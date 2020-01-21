@@ -15,7 +15,7 @@ Des rapports web ou pdf sont à disposition des différents types d'utilisateurs
 Quelques progiciels de time tracking : https://thedigitalprojectmanager.com/time-tracking-software/  
 Une définition des logiciels de gestion des temps et d'activités : https://www.asys.fr/definition-gestion-des-temps-et-des-activites 
   
-Le besoin exprimé par le service demandeur est un suivi simplifié par demi-journée contrairement à ce que propose les progiciels de time tracking (par heure). Il s'agit d'un complément au dispoditif du SIRH en place pour les internes, ainsi que d'un progiciel maison de suivi de projet déployé dans la direction mais réservé au internes.  
+Le besoin exprimé par le service demandeur est un suivi simplifié par demi-journée contrairement à ce que propose les progiciels de time tracking (par heure). Il s'agit d'un complément au dispoditif du SIRH en place pour les internes, ainsi qu'au progiciel maison de suivi de projet déployé dans la direction mais réservé au internes.  
 Dans plusieurs services, y compris le demandeur, le besoin est couvert par un outillage Excel avec plus ou moins d'efficacité, mais toujours certaines limites au niveau exhaustivité, mise à jour, travail collaboratif, suivi et interraction avec l'echosystème RH.
 
 
