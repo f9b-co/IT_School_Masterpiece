@@ -24,8 +24,8 @@ Des rapports web ou pdf sont à disposition des différents types d'utilisateurs
 
 ## Rôles
 
-Manager
-Prestataire
-(team leader)
+Manager  
+Prestataire  
+(team leader)  
 
 ## Personae
