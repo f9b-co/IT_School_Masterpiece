@@ -2,13 +2,17 @@
 
 ## Pitch
 
-Application de suivi simplifié d'activité des prestataires.  
+Application de suivi d'activité des prestataires.  
 L'interface principale est un calendrier/planificateur affichant par période et par demi-journée l'absence ou la présence d'un ou plusieurs prestataires par service ou projet.  
 Un prestataire peut éditer les périodes non validées/révolues selon ses droits. Le manager peut corriger une saisie et/ou la valider.
 Les deux principaux besoins sont le suivi du volume d'activité par prestataire et par service ou projet, ainsi que la planification des périodes d'absences par équipe.  
 Chaque prestataire reçoit un rappel mensuel pour faire sa saisie, suivi le cas échéant d'une relance avec notification du manager.
 Des rapports web ou pdf sont à disposition des différents types d'utilisateurs (managers, prestataires).  
-
+  
+Activity monitoring of service providers.
+The main interface is a calendar / scheduler displaying by period and by half-day the absence or the presence of one or more service providers per service or project.
+A service provider can edit the non-validated / completed periods according to his rights. The manager can correct an entry and / or validate it. The two main needs are monitoring the volume of activity by service provider and by service or project, as well as planning periods of absence by team.
+Each service provider receives a monthly reminder to enter data, followed if necessary by a reminder with notification of the manager. Web or pdf reports are available to different types of users (managers, service providers).
 
 ## Etude de l'existant
 
