@@ -1,3 +1,5 @@
 # IT_School_Masterpiece
 
-coming soon...
+Coming soon...
+
+Wiki in progress!
