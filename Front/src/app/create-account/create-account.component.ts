@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormControl } from "@angular/forms";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-create-account",
@@ -12,10 +12,9 @@ export class CreateAccountComponent implements OnInit {
   ngOnInit() {}
 
   createForm = new FormGroup({
-    identifiant: new FormControl(""),
-    motDePasse: new FormControl(""),
-    confirmeMotDePasse: new FormControl(""),
-    valider: new FormControl("")
+    identifiant: new FormControl("Axxxxxx", Validators.required),
+    motDePasse: new FormControl("A+xxxxxx", Validators.required),
+    confirmeMotDePasse: new FormControl("", Validators.required)
   });
 
   onSubmit() {

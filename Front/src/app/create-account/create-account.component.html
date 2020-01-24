@@ -1,18 +1,16 @@
-<form [formGroup]="createForm">
+<form [formGroup]="createForm" (ngSubmit)="onSubmit()">
     <h3>Nouveau Compte</h3>
-    <label>
-        <p>Identifiant:</p>
-        <input type="text" formControlName="identifiant">
-    </label>
-    <label>
-        <p>Mot de Passe:</p>
-        <input type="text" formControlName="motDePasse">
-    </label>
-    <label>
-        <p>Confirmation du Mot de Passe:</p>
-        <input type="text" formControlName="confirmeMotDePasse">
-    </label>
-    <p>
-        <button type="submit" [disabled]="!createForm.valider">Valider</button>
-    </p>
+    <div class="form-group">
+        <label>Identifiant:</label><br />
+        <input type="text" class="form-control" formControlName="identifiant" required>
+    </div>
+    <div class="form-group">
+        <label>Mot de Passe:</label><br />
+        <input type="text" class="form-control" formControlName="motDePasse" required>
+    </div>
+    <div class="form-group">
+        <label>Confirmation du Mot de Passe:</label><br />
+        <input type="text" class="form-control" formControlName="confirmeMotDePasse" required>
+    </div>
+    <button type="submit" class="button" [disabled]="!createForm.valid">Valider</button>
 </form>
