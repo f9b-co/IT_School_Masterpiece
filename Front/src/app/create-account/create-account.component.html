@@ -1,0 +1,18 @@
+<form [formGroup]="createForm">
+    <h3>Nouveau Compte</h3>
+    <label>
+        <p>Identifiant:</p>
+        <input type="text" formControlName="identifiant">
+    </label>
+    <label>
+        <p>Mot de Passe:</p>
+        <input type="text" formControlName="motDePasse">
+    </label>
+    <label>
+        <p>Confirmation du Mot de Passe:</p>
+        <input type="text" formControlName="confirmeMotDePasse">
+    </label>
+    <p>
+        <button type="submit" [disabled]="!createForm.valider">Valider</button>
+    </p>
+</form>
