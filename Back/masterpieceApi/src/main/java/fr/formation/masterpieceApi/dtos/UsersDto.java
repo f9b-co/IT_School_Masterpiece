@@ -1,20 +1,17 @@
-package fr.formation.masterpieceApi.entities;
+package fr.formation.masterpieceApi.dtos;
 
-import javax.persistence.Column;
+import javax.validation.constraints.NotBlank;
 
-public class Users extends AbstractEntity {
-    @Column(length = 64, nullable = true)
+public class UsersDto {
     private String firstName;
-    @Column(length = 64, nullable = true)
     private String lastName;
-    @Column(length = 64, nullable = true)
     private String department;
-    @Column(length = 7, nullable = false)
+    @NotBlank
     private String login;
-    @Column(length = 20, nullable = false)
+    @NotBlank
     private String password;
 
-    public Users() {
+    public UsersDto() {
         //
     }
 

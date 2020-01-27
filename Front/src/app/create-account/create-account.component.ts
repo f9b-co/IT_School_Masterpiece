@@ -19,6 +19,6 @@ export class CreateAccountComponent implements OnInit {
 
   onSubmit() {
     // TODO: Use EventEmitter with form value
-    console.warn(this.createForm.value);
+    console.warn("Valeurs du formulaire = " + this.createForm.value);
   }
 }

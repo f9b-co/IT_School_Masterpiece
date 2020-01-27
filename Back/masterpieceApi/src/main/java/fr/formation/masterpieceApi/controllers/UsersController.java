@@ -1,7 +1,11 @@
 package fr.formation.masterpieceApi.controllers;
 
+import fr.formation.masterpieceApi.dtos.UsersDto;
+import fr.formation.masterpieceApi.dtos.UsersViewDto;
+import fr.formation.masterpieceApi.services.UsersService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
