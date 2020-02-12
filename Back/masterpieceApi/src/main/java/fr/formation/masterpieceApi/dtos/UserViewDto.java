@@ -1,10 +1,11 @@
 package fr.formation.masterpieceApi.dtos;
 
 
-public interface UsersViewDto {
+public interface UserViewDto {
     String getFirstName();
     String getLastName();
     String getDepartment();
     String getLogin();
-    String getPassword();
+    String getAccountPassword();
+    //String getAccountRoles();
 }

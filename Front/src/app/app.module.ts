@@ -6,10 +6,13 @@ import { AppComponent } from "./app.component";
 
 import { ReactiveFormsModule } from "@angular/forms";
 import { CreateAccountComponent } from "./create-account/create-account.component";
+import { LoginAccountComponent } from "./login-account/login-account.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { CreateUserComponent } from './create-user/create-user.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
-  declarations: [AppComponent, CreateAccountComponent],
+  declarations: [AppComponent, CreateAccountComponent, LoginAccountComponent, CreateUserComponent, NavbarComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -1,0 +1,23 @@
+/*app-root*/
+:host {
+  margin: 0%;
+  min-width: 675px;
+  border: 0px solid black;
+  padding: 0%;
+  font-family: "Libre Franklin", sans-serif;
+  display: flex;
+}
+:host >>> ::placeholder {
+  color: lightgrey;
+}
+:host >>> form {
+  width: 30vw;
+  min-width: 225px;
+  font-size: 0.9rem;
+  border: 0.1vw solid black;
+  padding: 1.4vw;
+  justify-content: space-between;
+}
+:host >>> .form-group {
+  margin-bottom: 1rem;
+}

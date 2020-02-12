@@ -1,17 +1,26 @@
-package fr.formation.masterpieceApi.dtos;
+package fr.formation.masterpieceApi.entities;
 
-import javax.validation.constraints.NotBlank;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Column;
 
-public class UsersDto {
+
+@Entity
+@Table(name="users")
+public class User extends AbstractEntity {
+    @Column(length = 64, nullable = false)
     private String firstName;
+    @Column(length = 64, nullable = false)
     private String lastName;
+    @Column(length = 64, nullable = false)
     private String department;
-    @NotBlank
+    @Column(length = 7, nullable = false)
     private String login;
-    @NotBlank
-    private String password;
+    @Embedded
+    private Account account;
 
-    public UsersDto() {
+    public User() {
         //
     }
 
@@ -23,6 +32,6 @@ public class UsersDto {
     public void setDepartment(String department) { this.department = department; }
     public String getLogin() { return login; }
     public void setLogin(String login) { this.login = login; }
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public Account getAccount() { return account; }
+    public void setAccount(Account account) { this.account = account; }
 }

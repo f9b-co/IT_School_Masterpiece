@@ -11,14 +11,18 @@ export class CreateAccountComponent implements OnInit {
 
   ngOnInit() {}
 
-  createForm = new FormGroup({
-    identifiant: new FormControl("Axxxxxx", Validators.required),
-    motDePasse: new FormControl("A+xxxxxx", Validators.required),
-    confirmeMotDePasse: new FormControl("", Validators.required)
+  createAccountForm = new FormGroup({
+    id: new FormControl("", Validators.required),
+    password: new FormControl("", Validators.required),
+    passwordCheck: new FormControl("", Validators.required)
   });
 
   onSubmit() {
     // TODO: Use EventEmitter with form value
-    console.warn("Valeurs du formulaire = " + this.createForm.value);
+    console.warn("Valeurs du formulaire = ");
+    const formKeys = Object.keys(this.createAccountForm.value);
+    formKeys.forEach(k => {
+      console.log(k + " : " + this.createAccountForm.get(k).value);
+    });
   }
 }
