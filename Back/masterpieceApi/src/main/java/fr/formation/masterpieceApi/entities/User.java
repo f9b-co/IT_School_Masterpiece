@@ -1,5 +1,7 @@
 package fr.formation.masterpieceApi.entities;
 
+import org.hibernate.annotations.NaturalId;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -34,4 +36,15 @@ public class User extends AbstractEntity {
     public void setLogin(String login) { this.login = login; }
     public Account getAccount() { return account; }
     public void setAccount(Account account) { this.account = account; }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", department='" + department + '\'' +
+                ", login='" + login + '\'' +
+                ", account=" + account +
+                '}';
+    }
 }

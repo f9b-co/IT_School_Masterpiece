@@ -8,6 +8,7 @@ import fr.formation.masterpieceApi.repositories.UserRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -19,7 +20,8 @@ public class UserServiceImpl implements UserService {
     protected UserServiceImpl(UserRepository usersRepo) {
         this.usersRepo = usersRepo;
     }
-    
+
+
     private void populateAndSave(@NotNull UserDto dto, @NotNull User user) {
         // Convert dto to entity:
         user.setFirstName(dto.getFirstName());
@@ -27,31 +29,38 @@ public class UserServiceImpl implements UserService {
         user.setDepartment(dto.getDepartment());
         user.setLogin(dto.getLogin());
         Account account = new Account();
+        account.setNoAccount(dto.getNoAccount());
         account.setPassword(dto.getPassword());
+        user.setAccount(account);
         //account.setRoles(dto.getRoles());
 
         usersRepo.save(user); // Save to database
-    } 
+    }
+
     @Override
     public void create(UserDto dto) {
         User user = new User();
         populateAndSave(dto, user);
+        System.out.println(user.toString());
     }
 
     @Override
     public void update(String login, UserDto dto) {
         User user = usersRepo.findAll().stream().filter(u -> u.getLogin().equals(login)).findFirst().get();
         populateAndSave(dto, user);
+        System.out.println(user.toString());
     }
 
     @Override
-    public UserViewDto getOne(String login) { return usersRepo.getByLogin(login); }
+    public UserViewDto getOne(String login) {
+        return usersRepo.getByLogin(login); }
 
     @Override
     public List<UserViewDto> getAll(Pageable pageable) {
         return usersRepo.getAllProjectedBy(pageable);
     }
 
+    @Transactional
     @Override
     public void delete(String login) { usersRepo.deleteByLogin(login); }
 }

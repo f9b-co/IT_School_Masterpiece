@@ -33,11 +33,23 @@ public class UserDto {
     public String getPassword() { return password; }
     public void setPassword(String password) {
         this.password = password;
-        if (noAccount) { setNoAccount(false); }
+        if (!(password =="")) { setNoAccount(false); }
     }
     /*public Set<Role> getRoles() { return roles; }
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
         if (isNull) { setIsNull(false); }
     }*/
+
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", department='" + department + '\'' +
+                ", login='" + login + '\'' +
+                ", noAccount=" + noAccount +
+                ", password='" + password + '\'' +
+                '}';
     }
+}

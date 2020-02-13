@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { passwordChecking } from "../validators/passwordChecking";
 
 @Component({
   selector: "app-create-account",
@@ -11,11 +12,31 @@ export class CreateAccountComponent implements OnInit {
 
   ngOnInit() {}
 
-  createAccountForm = new FormGroup({
-    id: new FormControl("", Validators.required),
-    password: new FormControl("", Validators.required),
-    passwordCheck: new FormControl("", Validators.required)
-  });
+  createAccountForm = new FormGroup(
+    {
+      id: new FormControl(
+        "",
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(7),
+          Validators.maxLength(7)
+        ])
+      ),
+      password: new FormControl(
+        "",
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(8),
+          Validators.maxLength(20),
+          Validators.pattern(
+            "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).*$|^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?W).*$|^(?=.*?[a-z])(?=.*?[0-9])(?=.*?W).*$|^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?W).*$"
+          )
+        ])
+      ),
+      passwordCheck: new FormControl("", Validators.required)
+    },
+    { validators: passwordChecking }
+  );
 
   onSubmit() {
     // TODO: Use EventEmitter with form value

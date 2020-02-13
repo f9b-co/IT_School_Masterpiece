@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@CrossOrigin
+
 @RestController
-@RequestMapping("/Users")
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService service;
@@ -24,12 +24,14 @@ public class UserController {
     @PostMapping
     protected void create(@Valid @RequestBody UserDto dto) {
         service.create(dto);
+        System.out.println(dto.toString());
     }
 
     @GetMapping("/{login}")
     protected UserViewDto getOne(@PathVariable("login") String login) {
         return service.getOne(login);
     }
+
 
     @GetMapping
     protected List<UserViewDto> getAll(@RequestParam("p") int page, @RequestParam("s") int size) {
