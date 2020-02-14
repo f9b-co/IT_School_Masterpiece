@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { HttpClient } from "@angular/common/http";
 
 @Component({
   selector: "app-create-user",
@@ -7,12 +8,12 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
   styleUrls: ["./create-user.component.css"]
 })
 export class CreateUserComponent implements OnInit {
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {}
 
   createUserForm = new FormGroup({
-    id: new FormControl("", Validators.required),
+    login: new FormControl("", Validators.required),
     firstname: new FormControl("", Validators.required),
     lastname: new FormControl("", Validators.required),
     email: new FormControl("", Validators.required),
@@ -20,7 +21,18 @@ export class CreateUserComponent implements OnInit {
   });
 
   onSubmit() {
-    // TODO: Use EventEmitter with form value
+    // EventEmitter with form value
+    const formData = this.createUserForm.value;
+
+    this.http.post("http://localhost:8081/users/", formData).subscribe(
+      data => {
+        console.warn("Enregistrement réussi");
+      },
+      error => {
+        console.warn("Enregistrement impossible");
+      }
+    );
+
     console.warn("Valeurs du formulaire = ");
     const formKeys = Object.keys(this.createUserForm.value);
     formKeys.forEach(k => {

@@ -12,7 +12,7 @@ export class LoginAccountComponent implements OnInit {
   ngOnInit() {}
 
   loginForm = new FormGroup({
-    id: new FormControl(
+    login: new FormControl(
       "",
       Validators.compose([
         Validators.required,

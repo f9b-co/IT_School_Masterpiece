@@ -11,6 +11,7 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String department;
+    private String email;
     private String login;
     private  boolean noAccount = true ;
     private String password;
@@ -26,6 +27,8 @@ public class UserDto {
     public void setLastName(String lastName) { this.lastName = lastName; }
     public String getDepartment() { return department; }
     public void setDepartment(String department) { this.department = department; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
     public String getLogin() { return login; }
     public void setLogin(String login) { this.login = login; }
     public boolean getNoAccount() {return noAccount; }
@@ -47,6 +50,7 @@ public class UserDto {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", department='" + department + '\'' +
+                ", email='" + email + '\'' +
                 ", login='" + login + '\'' +
                 ", noAccount=" + noAccount +
                 ", password='" + password + '\'' +

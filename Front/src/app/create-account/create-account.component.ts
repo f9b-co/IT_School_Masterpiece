@@ -14,7 +14,7 @@ export class CreateAccountComponent implements OnInit {
 
   createAccountForm = new FormGroup(
     {
-      id: new FormControl(
+      login: new FormControl(
         "",
         Validators.compose([
           Validators.required,

@@ -17,6 +17,8 @@ public class User extends AbstractEntity {
     private String lastName;
     @Column(length = 64, nullable = false)
     private String department;
+    @Column(length = 64, nullable = false)
+    private String email;
     @Column(length = 7, nullable = false)
     private String login;
     @Embedded
@@ -32,6 +34,8 @@ public class User extends AbstractEntity {
     public void setLastName(String lastName) { this.lastName = lastName; }
     public String getDepartment() { return department; }
     public void setDepartment(String department) { this.department = department; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
     public String getLogin() { return login; }
     public void setLogin(String login) { this.login = login; }
     public Account getAccount() { return account; }
@@ -43,6 +47,7 @@ public class User extends AbstractEntity {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", department='" + department + '\'' +
+                ", email='" + email + '\'' +
                 ", login='" + login + '\'' +
                 ", account=" + account +
                 '}';
