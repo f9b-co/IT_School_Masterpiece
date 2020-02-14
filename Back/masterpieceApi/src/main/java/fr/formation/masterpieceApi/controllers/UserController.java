@@ -5,12 +5,13 @@ import fr.formation.masterpieceApi.dtos.UserViewDto;
 import fr.formation.masterpieceApi.services.UserService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin //(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -21,7 +22,7 @@ public class UserController {
         this.service = service;
     }
 
-    @PostMapping
+    @PostMapping(consumes = "application/json", produces = "application/json")
     protected void create(@Valid @RequestBody UserDto dto) {
         service.create(dto);
         System.out.println(dto.toString());

@@ -11,4 +11,5 @@ public class MasterpieceApiApplication {
 		SpringApplication.run(MasterpieceApiApplication.class, args);
 	}
 
+
 }

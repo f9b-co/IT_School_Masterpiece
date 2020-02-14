@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 @Component({
   selector: "app-create-user",
@@ -12,31 +12,48 @@ export class CreateUserComponent implements OnInit {
 
   ngOnInit() {}
 
+  passGenerator(len) {
+    const alphaUpper = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
+    const alphaLower = [..."abcdefghijklmnopqrstuvwxyz"];
+    const specialChars = [..."~!@#$%^&*()_+-=[]\\{}|;:',./<>?"];
+    const numbers = [..."0123456789"];
+    const base = [...alphaUpper, ...numbers, ...alphaLower, ...specialChars];
+    const randPassword = [...Array(len)]
+      .map(i => base[(Math.random() * base.length) | 0])
+      .join("");
+    return "R@nd" + randPassword;
+  }
+
   createUserForm = new FormGroup({
     login: new FormControl("", Validators.required),
-    firstname: new FormControl("", Validators.required),
-    lastname: new FormControl("", Validators.required),
+    firstName: new FormControl("", Validators.required),
+    lastName: new FormControl("", Validators.required),
     email: new FormControl("", Validators.required),
-    department: new FormControl("", Validators.required)
+    department: new FormControl("", Validators.required),
+    noAccount: new FormControl(true),
+    password: new FormControl(this.passGenerator(10))
   });
 
   onSubmit() {
-    // EventEmitter with form value
-    const formData = this.createUserForm.value;
+    // Send http request with form values to back api
+    let headers = new HttpHeaders()
+      .set("access-control-allow-origin", "http://localhost:8081")
+      .set("Access-Control-Request-Method", "GET,HEAD,PUT,PATCH,POST,DELETE")
+      .set("Content-Type", "application/json");
 
-    this.http.post("http://localhost:8081/users/", formData).subscribe(
-      data => {
-        console.warn("Enregistrement réussi");
-      },
-      error => {
-        console.warn("Enregistrement impossible");
-      }
-    );
-
-    console.warn("Valeurs du formulaire = ");
-    const formKeys = Object.keys(this.createUserForm.value);
-    formKeys.forEach(k => {
-      console.log(k + " : " + this.createUserForm.get(k).value);
-    });
+    this.http
+      .post(
+        "http://localhost:8081/users/",
+        JSON.stringify(this.createUserForm.value),
+        { headers }
+      )
+      .subscribe(
+        data => {
+          console.warn("Enregistrement réussi");
+        },
+        error => {
+          console.warn("Enregistrement impossible");
+        }
+      );
   }
 }

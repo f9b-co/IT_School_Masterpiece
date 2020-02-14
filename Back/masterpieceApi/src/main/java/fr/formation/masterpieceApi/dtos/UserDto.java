@@ -36,7 +36,7 @@ public class UserDto {
     public String getPassword() { return password; }
     public void setPassword(String password) {
         this.password = password;
-        if (!(password =="")) { setNoAccount(false); }
+        if (!(password.matches("^R@nd.+$"))) { setNoAccount(false); }
     }
     /*public Set<Role> getRoles() { return roles; }
     public void setRoles(Set<Role> roles) {
