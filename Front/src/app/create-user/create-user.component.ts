@@ -25,11 +25,33 @@ export class CreateUserComponent implements OnInit {
   }
 
   createUserForm = new FormGroup({
-    login: new FormControl("", Validators.required),
-    firstName: new FormControl("", Validators.required),
-    lastName: new FormControl("", Validators.required),
-    email: new FormControl("", Validators.required),
-    department: new FormControl("", Validators.required),
+    login: new FormControl("",
+    Validators.compose([
+      Validators.required,
+      Validators.minLength(7),
+      Validators.maxLength(7)
+    ])),
+    firstName: new FormControl("",
+    Validators.compose([
+      Validators.required,
+      Validators.maxLength(64)
+    ])),
+    lastName: new FormControl("",
+    Validators.compose([
+      Validators.required,
+      Validators.maxLength(64)
+    ])),
+    email: new FormControl("",
+    Validators.compose([
+      Validators.required,
+      Validators.email,
+      Validators.maxLength(64)
+    ])),
+    department: new FormControl("",
+    Validators.compose([
+      Validators.required,
+      Validators.maxLength(64)
+    ])),
     noAccount: new FormControl(true),
     password: new FormControl(this.passGenerator(10))
   });
