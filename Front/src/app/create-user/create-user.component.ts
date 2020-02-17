@@ -25,33 +25,34 @@ export class CreateUserComponent implements OnInit {
   }
 
   createUserForm = new FormGroup({
-    login: new FormControl("",
-    Validators.compose([
-      Validators.required,
-      Validators.minLength(7),
-      Validators.maxLength(7)
-    ])),
-    firstName: new FormControl("",
-    Validators.compose([
-      Validators.required,
-      Validators.maxLength(64)
-    ])),
-    lastName: new FormControl("",
-    Validators.compose([
-      Validators.required,
-      Validators.maxLength(64)
-    ])),
-    email: new FormControl("",
-    Validators.compose([
-      Validators.required,
-      Validators.email,
-      Validators.maxLength(64)
-    ])),
-    department: new FormControl("",
-    Validators.compose([
-      Validators.required,
-      Validators.maxLength(64)
-    ])),
+    login: new FormControl(
+      "",
+      Validators.compose([
+        Validators.required,
+        Validators.minLength(7),
+        Validators.maxLength(7)
+      ])
+    ),
+    firstName: new FormControl(
+      "",
+      Validators.compose([Validators.required, Validators.maxLength(64)])
+    ),
+    lastName: new FormControl(
+      "",
+      Validators.compose([Validators.required, Validators.maxLength(64)])
+    ),
+    email: new FormControl(
+      "",
+      Validators.compose([
+        Validators.required,
+        Validators.email,
+        Validators.maxLength(64)
+      ])
+    ),
+    department: new FormControl(
+      "",
+      Validators.compose([Validators.required, Validators.maxLength(64)])
+    ),
     noAccount: new FormControl(true),
     password: new FormControl(this.passGenerator(10))
   });
@@ -60,7 +61,7 @@ export class CreateUserComponent implements OnInit {
     // Send http request with form values to back api
     let headers = new HttpHeaders()
       .set("access-control-allow-origin", "http://localhost:8081")
-      .set("Access-Control-Request-Method", "GET,HEAD,PUT,PATCH,POST,DELETE")
+      //.set("Access-Control-Request-Method", "GET,HEAD,PUT,PATCH,POST,DELETE")
       .set("Content-Type", "application/json");
 
     this.http
