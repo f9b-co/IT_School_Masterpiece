@@ -45,6 +45,11 @@ public class UserController {
         service.update(login, dto);
     }
 
+    @PatchMapping(value = "/{login}/sp", consumes = "text/html")
+    protected void changePassword(@PathVariable("login") String login, @Valid @RequestBody String password) {
+        service.changePassword(login, password);
+    }
+
     @DeleteMapping("/{login}")
     protected void delete(@PathVariable("login") String login) {
         service.delete(login);

@@ -53,6 +53,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void changePassword(String login, String password) {
+        User user = usersRepo.findAll().stream().filter(u -> u.getLogin().equals(login)).findFirst().get();
+        Account account = new Account();
+        account.setNoAccount(false);
+        account.setPassword(password);
+        user.setAccount(account);
+        usersRepo.save(user);
+    }
+
+    @Override
     public UserViewDto getOne(String login) {
         return usersRepo.getByLogin(login); }
 
@@ -64,4 +74,5 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void delete(String login) { usersRepo.deleteByLogin(login); }
+
 }

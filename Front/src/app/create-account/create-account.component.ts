@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { passwordChecking } from "../validators/passwordChecking";
 
 @Component({
@@ -8,7 +9,7 @@ import { passwordChecking } from "../validators/passwordChecking";
   styleUrls: ["./create-account.component.css"]
 })
 export class CreateAccountComponent implements OnInit {
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {}
 
@@ -39,7 +40,24 @@ export class CreateAccountComponent implements OnInit {
   );
 
   onSubmit() {
-    // TODO: Use EventEmitter with form value
+    const cAF = this.createAccountForm;
+    const apiUrl = "http://localhost:8081/users/";
+    const patchUrl = apiUrl + cAF.get("login").value + "/sp"; // + "/sp"
+    const headers = new HttpHeaders()
+      .set("access-control-allow-origin", "http://localhost:8081")
+      .set("Content-Type", "text/html");
+
+    // Send http request with form values to back api
+    this.http.patch(patchUrl, cAF.get("password").value, { headers }).subscribe(
+      data => {
+        console.warn("password changé");
+      },
+      error => {
+        console.warn("erreur!");
+      }
+    );
+
+    //
     console.warn("Valeurs du formulaire = ");
     const formKeys = Object.keys(this.createAccountForm.value);
     formKeys.forEach(k => {

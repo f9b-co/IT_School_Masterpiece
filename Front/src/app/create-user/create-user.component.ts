@@ -58,25 +58,20 @@ export class CreateUserComponent implements OnInit {
   });
 
   onSubmit() {
-    // Send http request with form values to back api
+    const cUF = this.createUserForm;
+    const apiUrl = "http://localhost:8081/users/";
     let headers = new HttpHeaders()
       .set("access-control-allow-origin", "http://localhost:8081")
-      //.set("Access-Control-Request-Method", "GET,HEAD,PUT,PATCH,POST,DELETE")
       .set("Content-Type", "application/json");
 
-    this.http
-      .post(
-        "http://localhost:8081/users/",
-        JSON.stringify(this.createUserForm.value),
-        { headers }
-      )
-      .subscribe(
-        data => {
-          console.warn("Enregistrement réussi");
-        },
-        error => {
-          console.warn("Enregistrement impossible");
-        }
-      );
+    // Send http request with form values to back api
+    this.http.post(apiUrl, JSON.stringify(cUF.value), { headers }).subscribe(
+      data => {
+        console.warn("Enregistrement réussi");
+      },
+      error => {
+        console.warn("Enregistrement impossible");
+      }
+    );
   }
 }
