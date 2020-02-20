@@ -2,18 +2,35 @@ package fr.formation.masterpieceApi.dtos;
 
 import fr.formation.masterpieceApi.entities.Role;
 
-import javax.persistence.Column;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 public class UserDto {
+
+    @NotBlank
+    @Size(max = 64)
     private String firstName;
+    @NotBlank
+    @Size(max = 64)
     private String lastName;
+    @NotBlank
+    @Size(max = 64)
     private String department;
+    @NotNull
+    @Size(max = 64)
+    @Email
     private String email;
+    @NotBlank
+    @Size(min = 7, max = 7)
     private String login;
+    @NotNull
     private  boolean noAccount = true ;
+    @NotBlank
+    @Size(min = 8, max = 20)
     private String password;
     //private Set<Role> roles;
 

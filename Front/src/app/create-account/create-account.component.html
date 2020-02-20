@@ -3,6 +3,9 @@
     <div class="form-group">
         <label>Identifiant :</label><br />
         <input type="text" placeholder="Axxxxxx" class="form-control" formControlName="login" required>
+        <div class="errors" *ngIf="fc.login.errors && fc.login.touched">
+            Identifiant requis (Axxxxxx/Xyyyyyy)
+        </div>
     </div>
     <div class="form-group">
         <label>Mot de Passe :</label><br />

@@ -42,6 +42,8 @@ export class CreateAccountComponent implements OnInit {
     { validators: passwordChecking }
   );
 
+  fc = this.createAccountForm.controls;
+
   onSubmit() {
     const cAF = this.createAccountForm;
     const apiUrl = "http://localhost:8081/users/";

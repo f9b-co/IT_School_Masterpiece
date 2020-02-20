@@ -21,3 +21,6 @@
 :host >>> .form-group {
   margin-bottom: 1rem;
 }
+:host >>> .errors {
+  color: crimson;
+}
