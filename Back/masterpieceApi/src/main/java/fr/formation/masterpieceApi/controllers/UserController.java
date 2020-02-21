@@ -33,7 +33,6 @@ public class UserController {
         return service.getOne(login);
     }
 
-
     @GetMapping
     protected List<UserViewDto> getAll(@RequestParam("p") int page, @RequestParam("s") int size) {
         Pageable pageable = PageRequest.of(page, size);

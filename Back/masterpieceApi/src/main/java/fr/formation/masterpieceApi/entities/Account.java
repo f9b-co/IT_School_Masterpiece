@@ -1,40 +1,41 @@
 package fr.formation.masterpieceApi.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.*;
+import java.util.Set;
 
-@Embeddable
+@Entity
+@Table(name="accounts")
 public class Account {
 
     @Column(nullable = false)
-    private  boolean noAccount = true ;
-    @Column(length = 20)
+    private  boolean enable;
+    @Column(length = 7, nullable = false)
+    private String username;
+    @Column(length = 255)
     private String password;
-    /*@ManyToMany
-    private Set<Role> roles;*/
+    @ManyToMany
+    private Set<Role> roles;
 
     public Account() {
         //
     }
 
-    public boolean getNoAccount() {return noAccount; }
-    public void setNoAccount(boolean noAccount) { this.noAccount = noAccount; }
+    public boolean isEnable() { return enable; }
+    public void setEnable(boolean enable) { this.enable = enable; }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
     public String getPassword() { return password; }
-    public void setPassword(String password) {
-        this.password = password;
-        if (!(password.matches("^R@nd.+$"))) { setNoAccount(false); }
-    }
-    /*public Set<Role> getRoles() { return roles; }
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-        if (isNull) { setIsNull(false); }
-    }*/
+    public void setPassword(String password) { this.password = password; }
+    public Set<Role> getRoles() { return roles; }
+    public void setRoles(Role role) { this.roles.add(role); }
 
     @Override
     public String toString() {
         return "Account{" +
-                "noAccount=" + noAccount +
+                "enable=" + enable +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 }

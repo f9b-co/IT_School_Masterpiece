@@ -53,7 +53,7 @@ export class CreateUserComponent implements OnInit {
       "",
       Validators.compose([Validators.required, Validators.maxLength(64)])
     ),
-    noAccount: new FormControl(true),
+    noInit: new FormControl(true),
     password: new FormControl(this.passGenerator(10))
   });
   cUF = this.createUserForm;

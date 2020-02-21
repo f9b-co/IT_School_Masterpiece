@@ -6,8 +6,5 @@ public interface UserViewDto {
     String getLastName();
     String getDepartment();
     String getEmail();
-    String getLogin();
-    Boolean getAccountNoAccount();
-    String getAccountPassword();
-    //String getAccountRoles();
+    String getAccountUsername();
 }
