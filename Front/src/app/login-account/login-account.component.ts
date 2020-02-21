@@ -25,10 +25,7 @@ export class LoginAccountComponent implements OnInit {
       Validators.compose([
         Validators.required,
         Validators.minLength(8),
-        Validators.maxLength(20),
-        Validators.pattern(
-          "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).*$|^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?W).*$|^(?=.*?[a-z])(?=.*?[0-9])(?=.*?W).*$|^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?W).*$"
-        )
+        Validators.maxLength(20)
       ])
     )
   });

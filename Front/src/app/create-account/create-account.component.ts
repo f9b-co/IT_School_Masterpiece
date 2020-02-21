@@ -42,18 +42,18 @@ export class CreateAccountComponent implements OnInit {
     { validators: passwordChecking }
   );
 
+  cAF = this.createAccountForm;
   fc = this.createAccountForm.controls;
 
   onSubmit() {
-    const cAF = this.createAccountForm;
     const apiUrl = "http://localhost:8081/users/";
-    const patchUrl = apiUrl + cAF.get("login").value + "/sp"; // + "/sp"
+    const patchUrl = apiUrl + this.cAF.get("login").value + "/sp"; // + "/sp"
     const headers = new HttpHeaders()
       .set("access-control-allow-origin", "http://localhost:8081")
       .set("Content-Type", "text/html");
 
     // Send http request with form values to back api
-    this.http.patch(patchUrl, cAF.get("password").value, { headers }).subscribe(
+    this.http.patch(patchUrl, this.cAF.get("password").value, { headers }).subscribe(
       data => {
         console.warn("password changé");
       },
@@ -64,9 +64,9 @@ export class CreateAccountComponent implements OnInit {
 
     //
     console.warn("Valeurs du formulaire = ");
-    const formKeys = Object.keys(this.createAccountForm.value);
+    const formKeys = Object.keys(this.cAF.value);
     formKeys.forEach(k => {
-      console.log(k + " : " + this.createAccountForm.get(k).value);
+      console.log(k + " : " + this.cAF.get(k).value);
     });
   }
 }

@@ -4,16 +4,24 @@
         <label>Identifiant :</label><br />
         <input type="text" placeholder="Axxxxxx" class="form-control" formControlName="login" required>
         <div class="errors" *ngIf="fc.login.errors && fc.login.touched">
-            Identifiant requis (Axxxxxx/Xyyyyyy)
+            Identifiant requis, 7 car. (Axxxxxx/Xyyyyyy)
         </div>
     </div>
     <div class="form-group">
         <label>Mot de Passe :</label><br />
-        <input type="text" placeholder="A+xxxxxx" class="form-control" formControlName="password" required>
+        <input type="text" placeholder="%xxxxLxx" class="form-control" formControlName="password" required>
+        <div class="errors" *ngIf="fc.password.errors && fc.password.touched">
+            Mot de passe requis, de 8 à 20 car.<br />
+            d'au moins 3 sortes parmi :<br />
+            Majuscules-Minuscules-Chiffres-Spéciaux
+        </div>
     </div>
     <div class="form-group">
         <label>Confirmation du Mot de Passe :</label><br />
-        <input type="text" placeholder="A+xxxxxx" class="form-control" formControlName="passwordCheck" required>
+        <input type="text" placeholder="%xxxxLxx" class="form-control" formControlName="passwordCheck" required>
+        <div class="errors" *ngIf="fc.passwordCheck.errors.passwordChecking && fc.passwordCheck.touched">
+            Saisies différentes!
+        </div>
     </div>
     <button type="submit" class="button" [disabled]="!createAccountForm.valid">Valider</button>
 </form>

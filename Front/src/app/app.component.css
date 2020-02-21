@@ -21,6 +21,9 @@
 :host >>> .form-group {
   margin-bottom: 1rem;
 }
+:host >>> input.form-control {
+  margin: 0.25rem 0rem;
+}
 :host >>> .errors {
   color: crimson;
 }
