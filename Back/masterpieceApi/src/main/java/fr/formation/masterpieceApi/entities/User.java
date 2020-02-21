@@ -17,7 +17,7 @@ public class User extends AbstractEntity {
     private String lastName;
     @Column(length = 64, nullable = false)
     private String department;
-    @Column(length = 64, nullable = false)
+    @Column(length = 128, nullable = false)
     private String email;
     @Column(length = 7, nullable = false)
     private String login;

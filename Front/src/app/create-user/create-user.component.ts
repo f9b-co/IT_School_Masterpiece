@@ -46,7 +46,7 @@ export class CreateUserComponent implements OnInit {
       Validators.compose([
         Validators.required,
         Validators.email,
-        Validators.maxLength(64)
+        Validators.maxLength(128)
       ])
     ),
     department: new FormControl(
@@ -56,22 +56,26 @@ export class CreateUserComponent implements OnInit {
     noAccount: new FormControl(true),
     password: new FormControl(this.passGenerator(10))
   });
+  cUF = this.createUserForm;
+  fc = this.createUserForm.controls;
 
   onSubmit() {
-    const cUF = this.createUserForm;
     const apiUrl = "http://localhost:8081/users/";
     let headers = new HttpHeaders()
       .set("access-control-allow-origin", "http://localhost:8081")
       .set("Content-Type", "application/json");
 
     // Send http request with form values to back api
-    this.http.post(apiUrl, JSON.stringify(cUF.value), { headers }).subscribe(
-      data => {
-        console.warn("Enregistrement réussi");
-      },
-      error => {
-        console.warn("Enregistrement impossible");
-      }
-    );
+    this.http
+      .post(apiUrl, JSON.stringify(this.cUF.value), { headers })
+      .subscribe(
+        data => {
+          this.cUF.reset();
+          console.warn("Enregistrement réussi");
+        },
+        error => {
+          console.warn("Enregistrement impossible");
+        }
+      );
   }
 }

@@ -53,14 +53,17 @@ export class CreateAccountComponent implements OnInit {
       .set("Content-Type", "text/html");
 
     // Send http request with form values to back api
-    this.http.patch(patchUrl, this.cAF.get("password").value, { headers }).subscribe(
-      data => {
-        console.warn("password changé");
-      },
-      error => {
-        console.warn("erreur!");
-      }
-    );
+    this.http
+      .patch(patchUrl, this.cAF.get("password").value, { headers })
+      .subscribe(
+        data => {
+          this.cAF.reset();
+          console.warn("password changé");
+        },
+        error => {
+          console.warn("erreur!");
+        }
+      );
 
     //
     console.warn("Valeurs du formulaire = ");

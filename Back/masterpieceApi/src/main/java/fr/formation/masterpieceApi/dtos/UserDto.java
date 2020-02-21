@@ -21,7 +21,7 @@ public class UserDto {
     @Size(max = 64)
     private String department;
     @NotNull
-    @Size(max = 64)
+    @Size(max = 128)
     @Email
     private String email;
     @NotBlank

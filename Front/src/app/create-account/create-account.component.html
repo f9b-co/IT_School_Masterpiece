@@ -19,7 +19,7 @@
     <div class="form-group">
         <label>Confirmation du Mot de Passe :</label><br />
         <input type="text" placeholder="%xxxxLxx" class="form-control" formControlName="passwordCheck" required>
-        <div class="errors" *ngIf="fc.passwordCheck.errors.passwordChecking && fc.passwordCheck.touched">
+        <div class="errors" *ngIf="fc.passwordCheck.value != fc.password.value && fc.passwordCheck.touched">
             Saisies différentes!
         </div>
     </div>
