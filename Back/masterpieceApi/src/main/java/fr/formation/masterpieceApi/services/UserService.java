@@ -12,5 +12,4 @@ public interface UserService {
     UserViewDto getOne(String login);
     List<UserViewDto> getAll(Pageable pageable);
     void delete(String login);
-    void changePassword(String login, String password);
 }

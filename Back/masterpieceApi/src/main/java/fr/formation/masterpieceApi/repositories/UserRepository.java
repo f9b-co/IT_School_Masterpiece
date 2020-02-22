@@ -16,6 +16,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     UserViewDto getByLogin(String login)  ;
     List<UserViewDto> getAllProjectedBy(Pageable pageable);
     void deleteByLogin(String login);
-    Optional<User> findByLogin (String login);
-
+    Optional<User> findByAccountUsername (String accountUsername);
 }

@@ -28,9 +28,9 @@ public class UserController {
         System.out.println(dto.toString());
     }
 
-    @GetMapping("/{login}")
-    protected UserViewDto getOne(@PathVariable("login") String login) {
-        return service.getOne(login);
+    @GetMapping("/{accountUsername}")
+    protected UserViewDto getOne(@PathVariable("accountUsername") String accountUsername) {
+        return service.getOne(accountUsername);
     }
 
     @GetMapping
@@ -39,19 +39,14 @@ public class UserController {
         return service.getAll(pageable);
     }
 
-    @PutMapping("/{login}")
-    protected void update(@PathVariable("login") String login, @Valid @RequestBody UserDto dto) {
-        service.update(login, dto);
+    @PutMapping("/{accountUsername}")
+    protected void update(@PathVariable("accountUsername") String accountUsername, @Valid @RequestBody UserDto dto) {
+        service.update(accountUsername, dto);
     }
 
-    @PatchMapping(value = "/{login}/sp", consumes = "text/html")
-    protected void changePassword(@PathVariable("login") String login, @Valid @RequestBody String password) {
-        service.changePassword(login, password);
-    }
-
-    @DeleteMapping("/{login}")
-    protected void delete(@PathVariable("login") String login) {
-        service.delete(login);
+    @DeleteMapping("/{accountUsername}")
+    protected void delete(@PathVariable("accountUsername") String accountUsername) {
+        service.delete(accountUsername);
     }
 
 }
