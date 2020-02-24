@@ -13,8 +13,8 @@ import java.util.Set;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    UserViewDto getByLogin(String login)  ;
+    UserViewDto getByUsername(String username)  ;
     List<UserViewDto> getAllProjectedBy(Pageable pageable);
-    void deleteByLogin(String login);
-    Optional<User> findByAccountUsername (String accountUsername);
+    void deleteByUsername(String username);
+    Optional<User> findByUsername (String username);
 }

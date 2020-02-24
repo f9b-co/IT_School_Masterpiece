@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
         user.setLastName(dto.getLastName());
         user.setDepartment(dto.getDepartment());
         user.setEmail(dto.getEmail());
-        user.setLogin(dto.getAccountUsername());
+        user.setUsername(dto.getUsername());
         usersRepo.save(user);
     }
 
@@ -37,14 +37,14 @@ public class UserServiceImpl implements UserService {
     }
     @Override
 
-    public void update(String accountUsername, UserDto dto) {
-        User user = usersRepo.findByAccountUsername(accountUsername).get();//usersRepo.findAll().stream().filter(u -> u.getAccountUsername().equals(accountUsername)).findFirst().get();
+    public void update(String username, UserDto dto) {
+        User user = usersRepo.findByUsername(username).get();//usersRepo.findAll().stream().filter(u -> u.getUsername().equals(username)).findFirst().get();
         populateAndSave(dto, user);
         System.out.println(user.toString());
     }
 
     @Override
-    public UserViewDto getOne(String login) { return usersRepo.getByLogin(login); }
+    public UserViewDto getOne(String username) { return usersRepo.getByUsername(username); }
 
     @Override
     public List<UserViewDto> getAll(Pageable pageable) {
@@ -53,6 +53,6 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void delete(String login) { usersRepo.deleteByLogin(login); }
+    public void delete(String username) { usersRepo.deleteByUsername(username); }
 
 }

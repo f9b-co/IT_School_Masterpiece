@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface AccountService {
 
+    boolean userExists(String username);
+    boolean usernameNotUsed(String username);
     void create(AccountDto dto);
     AccountViewDto getOne(String username);
     List<AccountViewDto> getAll(Pageable pageable);

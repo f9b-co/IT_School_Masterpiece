@@ -6,5 +6,5 @@ public interface UserViewDto {
     String getLastName();
     String getDepartment();
     String getEmail();
-    String getAccountUsername();
+    String getUsername();
 }

@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface UserService {
     void create(UserDto dto);
-    void update(String login, UserDto dto);
-    UserViewDto getOne(String login);
+    void update(String username, UserDto dto);
+    UserViewDto getOne(String username);
     List<UserViewDto> getAll(Pageable pageable);
-    void delete(String login);
+    void delete(String username);
 }

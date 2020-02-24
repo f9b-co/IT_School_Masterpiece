@@ -1,6 +1,7 @@
 package fr.formation.masterpieceApi.controllers;
 
 import fr.formation.masterpieceApi.dtos.AccountDto;
+import fr.formation.masterpieceApi.dtos.AccountViewDto;
 import fr.formation.masterpieceApi.services.AccountService;
 import org.springframework.web.bind.annotation.*;
 

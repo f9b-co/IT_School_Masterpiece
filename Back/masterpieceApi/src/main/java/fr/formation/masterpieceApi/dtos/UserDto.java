@@ -22,7 +22,7 @@ public class UserDto {
     private String email;
     @NotBlank
     @Size(min = 7, max = 7)
-    private String accountUsername;
+    private String username;
 
     public UserDto() {
         //
@@ -36,8 +36,8 @@ public class UserDto {
     public void setDepartment(String department) { this.department = department; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-    public String getAccountUsername() { return accountUsername; }
-    public void setAccountUsername(String accountUsername) { this.accountUsername = accountUsername; }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
     @Override
     public String toString() {
@@ -46,7 +46,7 @@ public class UserDto {
                 ", lastName='" + lastName + '\'' +
                 ", department='" + department + '\'' +
                 ", email='" + email + '\'' +
-                ", login='" + accountUsername + '\'' +
+                ", login='" + username + '\'' +
                 '}';
     }
 }

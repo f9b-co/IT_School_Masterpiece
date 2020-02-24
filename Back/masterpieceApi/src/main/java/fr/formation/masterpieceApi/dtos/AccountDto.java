@@ -16,7 +16,7 @@ public class AccountDto {
     private  boolean enable;
     @NotBlank
     @Size(min = 7, max = 7)
-    private String username;
+    private String accountUsername;
     @NotNull
     @Size(min = 8, max = 20)
     @Pattern(regexp = passPattern)
@@ -27,9 +27,6 @@ public class AccountDto {
     }
 
     public boolean isEnable() {return enable;}
-    public void setEnable(boolean enable) {this.enable = enable;}
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
+    public String getAccountUsername() { return accountUsername; }
     public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
 }

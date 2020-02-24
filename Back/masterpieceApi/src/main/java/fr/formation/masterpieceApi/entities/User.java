@@ -12,10 +12,13 @@ public class User extends AbstractEntity {
     private String lastName;
     @Column(length = 64, nullable = false)
     private String department;
-    @Column(length = 128, nullable = false)
+    @Column(length = 128, unique = true, nullable = false)
     private String email;
-    @Column(length = 7, nullable = false)
-    private String accountUsername;
+    @Column(length = 7, unique = true, nullable = false)
+    private String username;
+    @OneToOne(cascade = CascadeType.ALL)
+    //@JoinColumn(name = "username", referencedColumnName = "accountUsername", insertable = false, updatable = false)
+    private Account account;
 
     public User() {
         //
@@ -29,8 +32,8 @@ public class User extends AbstractEntity {
     public void setDepartment(String department) { this.department = department; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-    public String getLogin() { return accountUsername; }
-    public void setLogin(String login) { this.accountUsername = login; }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
     @Override
     public String toString() {
@@ -39,7 +42,7 @@ public class User extends AbstractEntity {
                 ", lastName='" + lastName + '\'' +
                 ", department='" + department + '\'' +
                 ", email='" + email + '\'' +
-                ", accountUsername='" + accountUsername + '\'' +
+                ", accountUsername='" + username + '\'' +
                 '}';
     }
 }

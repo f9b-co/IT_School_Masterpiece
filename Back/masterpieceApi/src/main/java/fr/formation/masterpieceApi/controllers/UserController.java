@@ -5,7 +5,6 @@ import fr.formation.masterpieceApi.dtos.UserViewDto;
 import fr.formation.masterpieceApi.services.UserService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
