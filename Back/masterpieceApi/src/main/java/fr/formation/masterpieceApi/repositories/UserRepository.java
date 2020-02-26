@@ -1,7 +1,6 @@
 package fr.formation.masterpieceApi.repositories;
 
 import fr.formation.masterpieceApi.dtos.UserViewDto;
-import fr.formation.masterpieceApi.entities.Role;
 import fr.formation.masterpieceApi.entities.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

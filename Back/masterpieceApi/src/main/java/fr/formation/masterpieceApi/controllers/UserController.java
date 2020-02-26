@@ -1,5 +1,6 @@
 package fr.formation.masterpieceApi.controllers;
 
+import fr.formation.masterpieceApi.dtos.UserAccountDto;
 import fr.formation.masterpieceApi.dtos.UserDto;
 import fr.formation.masterpieceApi.dtos.UserViewDto;
 import fr.formation.masterpieceApi.services.UserService;
@@ -27,9 +28,9 @@ public class UserController {
         System.out.println(dto.toString());
     }
 
-    @GetMapping("/{accountUsername}")
-    protected UserViewDto getOne(@PathVariable("accountUsername") String accountUsername) {
-        return service.getOne(accountUsername);
+    @GetMapping(value = "/{username}", consumes = "application/json", produces = "application/json")
+    protected UserViewDto getOne(@PathVariable("username") String username) {
+        return service.getOne(username);
     }
 
     @GetMapping
@@ -38,14 +39,14 @@ public class UserController {
         return service.getAll(pageable);
     }
 
-    @PutMapping("/{accountUsername}")
-    protected void update(@PathVariable("accountUsername") String accountUsername, @Valid @RequestBody UserDto dto) {
-        service.update(accountUsername, dto);
+    @PutMapping(value = "/{username}/changeP", consumes = "application/json", produces = "application/json")
+    protected void changePassword(@PathVariable("username") String username, @Valid @RequestBody UserAccountDto dto) {
+        service.changePassword(dto);
     }
 
-    @DeleteMapping("/{accountUsername}")
-    protected void delete(@PathVariable("accountUsername") String accountUsername) {
-        service.delete(accountUsername);
+    @DeleteMapping("/{username}")
+    protected void delete(@PathVariable("username") String username) {
+        service.delete(username);
     }
 
 }

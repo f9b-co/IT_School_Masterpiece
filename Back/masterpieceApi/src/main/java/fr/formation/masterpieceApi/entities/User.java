@@ -1,6 +1,7 @@
 package fr.formation.masterpieceApi.entities;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="users")
@@ -16,9 +17,12 @@ public class User extends AbstractEntity {
     private String email;
     @Column(length = 7, unique = true, nullable = false)
     private String username;
-    @OneToOne(cascade = CascadeType.ALL)
-    //@JoinColumn(name = "username", referencedColumnName = "accountUsername", insertable = false, updatable = false)
-    private Account account;
+    @Column(length = 255)
+    private String password;
+    @Column(nullable = false)
+    private  boolean enable;
+    @ManyToMany
+    private Set<Role> roles;
 
     public User() {
         //
@@ -34,6 +38,12 @@ public class User extends AbstractEntity {
     public void setEmail(String email) { this.email = email; }
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+    public boolean isEnable() { return enable; }
+    public void setEnable(boolean enable) { this.enable = enable; }
+    public Set<Role> getRoles() { return roles; }
+    public void setRoles(Set<Role> roles) { this.roles = roles; }
 
     @Override
     public String toString() {
@@ -42,7 +52,10 @@ public class User extends AbstractEntity {
                 ", lastName='" + lastName + '\'' +
                 ", department='" + department + '\'' +
                 ", email='" + email + '\'' +
-                ", accountUsername='" + username + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", enable=" + enable +
+                ", roles=" + roles +
                 '}';
     }
 }

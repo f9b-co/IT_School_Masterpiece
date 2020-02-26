@@ -12,20 +12,8 @@ export class CreateUserComponent implements OnInit {
 
   ngOnInit() {}
 
-  passGenerator(len) {
-    const alphaUpper = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
-    const alphaLower = [..."abcdefghijklmnopqrstuvwxyz"];
-    const specialChars = [..."~!@#$%^&*()_+-=[]\\{}|;:',./<>?"];
-    const numbers = [..."0123456789"];
-    const base = [...alphaUpper, ...numbers, ...alphaLower, ...specialChars];
-    const randPassword = [...Array(len)]
-      .map(i => base[(Math.random() * base.length) | 0])
-      .join("");
-    return "R@nd" + randPassword;
-  }
-
   createUserForm = new FormGroup({
-    login: new FormControl(
+    username: new FormControl(
       "",
       Validators.compose([
         Validators.required,
@@ -52,9 +40,7 @@ export class CreateUserComponent implements OnInit {
     department: new FormControl(
       "",
       Validators.compose([Validators.required, Validators.maxLength(64)])
-    ),
-    noInit: new FormControl(true),
-    password: new FormControl(this.passGenerator(10))
+    )
   });
   cUF = this.createUserForm;
   fc = this.createUserForm.controls;

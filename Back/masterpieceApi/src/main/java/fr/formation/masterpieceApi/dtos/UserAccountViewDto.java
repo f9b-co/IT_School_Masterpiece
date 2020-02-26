@@ -1,7 +1,6 @@
 package fr.formation.masterpieceApi.dtos;
 
-public interface AccountViewDto {
-    boolean isEnable();
+public interface UserAccountViewDto {
     String getAccountUsername();
     String getPassword();
 }

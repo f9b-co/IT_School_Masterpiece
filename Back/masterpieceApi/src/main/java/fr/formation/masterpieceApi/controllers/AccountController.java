@@ -1,11 +1,11 @@
 package fr.formation.masterpieceApi.controllers;
 
-import fr.formation.masterpieceApi.dtos.AccountDto;
-import fr.formation.masterpieceApi.dtos.AccountViewDto;
+import fr.formation.masterpieceApi.dtos.UserAccountDto;
+import fr.formation.masterpieceApi.dtos.UserAccountViewDto;
 import fr.formation.masterpieceApi.services.AccountService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+/*import javax.validation.Valid;
 
 @CrossOrigin
 @RestController
@@ -20,13 +20,13 @@ public class AccountController {
 
 
     @PostMapping(consumes = "application/json", produces = "application/json")
-    protected void create(@Valid @RequestBody AccountDto dto) {
+    protected void create(@Valid @RequestBody UserAccountDto dto) {
         service.create(dto);
         System.out.println(dto.toString());
     }
 
     @GetMapping("/{username}")
-    protected AccountViewDto getOne(@PathVariable("username") String username) {
+    protected UserAccountViewDto getOne(@PathVariable("username") String username) {
         return service.getOne(username);
     }
 
@@ -34,4 +34,5 @@ public class AccountController {
     protected void changePassword(@PathVariable("username") String username, @Valid @RequestBody String password) {
         service.changePassword(username, password);
     }
-}
+}*/
+

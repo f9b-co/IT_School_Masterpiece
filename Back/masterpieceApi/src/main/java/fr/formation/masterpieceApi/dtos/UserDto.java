@@ -7,6 +7,8 @@ import javax.validation.constraints.Size;
 
 public class UserDto {
 
+    @NotNull
+    private  boolean enable;
     @NotBlank
     @Size(max = 64)
     private String firstName;
@@ -28,6 +30,7 @@ public class UserDto {
         //
     }
 
+    public boolean isEnable() {return enable;}
     public String getFirstName() { return firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
     public String getLastName() { return lastName; }
