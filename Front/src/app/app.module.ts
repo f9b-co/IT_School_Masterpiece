@@ -6,20 +6,20 @@ import { MatDialogModule } from "@angular/material";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 
-import { CreateAccountComponent } from "./create-account/create-account.component";
+import { SetPasswordComponent } from "./set-Password/set-Password.component";
 import { LoginAccountComponent } from "./login-account/login-account.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { CreateUserComponent } from "./create-user/create-user.component";
+import { CreateUserAccountComponent } from "./create-userAccount/create-userAccount.component";
 import { NavbarComponent } from "./navbar/navbar.component";
 import { InterceptorService } from './services/interceptor.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CreateAccountComponent,
-    LoginAccountComponent,
-    CreateUserComponent,
-    NavbarComponent
+    NavbarComponent,
+    SetPasswordComponent,
+    CreateUserAccountComponent,
+    LoginAccountComponent
   ],
   imports: [
     BrowserModule,

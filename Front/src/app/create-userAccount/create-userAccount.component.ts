@@ -3,22 +3,22 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 @Component({
-  selector: "app-create-user",
-  templateUrl: "./create-user.component.html",
-  styleUrls: ["./create-user.component.css"]
+  selector: "app-create-userAccount",
+  templateUrl: "./create-userAccount.component.html",
+  styleUrls: ["./create-userAccount.component.css"],
 })
-export class CreateUserComponent implements OnInit {
+export class CreateUserAccountComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {}
 
-  createUserForm = new FormGroup({
+  createUserAccountForm = new FormGroup({
     username: new FormControl(
       "",
       Validators.compose([
         Validators.required,
         Validators.minLength(7),
-        Validators.maxLength(7)
+        Validators.maxLength(7),
       ])
     ),
     firstName: new FormControl(
@@ -34,16 +34,16 @@ export class CreateUserComponent implements OnInit {
       Validators.compose([
         Validators.required,
         Validators.email,
-        Validators.maxLength(128)
+        Validators.maxLength(128),
       ])
     ),
     department: new FormControl(
       "",
       Validators.compose([Validators.required, Validators.maxLength(64)])
-    )
+    ),
   });
-  cUF = this.createUserForm;
-  fc = this.createUserForm.controls;
+  cUF = this.createUserAccountForm;
+  fc = this.createUserAccountForm.controls;
 
   onSubmit() {
     const apiUrl = "http://localhost:8081/users/";
@@ -55,11 +55,11 @@ export class CreateUserComponent implements OnInit {
     this.http
       .post(apiUrl, JSON.stringify(this.cUF.value), { headers })
       .subscribe(
-        data => {
+        (data) => {
           this.cUF.reset();
           console.warn("Enregistrement réussi");
         },
-        error => {
+        (error) => {
           console.warn("Enregistrement impossible");
         }
       );

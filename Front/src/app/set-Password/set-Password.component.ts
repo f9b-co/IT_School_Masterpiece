@@ -10,16 +10,16 @@ import { throwError } from 'rxjs';
 import { passwordChecking } from "../validators/passwordChecking";
 
 @Component({
-  selector: "app-create-account",
-  templateUrl: "./create-account.component.html",
-  styleUrls: ["./create-account.component.css"]
+  selector: "app-set-Password",
+  templateUrl: "./set-Password.component.html",
+  styleUrls: ["./set-Password.component.css"]
 })
-export class CreateAccountComponent implements OnInit {
+export class SetPasswordComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {}
 
-  createAccountForm = new FormGroup(
+  setPasswordForm = new FormGroup(
     {
       username: new FormControl(
         "",
@@ -48,8 +48,8 @@ export class CreateAccountComponent implements OnInit {
     { validators: passwordChecking }
   );
 
-  cAF = this.createAccountForm;
-  fc = this.createAccountForm.controls;
+  cAF = this.setPasswordForm;
+  fc = this.setPasswordForm.controls;
 
   onSubmit() {
     const apiUrl = "http://localhost:8081/users/";

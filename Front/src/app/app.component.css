@@ -8,6 +8,11 @@
   font-family: "Libre Franklin", sans-serif;
   display: flex;
 }
+:host >>> app-navbar {
+  padding: 1.5vw;
+  color: white;
+  background-color: black;
+}
 :host >>> ::placeholder {
   color: lightgrey;
 }

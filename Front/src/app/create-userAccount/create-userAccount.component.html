@@ -1,4 +1,4 @@
-<form [formGroup]="createUserForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="createUserAccountForm" (ngSubmit)="onSubmit()">
     <h3>Nouvel Utilisateur</h3>
     <div class="form-group">
         <label>Identifiant :</label><br />
@@ -23,7 +23,7 @@
     </div>
     <div class="form-group">
         <label>Courriel :</label><br />
-        <input type="text" placeholder="pn.nm@" class="form-control" formControlName="email" required>
+        <input type="text" placeholder="pn.nm@domaine.ext" class="form-control" formControlName="email" required>
         <div class="errors" *ngIf="fc.email.errors && fc.email.touched">
             Courriel requis, 128 caractères max<br />
             Format xxx@yyy.zz
@@ -36,5 +36,5 @@
             Service requis, 64 caractères max
         </div>
     </div>
-    <button type="submit" class="button" [disabled]="!createUserForm.valid">Valider</button>
+    <button type="submit" class="button" [disabled]="!createUserAccountForm.valid">Valider</button>
 </form>
