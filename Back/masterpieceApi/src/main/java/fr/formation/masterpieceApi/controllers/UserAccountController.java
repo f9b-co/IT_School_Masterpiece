@@ -1,6 +1,6 @@
 package fr.formation.masterpieceApi.controllers;
 
-import fr.formation.masterpieceApi.dtos.UserAccountDto;
+import fr.formation.masterpieceApi.dtos.AccountDto;
 import fr.formation.masterpieceApi.dtos.UserDto;
 import fr.formation.masterpieceApi.dtos.UserViewDto;
 import fr.formation.masterpieceApi.services.UserService;
@@ -14,11 +14,11 @@ import java.util.List;
 @CrossOrigin //(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/users")
-public class UserController {
+public class UserAccountController {
 
     private final UserService service;
 
-    protected UserController(UserService service) {
+    protected UserAccountController(UserService service) {
         this.service = service;
     }
 
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/{username}/changeP", consumes = "application/json", produces = "application/json")
-    protected void changePassword(@PathVariable("username") String username, @Valid @RequestBody UserAccountDto dto) {
+    protected void changePassword(@PathVariable("username") String username, @Valid @RequestBody AccountDto dto) {
         service.changePassword(dto);
     }
 

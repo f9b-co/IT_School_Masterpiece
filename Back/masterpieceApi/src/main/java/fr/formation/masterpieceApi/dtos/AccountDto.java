@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class UserAccountDto {
+public class AccountDto {
 
     private final String passPattern = "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).*$|" +
             "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\\W).*$|" +
@@ -20,7 +20,7 @@ public class UserAccountDto {
     @Pattern(regexp = passPattern)
     private String password;
 
-    public UserAccountDto() {
+    public AccountDto() {
         //
     }
 

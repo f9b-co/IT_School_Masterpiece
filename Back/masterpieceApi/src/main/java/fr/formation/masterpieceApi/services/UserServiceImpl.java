@@ -1,6 +1,6 @@
 package fr.formation.masterpieceApi.services;
 
-import fr.formation.masterpieceApi.dtos.UserAccountDto;
+import fr.formation.masterpieceApi.dtos.AccountDto;
 import fr.formation.masterpieceApi.dtos.UserDto;
 import fr.formation.masterpieceApi.dtos.UserViewDto;
 import fr.formation.masterpieceApi.entities.Role;
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changePassword(UserAccountDto dto) {
+    public void changePassword(AccountDto dto) {
         User user = usersRepo.findByUsername(dto.getUsername()).get();
         user.setPassword(dto.getPassword());
         usersRepo.save(user);
