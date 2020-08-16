@@ -1,6 +1,6 @@
 package fr.formation.masterpieceApi.services;
 
-import fr.formation.masterpieceApi.dtos.AccountDto;
+import fr.formation.masterpieceApi.dtos.CredentialsDto;
 import fr.formation.masterpieceApi.dtos.UserDto;
 import fr.formation.masterpieceApi.dtos.UserViewDto;
 import fr.formation.masterpieceApi.entities.Role;
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
         user.setDepartment(dto.getDepartment());
         user.setEmail(dto.getEmail());
         user.setUsername(dto.getUsername());
-        user.setPassword("R@nd!nitial");
+        user.setPassword(dto.getUsername());
         user.setEnable(true);
         Role defaultRole = rolesRepo.findByDefaultRoleTrue().get();
         HashSet<Role> roles = new HashSet<Role>();
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changePassword(AccountDto dto) {
+    public void changePassword(CredentialsDto dto) {
         User user = usersRepo.findByUsername(dto.getUsername()).get();
         user.setPassword(dto.getPassword());
         usersRepo.save(user);
