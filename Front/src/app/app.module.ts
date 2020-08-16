@@ -1,22 +1,41 @@
-import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
-
-import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-
+import { AppRoutingModule } from "./app-routing.module";
+import { BrowserModule } from "@angular/platform-browser";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { MatDialogModule } from "@angular/material";
+import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
-import { CreateAccountComponent } from "./create-account/create-account.component";
+
+import { SetPasswordComponent } from "./set-Password/set-Password.component";
+import { LoginAccountComponent } from "./login-account/login-account.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { CreateUserAccountComponent } from "./create-userAccount/create-userAccount.component";
+import { NavbarComponent } from "./navbar/navbar.component";
+import { InterceptorService } from './services/interceptor.service';
 
 @NgModule({
-  declarations: [AppComponent, CreateAccountComponent],
+  declarations: [
+    AppComponent,
+    NavbarComponent,
+    SetPasswordComponent,
+    CreateUserAccountComponent,
+    LoginAccountComponent
+  ],
   imports: [
     BrowserModule,
+    MatDialogModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptorService,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
