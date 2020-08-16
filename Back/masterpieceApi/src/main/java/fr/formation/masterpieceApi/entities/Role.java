@@ -11,7 +11,7 @@ public class Role extends AbstractEntity {
     private String code;
     private boolean defaultRole;
     @ManyToMany(mappedBy = "roles")
-    public Set<User> accounts;
+    public Set<Employee> accounts;
 
     public Role() {
         //
@@ -21,6 +21,6 @@ public class Role extends AbstractEntity {
     public void setCode(String code) { this.code = code; }
     public boolean isDefaultRole() { return defaultRole; }
     public void setDefaultRole(boolean defaultRole) { this.defaultRole = defaultRole; }
-    public Set<User> getAccounts() { return accounts; }
-    public void setAccounts(Set<User> accounts) { this.accounts = accounts; }
+    public Set<Employee> getAccounts() { return accounts; }
+    public void setAccounts(Set<Employee> accounts) { this.accounts = accounts; }
 }

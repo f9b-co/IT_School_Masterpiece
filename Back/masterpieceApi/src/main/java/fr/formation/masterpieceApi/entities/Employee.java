@@ -5,7 +5,7 @@ import java.util.Set;
 
 @Entity
 @Table(name="users")
-public class User extends AbstractEntity {
+public class Employee extends AbstractEntity {
 
     @Column(length = 64, nullable = false)
     private String firstName;
@@ -24,7 +24,7 @@ public class User extends AbstractEntity {
     @ManyToMany
     private Set<Role> roles;
 
-    public User() {
+    public Employee() {
         //
     }
 

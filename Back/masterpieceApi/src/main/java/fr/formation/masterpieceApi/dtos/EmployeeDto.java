@@ -2,7 +2,7 @@ package fr.formation.masterpieceApi.dtos;
 
 import javax.validation.constraints.*;
 
-public class UserDto {
+public class EmployeeDto {
 
     private final String passPattern = "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).*$|" +
             "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\\W).*$|" +
@@ -32,10 +32,11 @@ public class UserDto {
     @Pattern(regexp = passPattern)
     private String password;
 
-    public UserDto() {
+    public EmployeeDto() {
         //
     }
 
+    public void setEnable(boolean enable) {this.enable = enable;}
     public boolean isEnable() {return enable;}
     public String getFirstName() { return firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
@@ -47,5 +48,6 @@ public class UserDto {
     public void setEmail(String email) { this.email = email; }
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
-
+    public String getPassword() {return password;}
+    public void setPassword(String password) {this.password = password;}
 }
