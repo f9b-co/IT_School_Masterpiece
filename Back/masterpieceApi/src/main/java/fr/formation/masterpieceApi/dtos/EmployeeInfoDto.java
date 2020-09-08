@@ -9,7 +9,7 @@ public interface EmployeeInfoDto {
 
     String getUsername();
 
-    String getFirstname();
+    String getFirstName();
 
-    String getLastname();
+    String getLastName();
 }
