@@ -74,12 +74,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         System.out.println(employee.toString());
     }
 
+/*//to be activated later
     @Override
-    public void changePassword(CredentialsDto dto) {
+    public void changePassword(EmployeeChangePasswordDto dto) {
         Employee employee = employeesRepo.getByUsername(dto.getUsername()).get();
         employee.setPassword(passwordEncoder.encode(dto.getPassword()));
         employeesRepo.save(employee);
-    }
+    }*/
 
     @Override
     public EmployeeViewDto getOne(String username) { return employeesRepo.readByUsername(username); }

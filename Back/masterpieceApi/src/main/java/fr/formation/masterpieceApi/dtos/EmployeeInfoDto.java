@@ -1,7 +1,8 @@
 package fr.formation.masterpieceApi.dtos;
 
+
 /**
- * A projection of a {@code CustomUser} for user info.
+ * A projection of a {@code Employee} for employee info.
  */
 public interface EmployeeInfoDto {
 
@@ -12,4 +13,9 @@ public interface EmployeeInfoDto {
     String getFirstName();
 
     String getLastName();
+
+    String getDepartment();
+
+    String getEmail();
+
 }
