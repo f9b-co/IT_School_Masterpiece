@@ -10,7 +10,7 @@ public class EmployeeDto {
             "^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?\\W).*$";
 
     @NotNull
-    private  boolean enable;
+    private  boolean enabled;
     @NotBlank
     @Size(max = 64)
     private String firstName;
@@ -36,8 +36,8 @@ public class EmployeeDto {
         //
     }
 
-    public void setEnable(boolean enable) {this.enable = enable;}
-    public boolean isEnable() {return enable;}
+    public void setEnabled(boolean enabled) {this.enabled = enabled;}
+    public boolean isEnabled() {return enabled;}
     public String getFirstName() { return firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
     public String getLastName() { return lastName; }

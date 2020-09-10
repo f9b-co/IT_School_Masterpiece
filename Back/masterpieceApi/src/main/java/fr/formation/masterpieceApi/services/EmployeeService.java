@@ -12,8 +12,6 @@ public interface EmployeeService extends UserDetailsService {
 
     boolean userExists(String username);
     void create(EmployeeDto dto);
-/*//to be activated later
-    void changePassword(EmployeeChangePasswordDto dto);*/
     EmployeeViewDto getOne(String username);
     List<EmployeeViewDto> getAll(Pageable pageable);
     EmployeeInfoDto getCurrentUserInfo(Long id);

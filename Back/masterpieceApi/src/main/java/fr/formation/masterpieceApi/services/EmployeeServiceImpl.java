@@ -16,6 +16,7 @@ import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -47,21 +48,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                 () -> new ResourceNotFoundException("with id:" + id));
     }
 
-    private void populateAndSave(@NotNull EmployeeDto dto, @NotNull Employee employee) {
-        employee.setFirstName(dto.getFirstName());
-        employee.setLastName(dto.getLastName());
-        employee.setDepartment(dto.getDepartment());
-        employee.setEmail(dto.getEmail());
-        employee.setUsername(dto.getUsername());
-        employee.setPassword(passwordEncoder.encode(dto.getPassword()));
-        employee.setEnable(true);
-        Role defaultRole = rolesRepo.findByDefaultRoleTrue().get();
-        HashSet<Role> roles = new HashSet<Role>();
-        roles.add(defaultRole);
-        employee.setRoles(roles);
-        employeesRepo.save(employee);
-    }
-
     @Override
     public boolean userExists(String username) {
         return employeesRepo.findByUsername(username).isPresent();
@@ -69,18 +55,24 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void create(EmployeeDto dto) {
-        Employee employee = new Employee();
-        populateAndSave(dto, employee);
+        Role defaultRole = rolesRepo.findByDefaultRoleTrue().get();
+        Set<Role> roles = new HashSet<Role>();
+        roles.add(defaultRole);
+        Employee employee = new Employee(
+                dto.getUsername(),
+                passwordEncoder.encode(dto.getPassword()),
+                roles
+        );
+        employee.setFirstName(dto.getFirstName());
+        employee.setLastName(dto.getLastName());
+        employee.setDepartment(dto.getDepartment());
+        employee.setEmail(dto.getEmail());
+        employee.setAccountNonExpired(true);
+        employee.setAccountNonLocked(true);
+        employee.setCredentialsNonExpired(true);
+        employeesRepo.save(employee);
         System.out.println(employee.toString());
     }
-
-/*//to be activated later
-    @Override
-    public void changePassword(EmployeeChangePasswordDto dto) {
-        Employee employee = employeesRepo.getByUsername(dto.getUsername()).get();
-        employee.setPassword(passwordEncoder.encode(dto.getPassword()));
-        employeesRepo.save(employee);
-    }*/
 
     @Override
     public EmployeeViewDto getOne(String username) { return employeesRepo.readByUsername(username); }
