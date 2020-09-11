@@ -34,7 +34,7 @@ public class Employee extends AbstractEntity {
     @Convert(converter = BooleanConverter.class)
     @Column(length = 1, nullable = false)
     private boolean credentialsNonExpired;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "employees_roles",
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -46,19 +46,19 @@ public class Employee extends AbstractEntity {
     /*
      * Creates a new enabled employee using employee's 4 args constructor.
      */
-    public Employee(String password, String username, Set<Role> roles) {
-        this(password, username, roles, true);
+    public Employee(String username, String password, Set<Role> roles) {
+        this(username, password, roles, true);
     }
     /*
      * Creates a new employee.     *
-     * @param password an encrypted password
      * @param username a unique username
+     * @param password an encrypted password
      * @param roles    some roles
      * @param enabled  {@code true} if enabled; {@code false} otherwise
      */
-    public Employee(String password, String username, Set<Role> roles, boolean enabled) {
-        this.password = password;
+    public Employee(String username, String password, Set<Role> roles, boolean enabled) {
         this.username = username;
+        this.password = password;
         this.roles = roles;
         this.enabled = enabled;
     }

@@ -2,11 +2,19 @@
     <h3>Connexion</h3>
     <div class="form-group">
         <label>Identifiant :</label><br />
-        <input type="text" placeholder="Axxxxxx" class="form-control" formControlName="login" required>
+        <input type="text" placeholder="A123456 ou X000001 ..." class="form-control" formControlName="username"
+            required>
+        <div class="errors" *ngIf="fc.username.errors && fc.username.touched">
+            Identifiant requis, 7 car. (Axxxxxx/Xyyyyyy)
+        </div>
     </div>
     <div class="form-group">
         <label>Mot de Passe :</label><br />
-        <input type="text" placeholder="A+xxxxxx" class="form-control" formControlName="password" required>
+        <input type="password" placeholder="Mot de Passe" class="form-control" formControlName="password"
+            required>
+        <div class="errors" *ngIf="fc.password.errors && fc.password.touched">
+            Mot de passe requis
+        </div>
     </div>
     <button type="submit" class="button" [disabled]="!loginForm.valid">Valider</button>
 </form>

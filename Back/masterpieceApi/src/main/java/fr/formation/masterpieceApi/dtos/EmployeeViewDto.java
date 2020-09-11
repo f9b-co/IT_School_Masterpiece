@@ -2,7 +2,7 @@ package fr.formation.masterpieceApi.dtos;
 
 
 public interface EmployeeViewDto {
-    boolean isEnable();
+    boolean isEnabled();
     String getFirstName();
     String getLastName();
     String getDepartment();

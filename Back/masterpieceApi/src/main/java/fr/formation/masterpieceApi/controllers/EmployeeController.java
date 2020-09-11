@@ -25,8 +25,8 @@ public class EmployeeController {
 
     @PostMapping(consumes = "application/json", produces = "application/json")
     protected void create(@Valid @RequestBody EmployeeDto dto) {
-        service.create(dto);
         System.out.println(dto.toString());
+        service.create(dto);
     }
 
     @GetMapping(value = "/{username}", consumes = "application/json", produces = "application/json")

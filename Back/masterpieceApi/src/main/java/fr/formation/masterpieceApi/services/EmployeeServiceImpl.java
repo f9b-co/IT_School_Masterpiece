@@ -70,8 +70,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setAccountNonExpired(true);
         employee.setAccountNonLocked(true);
         employee.setCredentialsNonExpired(true);
-        employeesRepo.save(employee);
         System.out.println(employee.toString());
+        employeesRepo.save(employee);
     }
 
     @Override
