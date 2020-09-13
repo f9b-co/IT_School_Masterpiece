@@ -3,7 +3,7 @@ export interface User {
   lastName: string;
   department: string;
   email: string;
-  login: string;
-  noAccount: boolean;
+  username: string;
   password: string;
+  noAccount: boolean;
 }

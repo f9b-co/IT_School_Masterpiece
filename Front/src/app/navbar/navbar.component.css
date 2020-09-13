@@ -1,0 +1,12 @@
+hr {
+  border: 0;
+  border-top: 0.25em solid white;
+  margin-block-start: 0;
+  margin-block-end: 1em;
+  border-style: solid;
+}
+img {
+  display: block;
+  margin: 1em auto;
+  height: 2em;
+}

@@ -1,0 +1,8 @@
+:host {
+  width: 100%;
+  background-color: black;
+}
+#insideAnim img {
+  width: 100%;
+  max-width: 800px;
+}

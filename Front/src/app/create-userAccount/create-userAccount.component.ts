@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { passwordChecking } from "../validators/passwordChecking";
@@ -9,7 +10,7 @@ import { passwordChecking } from "../validators/passwordChecking";
   styleUrls: ["./create-userAccount.component.css"],
 })
 export class CreateUserAccountComponent implements OnInit {
-  constructor(private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient) {}
 
   ngOnInit() {}
 
@@ -85,10 +86,11 @@ export class CreateUserAccountComponent implements OnInit {
     this.http.post(apiUrl, dataToSend, { headers }).subscribe(
       (data) => {
         this.cUF.reset();
-        console.warn("Enregistrement réussi");
+        console.log("Enregistrement réussi");
+        this.router.navigate(["/login"]);
       },
       (error) => {
-        console.warn("Enregistrement impossible");
+        console.log("Enregistrement impossible");
       }
     );
   }

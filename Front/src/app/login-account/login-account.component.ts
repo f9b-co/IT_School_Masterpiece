@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 
@@ -8,7 +9,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
   styleUrls: ["./login-account.component.css"],
 })
 export class LoginAccountComponent implements OnInit {
-  constructor(private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient) {}
 
   ngOnInit() {}
 
@@ -46,6 +47,7 @@ export class LoginAccountComponent implements OnInit {
         window.sessionStorage.setItem("accessToken", data["access_token"]);
         console.log(data);
         console.log("Connexion réussie");
+        this.router.navigate(["/inside"]);
       },
       (error) => {
         console.log(error);

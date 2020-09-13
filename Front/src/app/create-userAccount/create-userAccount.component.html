@@ -8,36 +8,40 @@
             Identifiant requis, 7 car. (Axxxxxx/Xyyyyyy)
         </div>
     </div>
-    <div class="form-group">
-        <label>Mot de Passe :</label><br />
-        <input type="password" placeholder="%xxxYxxx ou 0$YYYY1€ ..." class="form-control" formControlName="password"
-            required>
-        <div class="errors" *ngIf="fc.password.errors && fc.password.touched">
-            Mot de passe requis, de 8 à 20 car.<br />
-            d'au moins 3 sortes parmi :<br />
-            Majuscules-Minuscules-Chiffres-Spéciaux
+    <div class="forms-group">
+        <div class="form-group">
+            <label>Mot de Passe :</label><br />
+            <input type="password" placeholder="%xxxYxxx ou 0$YYYY1€ ..." class="form-control"
+                formControlName="password" required>
+            <div class="errors" *ngIf="fc.password.errors && fc.password.touched">
+                Mot de passe requis, de 8 à 20 car.<br />
+                d'au moins 3 sortes parmi :<br />
+                Majuscules-Minuscules-Chiffres-Spéciaux
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Confirmer Mot de Passe :</label><br />
+            <input type="text" placeholder="%xxxYxxx ou 0$YYYY1€ ..." class="form-control"
+                formControlName="passwordCheck" required>
+            <div class="errors" *ngIf="fc.passwordCheck.value != fc.password.value && fc.passwordCheck.touched">
+                Saisies différentes!
+            </div>
         </div>
     </div>
-    <div class="form-group">
-        <label>Confirmation du Mot de Passe :</label><br />
-        <input type="text" placeholder="%xxxYxxx ou 0$YYYY1€ ..." class="form-control" formControlName="passwordCheck"
-            required>
-        <div class="errors" *ngIf="fc.passwordCheck.value != fc.password.value && fc.passwordCheck.touched">
-            Saisies différentes!
+    <div class="forms-group">
+        <div class="form-group">
+            <label>Prénom :</label><br />
+            <input type="text" placeholder="pn" class="form-control" formControlName="firstName" required>
+            <div class="errors" *ngIf="fc.firstName.errors && fc.firstName.touched">
+                Prénom requis, 64 caractères max
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label>Prénom :</label><br />
-        <input type="text" placeholder="pn" class="form-control" formControlName="firstName" required>
-        <div class="errors" *ngIf="fc.firstName.errors && fc.firstName.touched">
-            Prénom requis, 64 caractères max
-        </div>
-    </div>
-    <div class="form-group">
-        <label>Nom :</label><br />
-        <input type="text" placeholder="nm" class="form-control" formControlName="lastName" required>
-        <div class="errors" *ngIf="fc.lastName.errors && fc.lastName.touched">
-            Nom requis, 64 caractères max
+        <div class="form-group">
+            <label>Nom :</label><br />
+            <input type="text" placeholder="nm" class="form-control" formControlName="lastName" required>
+            <div class="errors" *ngIf="fc.lastName.errors && fc.lastName.touched">
+                Nom requis, 64 caractères max
+            </div>
         </div>
     </div>
     <div class="form-group">

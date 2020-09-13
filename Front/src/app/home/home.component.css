@@ -1,0 +1,14 @@
+:host {
+  padding-top: 5em;
+  display: flex;
+  align-items: flex-start;
+}
+:visited {
+  color: black;
+}
+div {
+  min-width: 580px;
+  padding: auto 0;
+  display: flex;
+  justify-content: space-evenly;
+}

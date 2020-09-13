@@ -12,6 +12,9 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { CreateUserAccountComponent } from "./create-userAccount/create-userAccount.component";
 import { NavbarComponent } from "./navbar/navbar.component";
 import { InterceptorService } from './services/interceptor.service';
+import { HomeComponent } from './home/home.component';
+import { TopRibbonComponent } from './top-ribbon/top-ribbon.component';
+import { InsideComponent } from './inside/inside.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +22,10 @@ import { InterceptorService } from './services/interceptor.service';
     NavbarComponent,
     SetPasswordComponent,
     CreateUserAccountComponent,
-    LoginAccountComponent
+    LoginAccountComponent,
+    HomeComponent,
+    TopRibbonComponent,
+    InsideComponent
   ],
   imports: [
     BrowserModule,
