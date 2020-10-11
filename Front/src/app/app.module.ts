@@ -5,8 +5,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { MatDialogModule } from "@angular/material";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
+import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { SetPasswordComponent } from "./set-Password/set-Password.component";
 import { LoginAccountComponent } from "./login-account/login-account.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { CreateUserAccountComponent } from "./create-userAccount/create-userAccount.component";
@@ -20,7 +20,6 @@ import { InsideComponent } from './inside/inside.component';
   declarations: [
     AppComponent,
     NavbarComponent,
-    SetPasswordComponent,
     CreateUserAccountComponent,
     LoginAccountComponent,
     HomeComponent,
@@ -33,7 +32,8 @@ import { InsideComponent } from './inside/inside.component';
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    FlexLayoutModule
   ],
   providers: [
     {

@@ -86,11 +86,13 @@ export class CreateUserAccountComponent implements OnInit {
     this.http.post(apiUrl, dataToSend, { headers }).subscribe(
       (data) => {
         this.cUF.reset();
-        console.log("Enregistrement réussi");
+        console.warn(
+          "Enregistrement réussi! \n" + "Veuillez vous connecter..."
+        );
         this.router.navigate(["/login"]);
       },
       (error) => {
-        console.log("Enregistrement impossible");
+        console.warn("Enregistrement impossible \n" + error);
       }
     );
   }
