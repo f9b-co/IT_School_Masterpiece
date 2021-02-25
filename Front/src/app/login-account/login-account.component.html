@@ -4,14 +4,14 @@
         <label>Identifiant :</label><br />
         <input type="text" placeholder="A123456 ou X000001 ..." class="form-control" formControlName="username"
             required>
-        <div class="errors" *ngIf="fc.username.errors && fc.username.touched">
+        <div class="errors" *ngIf="lFc.username.errors && lFc.username.touched">
             Identifiant requis, 7 car. (Axxxxxx/Xyyyyyy)
         </div>
     </div>
     <div class="form-group">
         <label>Mot de Passe :</label><br />
         <input type="password" placeholder="Mot de Passe" class="form-control" formControlName="password" required>
-        <div class="errors" *ngIf="fc.password.errors && fc.password.touched">
+        <div class="errors" *ngIf="lFc.password.errors && lFc.password.touched">
             Mot de passe requis
         </div>
     </div>

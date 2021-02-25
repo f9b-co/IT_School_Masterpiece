@@ -1,1 +1,6 @@
-
+:host {
+  overflow: scroll;
+  padding-left: 20px;
+  min-width: 560px;
+  background-color: none;
+}

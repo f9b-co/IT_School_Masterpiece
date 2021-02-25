@@ -1,4 +1,62 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+h1 {
+  margin-block-start: auto;
+  margin-block-end: auto;
+}
+h3 {
+  margin-block-start: auto;
+  margin-block-end: 1em;
+}
+:link,
+:visited {
+  color: black;
+}
+form {
+  width: 100%;
+  min-width: max-content;
+  max-width: 500px;
+  font-size: 0.9rem;
+  border: 0 solid black;
+  padding: 1em;
+  justify-content: space-between;
+}
+input.form-control {
+  margin: 0.25rem 0rem;
+}
+::placeholder {
+  color: lightgrey;
+}
+.errors {
+  color: crimson;
+  font-size: 0.8rem;
+}
+.form-group {
+  margin-bottom: 1rem;
+  width: 50%;
+}
+.forms-group {
+  min-width: max-content;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-items: flex-start;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+app-login-account,
+app-create-userAccount {
+  overflow: scroll;
+  padding-left: 20px;
+  min-width: 560px;
+  background-color: silver;
+}

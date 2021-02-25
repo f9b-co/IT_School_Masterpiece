@@ -11,7 +11,7 @@ import { catchError } from "rxjs/operators";
 @Injectable({
   providedIn: "root"
 })
-export class InterceptorService implements HttpInterceptor {
+export class ErrorsInterceptorService implements HttpInterceptor {
   constructor() {}
   handleError(error: HttpErrorResponse) {
     let errorMessage = "Unknown error!";

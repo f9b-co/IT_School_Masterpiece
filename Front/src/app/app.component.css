@@ -11,48 +11,6 @@
   font-family: "Libre Franklin", sans-serif;
   display: block;
 }
-::ng-deep h1 {
-  margin-block-start: auto;
-  margin-block-end: auto;
-}
-::ng-deep h3 {
-  margin-block-start: auto;
-  margin-block-end: 1em;
-}
-::ng-deep :link,
-:visited {
-  color: black;
-}
-::ng-deep form {
-  width: 100%;
-  min-width: max-content;
-  max-width: 500px;
-  font-size: 0.9rem;
-  border: 0 solid black;
-  padding: 1em;
-  justify-content: space-between;
-}
-::ng-deep input.form-control {
-  margin: 0.25rem 0rem;
-}
-::ng-deep ::placeholder {
-  color: lightgrey;
-}
-::ng-deep .errors {
-  color: crimson;
-  font-size: 0.8rem;
-}
-::ng-deep .form-group {
-  margin-bottom: 1rem;
-  width: 50%;
-}
-::ng-deep .forms-group {
-  min-width: max-content;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-items: flex-start;
-}
 section {
   display: flex;
 }
@@ -78,16 +36,4 @@ app-navbar {
   height: 100%;
   color: white;
   background-color: black;
-}
-app-login-account {
-  overflow: scroll;
-  padding-left: 20px;
-  min-width: 560px;
-  background-color: blue;
-}
-app-create-userAccount {
-  overflow: scroll;
-  padding-left: 100px;
-  min-width: 560px;
-  background-color: blue;
 }

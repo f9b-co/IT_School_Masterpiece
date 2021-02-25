@@ -26,7 +26,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableAuthorizationServer
-@RestController // for "/me" endpoint
+//@RestController // for "/me" endpoint
 public class AuthorizationServerConfig
 	extends AuthorizationServerConfigurerAdapter {
 

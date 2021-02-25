@@ -61,8 +61,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = new Employee(
                 dto.getUsername(),
                 passwordEncoder.encode(dto.getPassword()),
-                roles
-        );
+                roles);
         employee.setFirstName(dto.getFirstName());
         employee.setLastName(dto.getLastName());
         employee.setDepartment(dto.getDepartment());

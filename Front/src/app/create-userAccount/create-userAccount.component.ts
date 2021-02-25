@@ -2,7 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { passwordChecking } from "../validators/passwordChecking";
+
+import { environment } from "../../environments/environment";
 
 @Component({
   selector: "app-create-userAccount",
@@ -67,14 +68,13 @@ export class CreateUserAccountComponent implements OnInit {
         "",
         Validators.compose([Validators.required, Validators.maxLength(64)])
       ),
-    },
-    { validators: passwordChecking }
+    }
   );
   cUF = this.createUserAccountForm;
   fc = this.createUserAccountForm.controls;
 
   onSubmit() {
-    const apiUrl = "http://localhost:8081/api/employees/";
+    const employeesUrl = `${environment.apiUrl}/api/employees/`;
     const headers = new HttpHeaders().set("Content-Type", "application/json");
     const dataToSend = JSON.stringify(this.cUF.value);
     Object.keys(dataToSend).forEach(function (key) {
@@ -83,7 +83,7 @@ export class CreateUserAccountComponent implements OnInit {
     console.log(dataToSend);
 
     // Send http request with form values to back api
-    this.http.post(apiUrl, dataToSend, { headers }).subscribe(
+    this.http.post(employeesUrl, dataToSend, { headers }).subscribe(
       (data) => {
         this.cUF.reset();
         console.warn(

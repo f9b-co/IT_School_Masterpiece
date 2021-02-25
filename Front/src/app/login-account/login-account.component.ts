@@ -3,6 +3,8 @@ import { Router } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 
+import { environment } from "../../environments/environment";
+
 @Component({
   selector: "app-login-account",
   templateUrl: "./login-account.component.html",
@@ -27,10 +29,10 @@ export class LoginAccountComponent implements OnInit {
     grant_type: new FormControl("password"),
   });
   lF = this.loginForm;
-  fc = this.loginForm.controls;
+  lFc = this.loginForm.controls;
 
   onSubmit() {
-    const url = "http://localhost:8081/oauth/token";
+    const url = `${environment.apiUrl}/oauth/token`;
     const headers = new HttpHeaders().set(
       "Content-Type",
       "application/x-www-form-urlencoded"

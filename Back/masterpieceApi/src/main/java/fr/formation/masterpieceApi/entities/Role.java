@@ -8,19 +8,19 @@ import java.util.Set;
 @Entity
 @Table(name="roles")
 public class Role extends AbstractEntity {
-    private String code;
+    private String name;
     private boolean defaultRole;
     @ManyToMany(mappedBy = "roles")
-    public Set<Employee> accounts;
+    public Set<Employee> employees;
 
     public Role() {
         //
     }
 
-    public String getCode() { return code; }
-    public void setCode(String code) { this.code = code; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
     public boolean isDefaultRole() { return defaultRole; }
     public void setDefaultRole(boolean defaultRole) { this.defaultRole = defaultRole; }
-    public Set<Employee> getAccounts() { return accounts; }
-    public void setAccounts(Set<Employee> accounts) { this.accounts = accounts; }
+    public Set<Employee> getEmployees() { return employees; }
+    public void setEmployees(Set<Employee> employees) { this.employees = employees; }
 }

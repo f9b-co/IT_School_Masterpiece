@@ -11,10 +11,11 @@ import { LoginAccountComponent } from "./login-account/login-account.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { CreateUserAccountComponent } from "./create-userAccount/create-userAccount.component";
 import { NavbarComponent } from "./navbar/navbar.component";
-import { InterceptorService } from './services/interceptor.service';
+import { ErrorsInterceptorService } from './_services/errors.interceptor.service';
+import { JwtInterceptorService } from './_services/jwt.interceptor.service';
 import { HomeComponent } from './home/home.component';
 import { TopRibbonComponent } from './top-ribbon/top-ribbon.component';
-import { InsideComponent } from './inside/inside.component';
+import { MonthlyActivityComponent } from './monthly-activity/monthlyActivity.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,7 @@ import { InsideComponent } from './inside/inside.component';
     LoginAccountComponent,
     HomeComponent,
     TopRibbonComponent,
-    InsideComponent
+    MonthlyActivityComponent
   ],
   imports: [
     BrowserModule,
@@ -36,11 +37,8 @@ import { InsideComponent } from './inside/inside.component';
     FlexLayoutModule
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: InterceptorService,
-      multi: true
-    }
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorsInterceptorService, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorService, multi: true }
   ],
   bootstrap: [AppComponent]
 })

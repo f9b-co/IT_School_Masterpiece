@@ -1,6 +1,5 @@
 package fr.formation.masterpieceApi.controllers;
 
-import fr.formation.masterpieceApi.config.SecurityHelper;
 import fr.formation.masterpieceApi.dtos.EmployeeDto;
 import fr.formation.masterpieceApi.dtos.EmployeeInfoDto;
 import fr.formation.masterpieceApi.dtos.EmployeeViewDto;
@@ -14,7 +13,7 @@ import java.util.List;
 
 @CrossOrigin //(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("/employees")
+@RequestMapping(value = "/employees", consumes = "application/json", produces = "application/json")
 public class EmployeeController {
 
     private final EmployeeService service;
@@ -29,14 +28,13 @@ public class EmployeeController {
         service.create(dto);
     }
 
-    @GetMapping(value = "/{username}", consumes = "application/json", produces = "application/json")
+    @GetMapping("/{username}")
     protected EmployeeViewDto getOne(@PathVariable("username") String username) {
         return service.getOne(username);
     }
 
     @GetMapping("/userInfo")
-    public EmployeeInfoDto currentEmployeeInfo() {
-        Long userId = SecurityHelper.getUserId();
+    public EmployeeInfoDto currentEmployeeInfo(Long userId) {
         return service.getCurrentUserInfo(userId);
     }
 

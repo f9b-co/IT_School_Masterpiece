@@ -28,7 +28,7 @@ public class EmployeeDetails extends User {
     }
 
     private static Set<GrantedAuthority> buildAuthorities(Set<Role> roles) {
-	return roles.stream().map(r -> new SimpleGrantedAuthority(r.getCode()))
+	return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName()))
 		.collect(Collectors.toUnmodifiableSet());
     }
 
