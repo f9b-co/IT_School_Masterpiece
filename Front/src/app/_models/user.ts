@@ -1,9 +1,14 @@
+import { Role } from './role';
+
 export class User {
-  firstName: string;
-  lastName: string;
-  department: string;
-  email: string;
   username: string;
-  password: string;
-  noAccount: boolean;
+  userId: number;
+  roles: Role[];
+
+  constructor(username: string, userId?: number, authorities?: Role[]) {
+    this.username = username;
+    this.userId = userId;
+    this.roles = authorities;
+  }
+
 }

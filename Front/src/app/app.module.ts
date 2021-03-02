@@ -15,7 +15,7 @@ import { ErrorsInterceptorService } from './_services/errors.interceptor.service
 import { JwtInterceptorService } from './_services/jwt.interceptor.service';
 import { HomeComponent } from './home/home.component';
 import { TopRibbonComponent } from './top-ribbon/top-ribbon.component';
-import { MonthlyActivityComponent } from './monthly-activity/monthlyActivity.component';
+import { MonthlyActivityComponent } from './monthlyActivity/monthlyActivity.component';
 
 @NgModule({
   declarations: [
@@ -42,4 +42,4 @@ import { MonthlyActivityComponent } from './monthly-activity/monthlyActivity.com
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

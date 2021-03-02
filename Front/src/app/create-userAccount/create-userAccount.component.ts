@@ -11,9 +11,9 @@ import { environment } from "../../environments/environment";
   styleUrls: ["./create-userAccount.component.css"],
 })
 export class CreateUserAccountComponent implements OnInit {
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   createUserAccountForm = new FormGroup(
     {
@@ -33,9 +33,9 @@ export class CreateUserAccountComponent implements OnInit {
           Validators.maxLength(20),
           Validators.pattern(
             "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).*$|" +
-              "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\\W).*$|" +
-              "^(?=.*?[a-z])(?=.*?[0-9])(?=.*?\\W).*$|" +
-              "^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?\\W).*$"
+            "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\\W).*$|" +
+            "^(?=.*?[a-z])(?=.*?[0-9])(?=.*?\\W).*$|" +
+            "^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?\\W).*$"
           ),
         ])
       ),
@@ -74,7 +74,7 @@ export class CreateUserAccountComponent implements OnInit {
   fc = this.createUserAccountForm.controls;
 
   onSubmit() {
-    const employeesUrl = `${environment.apiUrl}/api/employees/`;
+    const employeesUrl = `${environment.baseUrl}/api/employees/`;
     const headers = new HttpHeaders().set("Content-Type", "application/json");
     const dataToSend = JSON.stringify(this.cUF.value);
     Object.keys(dataToSend).forEach(function (key) {
@@ -89,7 +89,7 @@ export class CreateUserAccountComponent implements OnInit {
         console.warn(
           "Enregistrement réussi! \n" + "Veuillez vous connecter..."
         );
-        this.router.navigate(["/login"]);
+        this.router.navigate(['/login']);
       },
       (error) => {
         console.warn("Enregistrement impossible \n" + error);

@@ -12,8 +12,8 @@ export class TopRibbonComponent implements OnInit {
   ngOnInit() {
   }
 
-  logout(){
-    window.sessionStorage.removeItem("accessToken");
+  logout() {
+    window.sessionStorage.removeItem("access_Token");
   }
 
 }

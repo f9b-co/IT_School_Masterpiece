@@ -146,7 +146,7 @@ public class AuthorizationServerConfig
     @Override
     public void configure(ClientDetailsServiceConfigurer clients)
 	    throws Exception {
-	clients.inMemory().withClient("my-client-app")
+	clients.inMemory().withClient("masterpiece-spa")
 		.secret(passwordEncoder.encode("")).scopes("trusted")
 		.authorizedGrantTypes("password", "refresh_token")
 		.accessTokenValiditySeconds(accessTokenValiditySeconds)

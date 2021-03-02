@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
 
-import { environment } from "../../environments/environment";
+import { AuthenticationService } from '../_services/authentication.service';
+import { isNullOrUndefined } from "util";
 
 @Component({
   selector: "app-login-account",
@@ -11,9 +11,17 @@ import { environment } from "../../environments/environment";
   styleUrls: ["./login-account.component.css"],
 })
 export class LoginAccountComponent implements OnInit {
-  constructor(private router: Router, private http: HttpClient) {}
+  private requiredAuthData: string;
+  returnUrl: string;
 
-  ngOnInit() {}
+  constructor(private router: Router, private authenticationService: AuthenticationService) {
+    // redirect to main page if already logged in
+    if (this.authenticationService.isCurrentUserLogged()) {
+      this.router.navigate(['/monthlyActivity']);
+    }
+  }
+
+  ngOnInit() { }
 
   loginForm = new FormGroup({
     username: new FormControl(
@@ -25,31 +33,24 @@ export class LoginAccountComponent implements OnInit {
       ])
     ),
     password: new FormControl("", Validators.required),
-    client_id: new FormControl("my-client-app"),
+    client_id: new FormControl("masterpiece-spa"),
     grant_type: new FormControl("password"),
   });
   lF = this.loginForm;
   lFc = this.loginForm.controls;
 
   onSubmit() {
-    const url = `${environment.apiUrl}/oauth/token`;
-    const headers = new HttpHeaders().set(
-      "Content-Type",
-      "application/x-www-form-urlencoded"
-    );
-    const dataToSend = Object.keys(this.lF.value)
+    this.requiredAuthData = Object.keys(this.lF.value)
       .map((key) => key + "=" + this.lF.value[key])
       .join("&");
-    console.log(dataToSend);
+    console.log(this.requiredAuthData);
 
     // Send http request with form values to back api
-    this.http.post(url, dataToSend, { headers }).subscribe(
+    this.authenticationService.login(this.requiredAuthData).subscribe(
       (data) => {
-        this.lF.reset();
-        window.sessionStorage.setItem("accessToken", data["access_token"]);
         console.log(data);
         console.log("Connexion réussie");
-        this.router.navigate(["/inside"]);
+        this.router.navigate(['/monthlyActivity']);
       },
       (error) => {
         console.log(error);
