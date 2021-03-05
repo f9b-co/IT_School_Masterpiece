@@ -1,12 +1,16 @@
 hr {
-  border: 0;
-  border-top: 0.25em solid white;
+  border-style: none;
+  border-top: 5px solid white;
+  width: 40px;
   margin-block-start: 0;
   margin-block-end: 1em;
-  border-style: solid;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}
+.logout {
+  margin-top: auto;
 }
 img {
-  display: block;
-  margin: 1em auto;
+  margin: 0.5em auto;
   height: 2em;
 }

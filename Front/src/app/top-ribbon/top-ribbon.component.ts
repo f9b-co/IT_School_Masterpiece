@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { AuthenticationService } from '../_services/authentication.service';
+
 @Component({
   selector: 'app-top-ribbon',
   templateUrl: './top-ribbon.component.html',
@@ -7,13 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TopRibbonComponent implements OnInit {
 
-  constructor() { }
+  constructor(private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
   }
 
   logout() {
-    window.sessionStorage.removeItem("access_Token");
+    this.authenticationService.logout();
   }
 
 }

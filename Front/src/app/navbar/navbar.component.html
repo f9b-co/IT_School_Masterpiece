@@ -1,15 +1,14 @@
-<section id="navbar">
-    <hr>
-    <a routerLink="/home">
-        <img src="assets/images/Icon_home_remixofdynamitt.svg" alt="Accueil" title="Accueil">
-    </a>
-    <!--     <a routerLink=" ">
-        <img src="assets/images/ic_order_date_asc_white_24px.svg" alt="Saisie" title="Saisie">
-    </a> -->
-    <a routerLink="/monthlyActivity">
-        <img src="assets/images/ic_order_date_white_24px.svg" alt="Activité mensuelle" title="Activité mensuelle">
-    </a>
-    <!--     <a routerLink=" ">
-        <img src="assets/images/ic_order_date_desc_white_24px.svg" alt="Rapports" title="Rapports">
-    </a> -->
-</section>
+<hr>
+
+<a routerLink="/home">
+    <img src="assets/images/Icon_home_remixofdynamitt.svg" alt="Accueil" title="Accueil">
+</a>
+<a routerLink="/monthlyActivity">
+    <img src="assets/images/ic_order_date_white_24px.svg" alt="Activité mensuelle" title="Activité mensuelle">
+</a>
+<a routerLink=" ">
+    <img src="assets/images/ic_order_date_desc_white_24px.svg" alt="Rapports" title="Rapports">
+</a>
+<a class="logout" (click)="logout()" routerLink="/home">
+    <img src="assets/images/artmaster_logout_mini_icon_white.svg" alt="Déconnexion" title="Deconnexion">
+</a>

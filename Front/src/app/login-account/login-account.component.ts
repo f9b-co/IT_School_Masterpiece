@@ -1,9 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 import { AuthenticationService } from '../_services/authentication.service';
-import { isNullOrUndefined } from "util";
 
 @Component({
   selector: "app-login-account",
@@ -16,7 +15,7 @@ export class LoginAccountComponent implements OnInit {
 
   constructor(private router: Router, private authenticationService: AuthenticationService) {
     // redirect to main page if already logged in
-    if (this.authenticationService.isCurrentUserLogged()) {
+    if (this.authenticationService.isCurrentUserLoggedIn()) {
       this.router.navigate(['/monthlyActivity']);
     }
   }
@@ -49,7 +48,6 @@ export class LoginAccountComponent implements OnInit {
     this.authenticationService.login(this.requiredAuthData).subscribe(
       (data) => {
         console.log(data);
-        console.log("Connexion réussie");
         this.router.navigate(['/monthlyActivity']);
       },
       (error) => {

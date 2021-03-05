@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { isNullOrUndefined } from 'util';
 
 import { environment } from '../../environments/environment';
 import { User } from '../_models/user';
@@ -40,18 +41,20 @@ export class AuthenticationService {
           this.currentUserSubject.next(user);
         }
         console.log(user);
+        console.log("Connexion réussie");
         return user;
       }));
   }
 
   logout(): void {
-    // remove user from local storage to log user out
-    sessionStorage.removeItem('token');
+    // remove token from session storage to log user out
+    window.sessionStorage.removeItem('token');
     this.currentUserSubject.next(null);
+    console.log("Déconnexion réussie");
   }
 
-  isCurrentUserLogged(): boolean {
-    return (this.jwtService.getUserFromToken()) ? true : false;
+  isCurrentUserLoggedIn(): boolean {
+    return ((this.currentUserValue) && !isNullOrUndefined(this.currentUserValue.roles)) ? true : false;
   }
 
 }
