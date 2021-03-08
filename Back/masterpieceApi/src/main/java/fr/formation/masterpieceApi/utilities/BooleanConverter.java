@@ -4,7 +4,7 @@ import javax.persistence.AttributeConverter;
 
 /**
  * A custom converter to convert entity {@code Boolean} attribute state into
- * database column representationand back again.
+ * database column representation and back again.
  * <p>
  * This implementation converts {@code Boolean} from/to {@code String}s such as:
  * <ul>

@@ -14,8 +14,12 @@ public class Employee extends AbstractEntity {
     private String firstName;
     @Column(length = 64, nullable = false)
     private String lastName;
-    @Column(length = 64, nullable = false)
-    private String department;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "team_id")
+    private Team team;
     @Column(length = 128, unique = true, nullable = false)
     private String email;
     @Column(length = 7, unique = true, nullable = false)
@@ -35,10 +39,15 @@ public class Employee extends AbstractEntity {
     @Column(length = 1, nullable = false)
     private boolean credentialsNonExpired;
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "employees_roles",
+    @JoinTable(name = "assigned_roles",
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "done_activities",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "activity_id"))
+    private Set<Activity> activities;
 
     protected Employee() {
         // Empty no-arg constructor (Hibernate)
@@ -50,11 +59,11 @@ public class Employee extends AbstractEntity {
         this(username, password, roles, true);
     }
     /*
-     * Creates a new employee.     *
-     * @param username a unique username
-     * @param password an encrypted password
-     * @param roles    some roles
-     * @param enabled  {@code true} if enabled; {@code false} otherwise
+     * Creates a new employee:
+     * username as a unique username
+     * password as an encrypted password
+     * roles as some roles
+     * enabled = true if enabled, false otherwise
      */
     public Employee(String username, String password, Set<Role> roles, boolean enabled) {
         this.username = username;
@@ -63,12 +72,16 @@ public class Employee extends AbstractEntity {
         this.enabled = enabled;
     }
 
+
+
     public String getFirstName() { return firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
     public String getLastName() { return lastName; }
     public void setLastName(String lastName) { this.lastName = lastName; }
-    public String getDepartment() { return department; }
-    public void setDepartment(String department) { this.department = department; }
+    public Department getDepartment() { return department; }
+    public void setDepartment(Department department) { this.department = department; }
+    public Team getTeam() { return team; }
+    public void setTeam(Team team) { this.team = team; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     public String getUsername() { return username; }
@@ -85,21 +98,26 @@ public class Employee extends AbstractEntity {
     public void setCredentialsNonExpired(boolean credentialsNonExpired) { this.credentialsNonExpired = credentialsNonExpired; }
     public Set<Role> getRoles() { return roles; }
     public void setRoles(Set<Role> roles) { this.roles = roles; }
+    public Set<Activity> getActivities() { return activities; }
+    public void setActivities(Set<Activity> activities) { this.activities = activities; }
 
     @Override
     public String toString() {
+        // password=[PROTECTED], value must not be displayed in logs
         return "Employee{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", department='" + department + '\'' +
-                ", email='" + email + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", enable=" + enabled +
-                ", accountNonExpired=" + accountNonExpired +
-                ", accountNonLocked=" + accountNonLocked +
-                ", credentialsNonExpired=" + credentialsNonExpired +
-                ", roles=" + roles +
+                "firstName= '" + firstName + "\'" +
+                ", lastName= '" + lastName + "\'" +
+                ", department= '" + department.getName() + "\'" +
+                ", team= '" + team.getName() + "\'" +
+                ", email= '" + email + "\'" +
+                ", username= '" + username + "\'" +
+                ", password= '[PROTECTED]\'" +
+                ", enable= '" + enabled + "\'" +
+                ", accountNonExpired= '" + accountNonExpired + "\'" +
+                ", accountNonLocked= '" + accountNonLocked + "\'" +
+                ", credentialsNonExpired= '" + credentialsNonExpired + "\'" +
+                ", roles= '" + roles.toString() + "\'" +
+                ", activities= '" + activities.size() + "\'" +
                 '}';
     }
 }
