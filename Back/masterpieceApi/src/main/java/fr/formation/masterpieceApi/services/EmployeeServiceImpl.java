@@ -3,17 +3,16 @@ package fr.formation.masterpieceApi.services;
 import fr.formation.masterpieceApi.config.EmployeeDetails;
 import fr.formation.masterpieceApi.config.ResourceNotFoundException;
 import fr.formation.masterpieceApi.dtos.*;
+import fr.formation.masterpieceApi.entities.Department;
 import fr.formation.masterpieceApi.entities.Role;
 import fr.formation.masterpieceApi.entities.Employee;
-import fr.formation.masterpieceApi.repositories.RoleRepository;
-import fr.formation.masterpieceApi.repositories.EmployeeRepository;
+import fr.formation.masterpieceApi.repositories.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,13 +21,21 @@ import java.util.Set;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeesRepo;
+    private final DepartmentRepository departmentsRepo;
+    private final TeamRepository teamsRepo;
     private final RoleRepository rolesRepo;
     private final PasswordEncoder passwordEncoder;
-    
-    protected EmployeeServiceImpl(EmployeeRepository employeesRepo, RoleRepository rolesRepo, PasswordEncoder passwordEncoder) {
+    private final ActivityRepository activitiesRepo;
+
+    protected EmployeeServiceImpl(
+            EmployeeRepository employeesRepo, DepartmentRepository departmentsRepo, TeamRepository teamsRepo,
+            RoleRepository rolesRepo, PasswordEncoder passwordEncoder, ActivityRepository activitiesRepo) {
         this.employeesRepo = employeesRepo;
+        this.departmentsRepo = departmentsRepo;
+        this.teamsRepo = teamsRepo;
         this.rolesRepo = rolesRepo;
         this.passwordEncoder = passwordEncoder;
+        this.activitiesRepo = activitiesRepo;
     }
 
     // Throws UsernameNotFoundException (Spring contract)
@@ -53,8 +60,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeesRepo.findByUsername(username).isPresent();
     }
 
+
+    @Transactional
     @Override
-    public void create(EmployeeDto dto) {
+    public void create(EmployeeCreateDto dto) {
         Role defaultRole = rolesRepo.findByDefaultRoleTrue().get();
         Set<Role> roles = new HashSet<Role>();
         roles.add(defaultRole);
@@ -64,7 +73,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 roles);
         employee.setFirstName(dto.getFirstName());
         employee.setLastName(dto.getLastName());
-        employee.setDepartment(dto.getDepartment());
+        employee.setDepartment(this.findOne(dto.getDepartmentName()));
         employee.setEmail(dto.getEmail());
         employee.setAccountNonExpired(true);
         employee.setAccountNonLocked(true);
@@ -84,5 +93,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     @Override
     public void delete(String username) { employeesRepo.deleteByUsername(username); }
+
+    // Throws ResourceNotFoundException (restful practice)
+    @Override
+    public Department findOne(String departmentName) {
+        return departmentsRepo.findByName(departmentName).orElseThrow(
+                () -> new ResourceNotFoundException("with name:" + departmentName));
+    }
 
 }

@@ -52,8 +52,8 @@ public class AuthorizationServerConfig
     // Defined as Spring bean in WebSecurity
     private final AuthenticationManager authenticationManager;
 
-    // Custom user details service to authenticate users with username and
-    // password from the database
+    // Custom user details service to authenticate users
+    // with username and password from the database
     private final EmployeeService employeeService;
 
     // Custom token converter to store custom info within access token

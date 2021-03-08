@@ -15,7 +15,7 @@ const routes: Routes = [
     path: "monthlyActivity", component: MonthlyActivityComponent, canActivate: [AuthGuard],
     data: { roles: [Role.Admin, Role.Manager, Role.User] }
   },
-  { path: "", redirectTo: "/monthlyActivity", pathMatch: "full" }
+  { path: "", redirectTo: "/home", pathMatch: "full" }
 ];
 
 @NgModule({

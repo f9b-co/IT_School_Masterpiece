@@ -1,6 +1,6 @@
 package fr.formation.masterpieceApi.controllers;
 
-import fr.formation.masterpieceApi.dtos.EmployeeDto;
+import fr.formation.masterpieceApi.dtos.EmployeeCreateDto;
 import fr.formation.masterpieceApi.dtos.EmployeeInfoDto;
 import fr.formation.masterpieceApi.dtos.EmployeeViewDto;
 import fr.formation.masterpieceApi.services.EmployeeService;
@@ -23,7 +23,7 @@ public class EmployeeController {
     }
 
     @PostMapping(consumes = "application/json", produces = "application/json")
-    protected void create(@Valid @RequestBody EmployeeDto dto) {
+    protected void create(@Valid @RequestBody EmployeeCreateDto dto) {
         System.out.println(dto.toString());
         service.create(dto);
     }
