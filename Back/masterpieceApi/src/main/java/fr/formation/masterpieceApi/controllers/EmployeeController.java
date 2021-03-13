@@ -22,7 +22,7 @@ public class EmployeeController {
         this.service = service;
     }
 
-    @PostMapping(consumes = "application/json", produces = "application/json")
+    @PostMapping
     protected void create(@Valid @RequestBody EmployeeCreateDto dto) {
         System.out.println(dto.toString());
         service.create(dto);

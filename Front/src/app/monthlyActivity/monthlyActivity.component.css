@@ -1,7 +1,8 @@
 :host {
+  overflow: scroll;
   width: 100%;
   background-color: white;
 }
-#insideAnim img {
-  width: 100%;
+#timeline img {
+  width: 800px;
 }

@@ -1,6 +1,5 @@
 package fr.formation.masterpieceApi.entities;
 
-
 import fr.formation.masterpieceApi.utilities.BooleanConverter;
 
 import javax.persistence.*;
@@ -18,13 +17,13 @@ public class Employee extends AbstractEntity {
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "team_id")
+    @JoinColumn(name = "team_id", nullable = false)
     private Team team;
     @Column(length = 128, unique = true, nullable = false)
     private String email;
     @Column(length = 7, unique = true, nullable = false)
     private String username;
-    @Column(length = 255)
+    @Column(length = 255, nullable = false)
     private String password;
     @Convert(converter = BooleanConverter.class)
     @Column(length = 1, nullable = false)
@@ -44,7 +43,7 @@ public class Employee extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "done_activities",
+    @JoinTable(name = "listed_activities",
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "activity_id"))
     private Set<Activity> activities;
@@ -71,8 +70,6 @@ public class Employee extends AbstractEntity {
         this.roles = roles;
         this.enabled = enabled;
     }
-
-
 
     public String getFirstName() { return firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
