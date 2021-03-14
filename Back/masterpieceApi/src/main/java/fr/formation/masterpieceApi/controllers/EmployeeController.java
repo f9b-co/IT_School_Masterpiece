@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@CrossOrigin //(origins = "*", allowedHeaders = "*")
+
 @RestController
 @RequestMapping(value = "/employees", consumes = "application/json", produces = "application/json")
 public class EmployeeController {

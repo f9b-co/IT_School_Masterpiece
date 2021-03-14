@@ -7,21 +7,22 @@ import java.time.LocalDate;
 @Table(name="activities")
 public class Activity extends AbstractEntity {
 
-    @Column(name = "date", updatable = false)
+    @Column(name = "date", nullable = false, updatable = false)
     private LocalDate activityDate;
 
-    @Column(name = "half_day", updatable = false)
-    private String halfDay;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "half_day", nullable = false, updatable = false)
+    private HalfDay halfDay;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "task_id")
+    @JoinColumn(name = "task_id", nullable = false)
     private Task task;
 
     protected Activity() {
         // Empty no-arg constructor (Hibernate)
     }
 
-    public Activity(LocalDate activityDate, String halfDay, Task task) {
+    public Activity(LocalDate activityDate, HalfDay halfDay, Task task) {
         this.activityDate = activityDate;
         this.halfDay = halfDay;
         this.task = task;
@@ -29,8 +30,8 @@ public class Activity extends AbstractEntity {
 
     public LocalDate getActivityDate() { return activityDate; }
     public void setActivityDate(LocalDate activityDate) { this.activityDate = activityDate; }
-    public String getHalfDay() { return halfDay; }
-    public void setHalfDay(String halfDay) { this.halfDay = halfDay; }
+    public HalfDay getHalfDay() { return halfDay; }
+    public void setHalfDay(HalfDay halfDay) { this.halfDay = halfDay; }
     public Task getTask() { return task; }
     public void setTask(Task task) { this.task = task; }
 }

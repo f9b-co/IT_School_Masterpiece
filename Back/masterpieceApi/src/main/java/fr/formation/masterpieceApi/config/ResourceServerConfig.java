@@ -30,7 +30,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		.sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 		.authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll()
-		.antMatchers(HttpMethod.POST, "/api/users").permitAll()
+		.antMatchers(HttpMethod.POST, "/api/employees", "/api/activities").permitAll()
 		.antMatchers("/api/userInfo").authenticated();
     }
 }

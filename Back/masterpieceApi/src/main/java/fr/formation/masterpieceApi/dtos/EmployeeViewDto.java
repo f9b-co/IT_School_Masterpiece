@@ -1,11 +1,18 @@
 package fr.formation.masterpieceApi.dtos;
 
 
+import fr.formation.masterpieceApi.entities.Activity;
+import fr.formation.masterpieceApi.entities.Department;
+import fr.formation.masterpieceApi.entities.Team;
+
+import java.util.Set;
+
 public interface EmployeeViewDto {
-    boolean isEnabled();
     String getFirstName();
     String getLastName();
-    String getDepartment();
+    Department getDepartment();
+    Team getTeam();
     String getEmail();
     String getUsername();
+    Set<Activity> getActivities();
 }

@@ -42,7 +42,6 @@ export class LoginAccountComponent implements OnInit {
     this.requiredAuthData = Object.keys(this.lF.value)
       .map((key) => key + "=" + this.lF.value[key])
       .join("&");
-    console.log(this.requiredAuthData);
 
     // Send http request with form values to back api
     this.authenticationService.login(this.requiredAuthData).subscribe(

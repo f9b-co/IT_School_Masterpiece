@@ -17,7 +17,7 @@ public class Employee extends AbstractEntity {
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "team_id", nullable = false)
+    @JoinColumn(name = "team_id", nullable = true)
     private Team team;
     @Column(length = 128, unique = true, nullable = false)
     private String email;

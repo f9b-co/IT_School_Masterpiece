@@ -11,6 +11,6 @@ public interface ActivityService {
 
     void delete(Long id);
 
-    List<ListedActivitiesViewDto> getMonthlyListedActivities(Long id, int month);
+    List<ListedActivitiesViewDto> getAllProjectedBy(); //getMonthlyListedActivities(int monthOffset, Long userId);
 
 }

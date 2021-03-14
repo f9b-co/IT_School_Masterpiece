@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@CrossOrigin //(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping(value = "/activities", consumes = "application/json", produces = "application/json")
 public class ActivityController {
@@ -27,9 +26,14 @@ public class ActivityController {
         service.create(dto);
     }
 
-    @GetMapping
-    protected List<ListedActivitiesViewDto> getAllListed(@RequestParam("i") Long id , @RequestParam("m") int month) {
-        return service.getMonthlyListedActivities(id, month);
+/*    @GetMapping("/listed/filtered")
+    protected List<ListedActivitiesViewDto> getAllListed(@RequestParam("mo") int monthOffset, @RequestParam("ui") Long userId) {
+        return null; //service.getMonthlyListedActivities(monthOffset, userId);
+    }*/
+
+    @GetMapping("/listed")
+    protected List<ListedActivitiesViewDto> getAllListed() {
+        return service.getAllProjectedBy();
     }
 
     @DeleteMapping("/{id}")

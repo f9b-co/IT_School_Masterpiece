@@ -9,7 +9,7 @@ public class Team extends AbstractEntity {
     @Column(length = 64, nullable = false)
     private String name;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "manager_id")
+    @JoinColumn(name = "manager_id", nullable = false)
     private Employee manager;
 
     protected Team() {

@@ -11,6 +11,7 @@ import javax.persistence.Table;
 @Table(name="roles")
 public class Role extends AbstractEntity {
 
+    @Column(length = 64, nullable = false)
     private String name;
 
     @Convert(converter = BooleanConverter.class)
