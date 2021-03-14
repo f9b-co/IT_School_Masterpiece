@@ -42,11 +42,8 @@ public class Employee extends AbstractEntity {
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "listed_activities",
-            joinColumns = @JoinColumn(name = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "activity_id"))
-    private Set<Activity> activities;
+    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
+    private Set<ListedActivities> listedActivities;
 
     protected Employee() {
         // Empty no-arg constructor (Hibernate)
@@ -95,8 +92,8 @@ public class Employee extends AbstractEntity {
     public void setCredentialsNonExpired(boolean credentialsNonExpired) { this.credentialsNonExpired = credentialsNonExpired; }
     public Set<Role> getRoles() { return roles; }
     public void setRoles(Set<Role> roles) { this.roles = roles; }
-    public Set<Activity> getActivities() { return activities; }
-    public void setActivities(Set<Activity> activities) { this.activities = activities; }
+    public Set<ListedActivities> getListedActivities() { return listedActivities; }
+    public void setListedActivities(Set<ListedActivities> listedActivities) { this.listedActivities = listedActivities; }
 
     @Override
     public String toString() {
@@ -114,7 +111,7 @@ public class Employee extends AbstractEntity {
                 ", accountNonLocked= '" + accountNonLocked + "\'" +
                 ", credentialsNonExpired= '" + credentialsNonExpired + "\'" +
                 ", roles= '" + roles.toString() + "\'" +
-                ", activities= '" + activities.size() + "\'" +
+                ", activities= '" + listedActivities.size() + "\'" +
                 '}';
     }
 }

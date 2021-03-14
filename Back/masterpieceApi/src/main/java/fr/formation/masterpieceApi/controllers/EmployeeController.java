@@ -1,5 +1,6 @@
 package fr.formation.masterpieceApi.controllers;
 
+import fr.formation.masterpieceApi.dtos.EmployeeActivitiesDto;
 import fr.formation.masterpieceApi.dtos.EmployeeCreateDto;
 import fr.formation.masterpieceApi.dtos.EmployeeInfoDto;
 import fr.formation.masterpieceApi.dtos.EmployeeViewDto;
@@ -28,9 +29,14 @@ public class EmployeeController {
         service.create(dto);
     }
 
-    @GetMapping("/{username}")
-    protected EmployeeViewDto getOne(@PathVariable("username") String username) {
+    @GetMapping("/{username}/activities")
+    protected EmployeeActivitiesDto getOne(@PathVariable("username") String username) {
         return service.getOne(username);
+    }
+
+    @GetMapping("/team/{username}")
+    protected List<EmployeeViewDto> getByEmployeeTeam(@PathVariable("username") String username) {
+        return service.getByEmployeeTeam(username);
     }
 
     @GetMapping("/userInfo")

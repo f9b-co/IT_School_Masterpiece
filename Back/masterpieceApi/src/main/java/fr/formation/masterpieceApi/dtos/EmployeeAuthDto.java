@@ -4,8 +4,8 @@ import fr.formation.masterpieceApi.entities.Role;
 
 import java.util.Set;
 
-/**
- * A projection of a {@code Employee} for authentication.
+/*
+ * A projection of an Employee for authentication.
  */
 public interface EmployeeAuthDto {
 

@@ -8,25 +8,25 @@ import java.io.Serializable;
 
 @Entity
 @Table(name="listed_activities")
-@IdClass(ListedActivitiesId.class)
-public class ListedActivities implements Serializable {
+public class ListedActivities extends AbstractEntity {
 
-    @Id
-    @Column(name = "employee_id", insertable = false, updatable = false)
-    private Long employeeId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "employee_id", nullable = false)
+    private Employee employee;
 
-    @Id
-    @Column(name = "activity_id", insertable = false, updatable = false)
-    private Long activityId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "activity_id", nullable = false)
+    private Activity activity;
 
     @Convert(converter = BooleanConverter.class)
     @Column(length = 1, nullable = false)
     private  boolean validated;
 
-    public Long getEmployeeId() { return employeeId; }
-    public void setEmployeeId(Long employeeId) { this.employeeId = employeeId; }
-    public Long getActivityId() { return activityId; }
-    public void setActivityId(Long activityId) { this.activityId = activityId; }
+    public Employee getEmployee() { return employee; }
+    public void setEmployee(Employee employee) { this.employee = employee; }
+    public Activity getActivity() { return activity; }
+    public void setActivity(Activity activity) { this.activity = activity; }
     public boolean isValidated() { return validated; }
     public void setValidated(boolean validated) { this.validated = validated; }
+    
 }

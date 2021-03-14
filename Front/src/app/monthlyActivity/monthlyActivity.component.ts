@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+import { AuthenticationService } from '../_services/authentication.service';
 import { ActivityService } from '../_services/activity.service';
 import { User } from '../_models/user';
 
@@ -10,34 +10,46 @@ import { User } from '../_models/user';
   styleUrls: ['./monthlyActivity.component.css']
 })
 export class MonthlyActivityComponent implements OnInit {
-  targetMonthOffset: number = 4;
+  user: User = this.authenticationService.currentUserValue;
+  teams: any[] = [];
+  targetMonthOffset: number = 0;
   daysInTargetMonth: number;
   closedDaysInMonth: number[] = [];
   tableBody: HTMLElement = document.getElementById("activitiesTableBody");
 
-  constructor(private http: HttpClient) { }
+
+  constructor(private authenticationService: AuthenticationService,
+    private activityService: ActivityService) { }
 
   ngOnInit() {
     const today = new Date();
     const targetYear = today.getFullYear();
     const targetMonth = today.getMonth() + this.targetMonthOffset;
     const daysInTargetMonth = this.daysInMonth(targetMonth, targetYear);
-    const closedDaysInMonth = this.listClosedDays(targetYear, targetMonth, daysInTargetMonth);
+    const closedDaysInMonth = this.activityService.listClosedDays(targetYear, targetMonth, daysInTargetMonth);
 
+    this.loadActivities();
   }
 
-  loadActivities(url) {
-    fetch(url)
-      .then((resp) => resp.json())
-      .then((jsonResp) => this.tableize(jsonResp))
-      .catch((error) => alert("Erreur : " + error));
+  loadActivities() {
+
+    // Send http request with form values to back api
+    this.activityService.getMonthListedActivities(this.targetMonthOffset, this.user.username).subscribe(
+      (data) => {
+        console.log(data);
+        //this.tableize(data);
+      },
+      (error) => {
+        alert(error);
+      }
+    );
   }
 
   tableize(listedActivities) {
     console.log(listedActivities);
 
 
-    listedActivities.forEach((country) => {
+    listedActivities.forEach((userActivities) => {
       const tr = this.createNode("tr");
 
       for (let i = 0; i < this.daysInTargetMonth; i++) {
@@ -61,28 +73,7 @@ export class MonthlyActivityComponent implements OnInit {
     return new Date(year, month, 0).getDate();
   }
 
-  listClosedDays(year: number, month: number, daysInMonth: number) {
-    this.http.get<any>('../../assets/jsons/api-gouv-fr_jours-feries_2020-2022.json')
-      .subscribe((res: any) => {
-        const publicHoliday = [];
-        for (let date in res) {
-          const monthDay = new Date(date)
-          if (monthDay.getFullYear() == year && monthDay.getMonth() == month) {
-            publicHoliday.push(monthDay.getDate());
-          }
-        }
-        console.log(year + "-" + month + " publicHoliday = " + publicHoliday)
-        const closedDays = [];
-        for (let i = 1; i <= daysInMonth; i++) {
-          const weekDay = new Date(year, month, i).getDay();
-          if (weekDay == 0 || weekDay == 6 || publicHoliday.includes(i)) {
-            closedDays.push(i)
-          }
-        }
-        console.log(closedDays);
-        return closedDays;
-      });
-  }
+
 
   notNullCheck(el) {
     if (el != null) {

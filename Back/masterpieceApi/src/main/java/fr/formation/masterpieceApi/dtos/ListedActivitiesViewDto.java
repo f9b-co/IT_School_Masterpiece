@@ -1,9 +1,12 @@
 package fr.formation.masterpieceApi.dtos;
 
+import fr.formation.masterpieceApi.entities.Activity;
+import fr.formation.masterpieceApi.entities.Employee;
+
 public interface ListedActivitiesViewDto {
 
-    Long getEmployeeId();
-    Long getActivityId();
+    EmployeeViewDto getEmployee();
+    ActivityViewDto getActivity();
     boolean isValidated();
 
 

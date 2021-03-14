@@ -1,5 +1,6 @@
 package fr.formation.masterpieceApi.services;
 
+import fr.formation.masterpieceApi.dtos.EmployeeActivitiesDto;
 import fr.formation.masterpieceApi.dtos.EmployeeCreateDto;
 import fr.formation.masterpieceApi.dtos.EmployeeInfoDto;
 import fr.formation.masterpieceApi.dtos.EmployeeViewDto;
@@ -13,11 +14,12 @@ public interface EmployeeService extends UserDetailsService {
 
     boolean userExists(String username);
     void create(EmployeeCreateDto dto);
-    EmployeeViewDto getOne(String username);
+    EmployeeActivitiesDto getOne(String username);
     List<EmployeeViewDto> getAll(Pageable pageable);
     EmployeeInfoDto getCurrentUserInfo(Long id);
     void delete(String username);
 
     Department findOne(String DepartmentName);
 
+    List<EmployeeViewDto> getByEmployeeTeam(String username);
 }
