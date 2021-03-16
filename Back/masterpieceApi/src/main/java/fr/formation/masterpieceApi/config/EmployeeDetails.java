@@ -10,9 +10,9 @@ import org.springframework.security.core.userdetails.User;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * A custom {@code UserDetails} for Spring authentication contract and custom
- * properties we want in the token (such as the id).
+/*
+ * A custom UserDetails for Spring authentication contract
+ * and custom properties we want in the token (such as the id).
  */
 public class EmployeeDetails extends User {
 
@@ -39,10 +39,12 @@ public class EmployeeDetails extends User {
     @Override
     public String toString() {
 	return "{id=" + id + ", authorities=" + getAuthorities()
-		+ ", password=[PROTECTED], username=" + getUsername()
-		+ ", enabled=" + isEnabled() + ", accountNonExpired="
-		+ isAccountNonExpired() + ", accountNonLocked="
-		+ isAccountNonLocked() + ", credentialsNonExpired="
-		+ isCredentialsNonExpired() + "}";
+		+ ", password=[PROTECTED]"
+		+ ", username=" + getUsername()
+		+ ", enabled=" + isEnabled()
+		+ ", accountNonExpired=" + isAccountNonExpired()
+		+ ", accountNonLocked=" + isAccountNonLocked()
+		+ ", credentialsNonExpired=" + isCredentialsNonExpired() + "}";
     }
+
 }

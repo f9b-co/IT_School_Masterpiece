@@ -20,15 +20,12 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
 
 @Configuration
 @EnableAuthorizationServer
-//@RestController // for "/me" endpoint
-public class AuthorizationServerConfig
-	extends AuthorizationServerConfigurerAdapter {
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
 
@@ -46,13 +43,10 @@ public class AuthorizationServerConfig
     @Value("${jwt-auth-server.accessTokenValiditySeconds}")
     private int accessTokenValiditySeconds;
 
-    @Value("${jwt-auth-server.refreshTokenValiditySeconds}")
-    private int refreshTokenValiditySeconds;
-
     // Defined as Spring bean in WebSecurity
     private final AuthenticationManager authenticationManager;
 
-    // Custom user details service to authenticate users
+    // EmployeeService as custom user details service to authenticate users
     // with username and password from the database
     private final EmployeeService employeeService;
 
@@ -69,19 +63,19 @@ public class AuthorizationServerConfig
 	    this.customAccessTokenConverter = customAccessTokenConverter;
     }
 
-    /**
+    /*
      * Token service using random UUID values for the access token and refresh
-     * token values. Specifies the token store and enables the refresh token.
+     * token values. Specifies the token store and disables the refresh token.
      */
     @Bean
     protected DefaultTokenServices tokenServices() {
 	DefaultTokenServices services = new DefaultTokenServices();
 	services.setTokenStore(tokenStore());
-	services.setSupportRefreshToken(true);
+	services.setSupportRefreshToken(false);
 	return services;
     }
 
-    /**
+    /*
      * JwtTokenStore can read and write JWT thanks to the token converter.
      */
     @Bean
@@ -94,8 +88,9 @@ public class AuthorizationServerConfig
 	return new CustomTokenEnhancer();
     }
 
-    /**
-     * All in one.
+    /*
+     * Configure the properties and enhanced functionality
+     * of the Authorization Server endpoints.
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer configurer)
@@ -108,9 +103,8 @@ public class AuthorizationServerConfig
 		.userDetailsService(employeeService);
     }
 
-    /**
-     * A token converter for JWT and specifies a signing key (private/public key
-     * pair).
+    /*
+     * A token converter for JWT and specifies a signing key (private/public key pair).
      */
     @Bean
     protected JwtAccessTokenConverter accessTokenConverter() {
@@ -123,7 +117,7 @@ public class AuthorizationServerConfig
 	return converter;
     }
 
-    /**
+    /*
      * Change authorization server security allowing form auth for clients (vs
      * HTTP Basic). The client_id is sent as form parameter instead.
      */
@@ -133,12 +127,12 @@ public class AuthorizationServerConfig
 	configurer.allowFormAuthenticationForClients();
     }
 
-    /**
-     * In memory client with empty secret, application is a "private" API with a
-     * single client, but Spring forces a client authentication.
-     * <p>
-     * Authorized grant types are <i>password</i> and <i>refresh_token</i>.
-     * <p>
+    /*
+     * In memory client with empty secret, application is a "private" API
+     * with a single client, but Spring forces a client authentication.
+     *
+     * Authorized grant types are short-listed to only password.
+     *
      * The scope is trusted (convention) and no need to specify it during client
      * authentication. We do not use scope-based authorization in this
      * application.
@@ -148,9 +142,8 @@ public class AuthorizationServerConfig
 	    throws Exception {
 	clients.inMemory().withClient("masterpiece-spa")
 		.secret(passwordEncoder.encode("")).scopes("trusted")
-		.authorizedGrantTypes("password", "refresh_token")
-		.accessTokenValiditySeconds(accessTokenValiditySeconds)
-		.refreshTokenValiditySeconds(refreshTokenValiditySeconds);
+		.authorizedGrantTypes("password")
+		.accessTokenValiditySeconds(accessTokenValiditySeconds);
     }
 
 }

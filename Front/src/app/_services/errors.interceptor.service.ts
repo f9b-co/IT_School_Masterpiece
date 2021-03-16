@@ -1,16 +1,16 @@
 import { Injectable } from "@angular/core";
-import {
-  HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse
-} from "@angular/common/http";
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, 
+  HttpErrorResponse }  from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 
 import { AuthenticationService } from '../_services/authentication.service';
 
 @Injectable({ providedIn: "root" })
+
 export class ErrorsInterceptorService implements HttpInterceptor {
 
-  constructor(private authenticationService?: AuthenticationService) { }
+  constructor(private authenticationService: AuthenticationService) { }
 
   handleError(error: HttpErrorResponse) {
     let errorMessage = "Unknown error!";

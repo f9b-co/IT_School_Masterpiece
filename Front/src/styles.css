@@ -8,6 +8,12 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+.hidden {
+  visibility: hidden;
+}
+.visible {
+  visibility: visible;
+}
 h1 {
   margin-block-start: auto;
   margin-block-end: auto;

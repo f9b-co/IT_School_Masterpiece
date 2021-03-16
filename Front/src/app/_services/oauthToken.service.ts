@@ -6,7 +6,7 @@ import { User } from '../_models/user';
 @Injectable({
   providedIn: 'root'
 })
-export class JwtService {
+export class OauthTokenService {
   private decoded: { [key: string]: any };
 
   constructor() { }

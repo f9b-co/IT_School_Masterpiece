@@ -3,9 +3,7 @@ package fr.formation.masterpieceApi.services;
 import fr.formation.masterpieceApi.config.EmployeeDetails;
 import fr.formation.masterpieceApi.config.ResourceNotFoundException;
 import fr.formation.masterpieceApi.dtos.*;
-import fr.formation.masterpieceApi.entities.Department;
-import fr.formation.masterpieceApi.entities.Role;
-import fr.formation.masterpieceApi.entities.Employee;
+import fr.formation.masterpieceApi.entities.*;
 import fr.formation.masterpieceApi.repositories.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,9 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -66,14 +62,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void create(EmployeeCreateDto dto) {
         Role defaultRole = rolesRepo.findByDefaultRoleTrue().get();
         Set<Role> roles = new HashSet<Role>();
+        Set<ListedActivities> listedActivities = new HashSet<ListedActivities>();
         roles.add(defaultRole);
         Employee employee = new Employee(
                 dto.getUsername(),
                 passwordEncoder.encode(dto.getPassword()),
                 roles);
+        employee.setListedActivities(listedActivities);
         employee.setFirstName(dto.getFirstName());
         employee.setLastName(dto.getLastName());
-        employee.setDepartment(this.findOne(dto.getDepartmentName()));
+        employee.setDepartment(this.findOne(dto.getDepartment()));
         employee.setEmail(dto.getEmail());
         employee.setAccountNonExpired(true);
         employee.setAccountNonLocked(true);
@@ -86,13 +84,32 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeActivitiesDto getOne(String username) { return employeesRepo.readByUsername(username); }
 
     @Override
-    public List<EmployeeViewDto> getAll(Pageable pageable) {
-        return employeesRepo.getAllProjectedBy(pageable);
+    public List<EmployeeViewDto> getAll(Pageable pageable) { return employeesRepo.getAllProjectedBy(pageable); }
+
+    @Override
+    public List<EmployeeViewDto> getUserTeamMembers(String username) {
+        Team team = employeesRepo.getByUsername(username).get().getTeam();
+         return employeesRepo.getAllByTeam(team);
     }
 
     @Override
-    public List<EmployeeViewDto> getByEmployeeTeam(String username) {
-        return null; //employeesRepo.getAllByEmployeeTeam();
+    public List<EmployeeActivitiesDto> getAllActivities(String username, String yearMonth) {
+        List<EmployeeActivitiesDto> teamActivities = new ArrayList<>();
+        List<EmployeeViewDto> teamMembers = getUserTeamMembers(username);
+        for (EmployeeViewDto member : teamMembers) {
+            teamActivities.add(getMonthActivities(member.getUsername(), yearMonth));
+        }
+        return teamActivities; //ByListedActivitiesActivityDateStartsWith(yearMonth);
+    }
+
+    @Override
+    public EmployeeActivitiesDto getMonthActivities(String username, String yearMonth) {
+/*        EmployeeActivitiesDto monthWithoutActivities =
+                (EmployeeActivitiesDto) new Employee("username","",new HashSet<Role>(),true);
+        monthWithoutActivities.setListedActivities(new HashSet<>());*/
+        return employeesRepo.readByUsernameAndListedActivitiesActivityDateStartsWith(username, yearMonth);
+        //.orElse(monthWithoutActivities);
+        //.orElseThrow(() -> new ResourceNotFoundException("with username:" + username + " for " + yearMonth));
     }
 
     @Transactional

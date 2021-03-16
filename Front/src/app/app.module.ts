@@ -3,9 +3,12 @@ import { AppRoutingModule } from "./app-routing.module";
 import { BrowserModule } from "@angular/platform-browser";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { MatDialogModule } from "@angular/material";
-import { NgModule } from "@angular/core";
+import { NgModule, LOCALE_ID } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+registerLocaleData(localeFr, 'fr');
 
 import { LoginAccountComponent } from "./login-account/login-account.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -37,6 +40,7 @@ import { MonthlyActivityComponent } from './monthlyActivity/monthlyActivity.comp
     FlexLayoutModule
   ],
   providers: [
+    { provide: LOCALE_ID, useValue: 'fr' },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorsInterceptorService, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorService, multi: true }
   ],

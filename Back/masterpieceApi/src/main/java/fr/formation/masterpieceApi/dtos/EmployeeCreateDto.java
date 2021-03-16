@@ -19,7 +19,7 @@ public class EmployeeCreateDto {
     private String lastName;
     @NotBlank
     @Size(max = 64)
-    private String departmentName;
+    private String department;
     @NotNull
     @Size(max = 128)
     @Email
@@ -42,8 +42,8 @@ public class EmployeeCreateDto {
     public void setFirstName(String firstName) { this.firstName = firstName; }
     public String getLastName() { return lastName; }
     public void setLastName(String lastName) { this.lastName = lastName; }
-    public String getDepartmentName() { return departmentName; }
-    public void setDepartmentName(String departmentName) { this.departmentName = departmentName; }
+    public String getDepartment() { return department; }
+    public void setDepartment(String department) { this.department = department; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     public String getUsername() { return username; }

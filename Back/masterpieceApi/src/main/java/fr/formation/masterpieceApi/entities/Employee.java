@@ -102,7 +102,7 @@ public class Employee extends AbstractEntity {
                 "firstName= '" + firstName + "\'" +
                 ", lastName= '" + lastName + "\'" +
                 ", department= '" + department.getName() + "\'" +
-                ", team= '" + team.getName() + "\'" +
+                ", team= '" + ((team != null)? team.getName() : "") + "\'" +
                 ", email= '" + email + "\'" +
                 ", username= '" + username + "\'" +
                 ", password= '[PROTECTED]\'" +

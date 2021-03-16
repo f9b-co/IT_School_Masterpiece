@@ -6,9 +6,9 @@ import org.springframework.security.oauth2.provider.authentication.OAuth2Authent
 
 import java.util.Map;
 
-/**
+/*
  * Helper class to access the Spring security context.
- * <p>
+ *
  * Provides convenient methods to deal with the currently authenticated user.
  */
 public final class SecurityHelper {
@@ -17,10 +17,9 @@ public final class SecurityHelper {
 	// Ensure non-instantiability, helper class with static methods only
     }
 
-    /**
+    /*
      * Returns the currently authenticated user identifier.
      *
-     * @return the authenticated user identifier
      */
     @SuppressWarnings("unchecked")
     public static Long getUserId() {
@@ -34,10 +33,10 @@ public final class SecurityHelper {
 	return value.longValue();
     }
 
-    /**
+    /*
      * Returns the currently authenticated user username.
-     * <p>
-     * Alias for {@link #getPrincipal()}
+     *
+     * Alias for getPrincipal()
      *
      * @return the authenticated user username
      */
@@ -45,25 +44,24 @@ public final class SecurityHelper {
 	return getPrincipal();
     }
 
-    /**
+    /*
      * Returns the currently authenticated principal.
-     * <p>
+     *
      * The principal is the string representation of the "user details" object,
      * in other words its username.
      *
-     * @return the principal
-     * @see #getUsername()
+     * return the principal
+     * see also alias getUsername()
      */
     public static String getPrincipal() {
 	return (String) getAuthentication().getPrincipal();
     }
 
-    /**
-     * Returns the {@code Authentication} object associated to the currently
+    /*
+     * Returns the Authentication object associated to the currently
      * authenticated principal, or an authentication request token.
      *
-     * @return the Authentication or {@code null} if no
-     *         authenticationinformation is available
+     * return the Authentication or null if no authentication information is available
      */
     public static Authentication getAuthentication() {
 	return SecurityContextHolder.getContext().getAuthentication();

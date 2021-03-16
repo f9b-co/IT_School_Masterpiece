@@ -4,9 +4,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
+
 export class ActivityService {
   private apiUrl = `${environment.baseUrl}/api`;
   private headers = new HttpHeaders().set("Content-Type", "application/json");
@@ -24,7 +23,7 @@ export class ActivityService {
           }
         }
         console.log(year + "-" + month + " publicHoliday = " + publicHoliday)
-        const closedDays = [];
+        const closedDays: number[] = [];
         for (let i = 1; i <= daysInMonth; i++) {
           const weekDay = new Date(year, month, i).getDay();
           if (weekDay == 0 || weekDay == 6 || publicHoliday.includes(i)) {
@@ -36,12 +35,17 @@ export class ActivityService {
       });
   }
 
-  getMonthListedActivities(monthOffset, username): Observable<any> {
+  getTeamsMembers (yearMonth: string, username: string, manager: boolean) {
+
+  }
+
+  getMonthListedActivities(yearMonth: string, username: string, manager: boolean): Observable<any> {
     const httpOptions = {
       headers: this.headers/* ,
-      params: new HttpParams({fromString: `mo=${monthOffset}&ui=${userId}`}) */ };
-    console.log(`${this.apiUrl}/employees/${username}/activities`);
-    return this.http.get(`${this.apiUrl}/employees/${username}/activities`, httpOptions);
+      params: new HttpParams({fromString: `mo=${monthOffset}`})  */};
+    return this.http.get(`${this.apiUrl}/employees/${username}/teamActivities/${yearMonth}`, httpOptions);
+    //`${this.apiUrl}/employees/${username}/activities/${yearMonth}`
+    //`${this.apiUrl}/employees/${username}/teamActivities/${yearMonth}`
   }
 
   updateMonthListedActivities(): void {

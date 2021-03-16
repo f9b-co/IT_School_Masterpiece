@@ -10,7 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 @RestController
@@ -29,21 +31,38 @@ public class EmployeeController {
         service.create(dto);
     }
 
+    @GetMapping("/{username}/teamMembers/{yearMonth}")
+    protected List<EmployeeViewDto> getUserTeamMembersByMonth(@PathVariable("username") String username, @PathVariable("yearMonth") String yearMonth) {
+        List<EmployeeViewDto> teamMembers = new ArrayList<>();
+        return teamMembers;
+    }
+
+    @GetMapping("/{username}/teamsMembers/{yearMonth}")
+    protected List<List<EmployeeViewDto>> getManagerTeamsMembersByMonth(@PathVariable("username") String username, @PathVariable("yearMonth") String yearMonth) {
+        List<List<EmployeeViewDto>> teamsMembers = new ArrayList<List<EmployeeViewDto>>();
+        return teamsMembers;
+    }
+
     @GetMapping("/{username}/activities")
-    protected EmployeeActivitiesDto getOne(@PathVariable("username") String username) {
+    protected EmployeeActivitiesDto getUserActivities(@PathVariable("username") String username) {
         return service.getOne(username);
     }
 
-    @GetMapping("/team/{username}")
-    protected List<EmployeeViewDto> getByEmployeeTeam(@PathVariable("username") String username) {
-        return service.getByEmployeeTeam(username);
+    @GetMapping("/{username}/activities/{yearMonth}")
+    protected EmployeeActivitiesDto getUserActivities(@PathVariable("username") String username, @PathVariable("yearMonth") String yearMonth) {
+        return service.getMonthActivities(username, yearMonth); //.getOne(username);
     }
 
-    @GetMapping("/userInfo")
+    @GetMapping("{username}/teamActivities/{yearMonth}") //{username}/teamActivities
+    protected List<EmployeeActivitiesDto> getUserTeamActivitiesByMonth(@PathVariable("username") String username, @PathVariable("yearMonth") String yearMonth) {
+        return service.getAllActivities(username, yearMonth);
+    }
+
+    /*@GetMapping("/userInfo")
     public EmployeeInfoDto currentEmployeeInfo(Long userId) {
         return service.getCurrentUserInfo(userId);
     }
-
+*/
     @GetMapping
     protected List<EmployeeViewDto> getAll(@RequestParam("p") int page, @RequestParam("s") int size) {
         Pageable pageable = PageRequest.of(page, size);

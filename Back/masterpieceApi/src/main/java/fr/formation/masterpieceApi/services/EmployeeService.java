@@ -16,10 +16,12 @@ public interface EmployeeService extends UserDetailsService {
     void create(EmployeeCreateDto dto);
     EmployeeActivitiesDto getOne(String username);
     List<EmployeeViewDto> getAll(Pageable pageable);
+    List<EmployeeViewDto> getUserTeamMembers(String username);
     EmployeeInfoDto getCurrentUserInfo(Long id);
     void delete(String username);
 
     Department findOne(String DepartmentName);
 
-    List<EmployeeViewDto> getByEmployeeTeam(String username);
+    List<EmployeeActivitiesDto> getAllActivities(String username, String yearMonth);
+    EmployeeActivitiesDto getMonthActivities(String username, String yearMonth);
 }

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../_services/authentication.service';
 import { ActivityService } from '../_services/activity.service';
 import { User } from '../_models/user';
+import { Role } from '../_models/role';
 
 @Component({
   selector: 'app-monthlyActivity',
@@ -11,10 +12,19 @@ import { User } from '../_models/user';
 })
 export class MonthlyActivityComponent implements OnInit {
   user: User = this.authenticationService.currentUserValue;
+  isManager: boolean = this.user.roles.includes(Role.Manager);
   teams: any[] = [];
-  targetMonthOffset: number = 0;
-  daysInTargetMonth: number;
-  closedDaysInMonth: number[] = [];
+  today = new Date();
+  actualYear = this.today.getFullYear();
+  actualMonth = this.today.getMonth();
+  monthOffset: number = 0;
+  targetYear = this.actualYear;
+  targetMonth = this.actualMonth;
+  isTooLow: boolean = false;
+  isTooHigh: boolean = false;
+  yearMonth: string;
+  daysInMonth: number;
+  closedDaysInMonth: any = [];
   tableBody: HTMLElement = document.getElementById("activitiesTableBody");
 
 
@@ -22,19 +32,59 @@ export class MonthlyActivityComponent implements OnInit {
     private activityService: ActivityService) { }
 
   ngOnInit() {
-    const today = new Date();
-    const targetYear = today.getFullYear();
-    const targetMonth = today.getMonth() + this.targetMonthOffset;
-    const daysInTargetMonth = this.daysInMonth(targetMonth, targetYear);
-    const closedDaysInMonth = this.activityService.listClosedDays(targetYear, targetMonth, daysInTargetMonth);
+    this.yearMonth = String(this.targetYear) + "-" + String(this.targetMonth + 1).padStart(2, '0');
+    this.daysInMonth = this.findDaysInMonth(this.targetMonth, this.targetYear);
+    this.closedDaysInMonth = this.activityService.listClosedDays(this.targetYear, this.targetMonth, this.daysInMonth);
 
-    this.loadActivities();
+    this.loadActivities(this.yearMonth);
+    this.checkNavMonthButtons();
   }
 
-  loadActivities() {
+  previousMonth() {
+    if (this.targetMonth == 0) {
+      this.targetYear--;
+      this.targetMonth += 11;
+    } else {
+      this.targetMonth--;
+    }
+    this.monthOffset--
+    this.checkMonthOffset();
+    this.ngOnInit();
+  }
+
+  nextMonth() {
+    if (this.targetMonth == 11) {
+      this.targetYear++;
+      this.targetMonth -= 11;
+    } else {
+      this.targetMonth++;
+    }
+    this.monthOffset++
+    this.checkMonthOffset();
+    this.ngOnInit();
+  }
+
+  checkMonthOffset() {
+    this.isTooLow = this.monthOffset < -4 ? true : false;
+    this.isTooHigh = this.monthOffset > 5 ? true : false;
+  }
+
+  checkNavMonthButtons() {
+    const prev = document.getElementById("#previous");
+    const next = document.getElementById("#next");
+    (this.isTooLow) ? prev.style.visibility = "hidden" : prev.style.visibility = "visible";
+    (this.isTooHigh) ? next.style.visibility = "hidden" : next.style.visibility = "visible";
+    console.log(this.isTooLow + " " + this.isTooHigh)
+  }
+
+  loadTeamsMembers() {
+
+  }
+
+  loadActivities(yearMonth: string) {
 
     // Send http request with form values to back api
-    this.activityService.getMonthListedActivities(this.targetMonthOffset, this.user.username).subscribe(
+    this.activityService.getMonthListedActivities(yearMonth, this.user.username, this.isManager).subscribe(
       (data) => {
         console.log(data);
         //this.tableize(data);
@@ -52,7 +102,7 @@ export class MonthlyActivityComponent implements OnInit {
     listedActivities.forEach((userActivities) => {
       const tr = this.createNode("tr");
 
-      for (let i = 0; i < this.daysInTargetMonth; i++) {
+      for (let i = 0; i < this.daysInMonth; i++) {
         const el = "";
         const td = this.createNode("td");
         if (i != 0) {
@@ -69,7 +119,7 @@ export class MonthlyActivityComponent implements OnInit {
     });
   }
 
-  daysInMonth(month, year) {
+  findDaysInMonth(month, year) {
     return new Date(year, month, 0).getDate();
   }
 

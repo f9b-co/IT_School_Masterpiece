@@ -6,16 +6,17 @@ import { isNullOrUndefined } from 'util';
 
 import { environment } from '../../environments/environment';
 import { User } from '../_models/user';
-import { JwtService } from '../_services/jwt.service';
+import { OauthTokenService } from './oauthToken.service';
 
 
 @Injectable({ providedIn: 'root' })
+
 export class AuthenticationService {
   private currentUserSubject: BehaviorSubject<User>;
-  private user: User = this.jwtService.getUserFromToken() || new User("guest");
+  private user: User = this.OauthTokenService.getUserFromToken() || new User("guest");
   public currentUser: Observable<User>;
 
-  constructor(private http: HttpClient, private jwtService: JwtService) {
+  constructor(private http: HttpClient, private OauthTokenService: OauthTokenService) {
     this.currentUserSubject = new BehaviorSubject<User>(this.user);
     this.currentUser = this.currentUserSubject.asObservable();
   }
@@ -37,7 +38,7 @@ export class AuthenticationService {
         if (response.access_token) {
           // store token in session storage to keep user logged in between page refreshes
           window.sessionStorage.setItem('token', JSON.stringify(response));
-          user = this.jwtService.getUserFromToken();
+          user = this.OauthTokenService.getUserFromToken();
           this.currentUserSubject.next(user);
         }
         console.log(user);

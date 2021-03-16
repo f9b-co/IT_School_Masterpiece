@@ -3,15 +3,14 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/c
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { JwtService } from '../_services/jwt.service';
+import { OauthTokenService } from './oauthToken.service';
 import { AuthenticationService } from '../_services/authentication.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
+
 export class JwtInterceptorService implements HttpInterceptor {
   constructor(private authenticationService: AuthenticationService,
-    private jwtService: JwtService) { }
+    private OauthTokenService: OauthTokenService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // add auth header with access token if user is logged in and request is to api url
@@ -20,7 +19,7 @@ export class JwtInterceptorService implements HttpInterceptor {
     if (isLoggedIn && isApiUrl) {
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${this.jwtService.getAccesToken()}`
+          Authorization: `Bearer ${this.OauthTokenService.getAccesToken()}`
         }
       });
     }

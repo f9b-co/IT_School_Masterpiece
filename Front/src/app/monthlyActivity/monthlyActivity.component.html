@@ -1,9 +1,19 @@
-<h1>{{user.username}}</h1>
+<h1>Welcome {{user.username}}!</h1>
 <section name="timeline" id="timeline">
-    <img src="assets/images/timeline.png" alt="timelineAnim">
+    <img src="assets/images/timeline.png" alt="timelineImg">
 </section>
 <section name="monthlyActivityTable" id="monthlyActivityTable">
-    <section id="activitiesHeaders">
+    <div name="navMonth" id="navMonth">
+        <button type="button" class="navButtons" name="previous" id="previous" 
+            (click)="isTooLow? false : previousMonth()">
+            <img src="assets/images/previous-arrow_grey.svg" alt="Mois précédent" title="Mois précédent">
+        </button>
+        <span>{{yearMonth | date:'MMM yyyy':'fr'}}</span>
+        <button type="button" class="navButtons" name="next" id="next" (click)="istooHigh? false : nextMonth()">
+            <img src="assets/images/next-arrow_grey.svg" alt="Mois suivant" title="Mois suivant">
+        </button>
+    </div>
+    <div id="activitiesHeaders">
         <table id="activitiesTableHead">
             <tr>
                 <th>titre ligne test</th>
@@ -12,13 +22,12 @@
                 <td>col 3</td>
             </tr>
         </table>
-    </section>
-    <section id="activitiesList">
+    </div>
+    <div id="activitiesList">
         <table id="activitiesTableBody">
         </table>
-    </section>
-
+    </div>
 </section>
-<section name="monthlyActivity" id="">
+<section name="tasksCaption" id="tasksCaption">
 
 </section>
