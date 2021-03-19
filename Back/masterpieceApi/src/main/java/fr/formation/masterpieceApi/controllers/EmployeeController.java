@@ -31,6 +31,11 @@ public class EmployeeController {
         service.create(dto);
     }
 
+    @GetMapping("/{username}")
+    protected EmployeeViewDto getOne(@PathVariable("username") String username) {
+        return service.getOne(username);
+    }
+
     @GetMapping("/{username}/teamMembers/{yearMonth}")
     protected List<EmployeeViewDto> getUserTeamMembersByMonth(@PathVariable("username") String username, @PathVariable("yearMonth") String yearMonth) {
         List<EmployeeViewDto> teamMembers = new ArrayList<>();
@@ -43,10 +48,10 @@ public class EmployeeController {
         return teamsMembers;
     }
 
-    @GetMapping("/{username}/activities")
+/*    @GetMapping("/{username}/activities")
     protected EmployeeActivitiesDto getUserActivities(@PathVariable("username") String username) {
         return service.getOne(username);
-    }
+    }*/
 
     @GetMapping("/{username}/activities/{yearMonth}")
     protected EmployeeActivitiesDto getUserActivities(@PathVariable("username") String username, @PathVariable("yearMonth") String yearMonth) {
@@ -64,7 +69,7 @@ public class EmployeeController {
     }
 */
     @GetMapping
-    protected List<EmployeeViewDto> getAll(@RequestParam("p") int page, @RequestParam("s") int size) {
+    protected List<EmployeeInfoDto> getAll(@RequestParam("p") int page, @RequestParam("s") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return service.getAll(pageable);
     }

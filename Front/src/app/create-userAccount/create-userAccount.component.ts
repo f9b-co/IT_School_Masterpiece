@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Observable } from "rxjs";
 
 import { environment } from "../../environments/environment";
 
@@ -13,7 +14,25 @@ import { environment } from "../../environments/environment";
 export class CreateUserAccountComponent implements OnInit {
   constructor(private router: Router, private http: HttpClient) { }
 
-  ngOnInit() { }
+  private apiUrl = `${environment.apiUrl}`;
+  private headers = new HttpHeaders().set("Content-Type", "application/json");
+  private departments = [];
+
+  ngOnInit() {
+    this.getDepartments().subscribe(
+      (data) => { this.departments = data; },
+      (error) => { alert(error); }
+    );
+  }
+
+  getDepartments(): Observable<any> {
+    const httpOptions = { headers: this.headers };
+    return this.http.get(`${this.apiUrl}/departments`, httpOptions);
+  }
+
+  setBlack() {
+    document.querySelector("select.form-control").setAttribute('style', 'color: black')
+  }
 
   createUserAccountForm = new FormGroup(
     {
@@ -64,19 +83,16 @@ export class CreateUserAccountComponent implements OnInit {
           Validators.maxLength(128),
         ])
       ),
-      department: new FormControl(
-        "",
-        Validators.compose([Validators.required, Validators.maxLength(64)])
-      ),
+      department: new FormControl("", Validators.required),
     }
   );
-  cUF = this.createUserAccountForm;
-  fc = this.createUserAccountForm.controls;
+  createForm = this.createUserAccountForm;
+  controls = this.createUserAccountForm.controls;
 
   onSubmit() {
     const employeesUrl = `${environment.baseUrl}/api/employees/`;
     const headers = new HttpHeaders().set("Content-Type", "application/json");
-    const dataToSend = JSON.stringify(this.cUF.value);
+    const dataToSend = JSON.stringify(this.createForm.value);
     Object.keys(dataToSend).forEach(function (key) {
       if (dataToSend[key] == "passwordCheck") delete dataToSend[key];
     });
@@ -85,8 +101,8 @@ export class CreateUserAccountComponent implements OnInit {
     // Send http request with form values to back api
     this.http.post(employeesUrl, dataToSend, { headers }).subscribe(
       (data) => {
-        this.cUF.reset();
-        console.warn(
+        this.createForm.reset();
+        alert(
           "Enregistrement réussi! \n" + "Veuillez vous connecter..."
         );
         this.router.navigate(['/login']);

@@ -14,12 +14,12 @@ export class MonthlyActivityComponent implements OnInit {
   user: User = this.authenticationService.currentUserValue;
   isManager: boolean = this.user.roles.includes(Role.Manager);
   teams: any[] = [];
-  today = new Date();
-  actualYear = this.today.getFullYear();
-  actualMonth = this.today.getMonth();
+  today: Date = new Date();
+  presentYear: number = this.today.getFullYear();
+  presentMonth: number = this.today.getMonth();
   monthOffset: number = 0;
-  targetYear = this.actualYear;
-  targetMonth = this.actualMonth;
+  targetYear: number = this.presentYear;
+  targetMonth: number = this.presentMonth;
   isTooLow: boolean = false;
   isTooHigh: boolean = false;
   yearMonth: string;
@@ -32,12 +32,21 @@ export class MonthlyActivityComponent implements OnInit {
     private activityService: ActivityService) { }
 
   ngOnInit() {
-    this.yearMonth = String(this.targetYear) + "-" + String(this.targetMonth + 1).padStart(2, '0');
+    this.yearMonthToString(this.targetYear, this.targetMonth)
     this.daysInMonth = this.findDaysInMonth(this.targetMonth, this.targetYear);
     this.closedDaysInMonth = this.activityService.listClosedDays(this.targetYear, this.targetMonth, this.daysInMonth);
 
     this.loadActivities(this.yearMonth);
     this.checkNavMonthButtons();
+  }
+
+  yearMonthToString(year: number, month: number){
+    this.yearMonth = String(this.targetYear) + "-" + String(this.targetMonth + 1).padStart(2, '0');
+  }
+
+  checkMonthOffset() {
+    this.isTooLow = this.monthOffset < -4 ? true : false;
+    this.isTooHigh = this.monthOffset > 5 ? true : false;
   }
 
   previousMonth() {
@@ -64,17 +73,11 @@ export class MonthlyActivityComponent implements OnInit {
     this.ngOnInit();
   }
 
-  checkMonthOffset() {
-    this.isTooLow = this.monthOffset < -4 ? true : false;
-    this.isTooHigh = this.monthOffset > 5 ? true : false;
-  }
-
   checkNavMonthButtons() {
-    const prev = document.getElementById("#previous");
-    const next = document.getElementById("#next");
+    const prev = document.getElementById("previous");
+    const next = document.getElementById("next");
     (this.isTooLow) ? prev.style.visibility = "hidden" : prev.style.visibility = "visible";
     (this.isTooHigh) ? next.style.visibility = "hidden" : next.style.visibility = "visible";
-    console.log(this.isTooLow + " " + this.isTooHigh)
   }
 
   loadTeamsMembers() {
@@ -83,7 +86,7 @@ export class MonthlyActivityComponent implements OnInit {
 
   loadActivities(yearMonth: string) {
 
-    // Send http request with form values to back api
+    // Call service with params to send corresponding http request to back api
     this.activityService.getMonthListedActivities(yearMonth, this.user.username, this.isManager).subscribe(
       (data) => {
         console.log(data);

@@ -9,8 +9,6 @@ public class EmployeeCreateDto {
             "^(?=.*?[a-z])(?=.*?[0-9])(?=.*?\\W).*$|" +
             "^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?\\W).*$";
 
-    @NotNull
-    private  boolean enabled;
     @NotBlank
     @Size(max = 64)
     private String firstName;
@@ -33,11 +31,9 @@ public class EmployeeCreateDto {
     private String password;
 
     public EmployeeCreateDto() {
-        //
+        // Empty no-arg constructor (Hibernate)
     }
 
-    public void setEnabled(boolean enabled) {this.enabled = enabled;}
-    public boolean isEnabled() {return enabled;}
     public String getFirstName() { return firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
     public String getLastName() { return lastName; }

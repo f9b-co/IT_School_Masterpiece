@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 @Injectable({ providedIn: 'root' })
 
 export class ActivityService {
-  private apiUrl = `${environment.baseUrl}/api`;
+  private apiUrl = `${environment.apiUrl}`;
   private headers = new HttpHeaders().set("Content-Type", "application/json");
 
   constructor(private http: HttpClient) { }

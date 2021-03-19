@@ -35,8 +35,13 @@ form {
   padding: 1em;
   justify-content: space-between;
 }
-input.form-control {
-  margin: 0.25rem 0rem;
+select {
+  padding: 1px 2px;
+  width: 170px;
+  color: lightgrey;
+}
+option {
+  color: black;
 }
 ::placeholder {
   color: lightgrey;
@@ -55,6 +60,9 @@ input.form-control {
   display: flex;
   flex-direction: row;
   justify-items: flex-start;
+}
+input.form-control, select.form-control {
+  margin: 0.25rem 0rem;
 }
 ::-webkit-scrollbar {
   display: none;

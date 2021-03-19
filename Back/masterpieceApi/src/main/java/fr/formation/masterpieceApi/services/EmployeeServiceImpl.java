@@ -81,10 +81,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeActivitiesDto getOne(String username) { return employeesRepo.readByUsername(username); }
+    public EmployeeViewDto getOne(String username) { return employeesRepo.readByUsername(username); }
 
     @Override
-    public List<EmployeeViewDto> getAll(Pageable pageable) { return employeesRepo.getAllProjectedBy(pageable); }
+    public List<EmployeeInfoDto> getAll(Pageable pageable) { return employeesRepo.getAllProjectedBy(pageable); }
 
     @Override
     public List<EmployeeViewDto> getUserTeamMembers(String username) {

@@ -18,15 +18,16 @@ import java.util.Optional;
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     Optional<Employee> getByUsername (String username);
-    List<EmployeeViewDto> getAllByTeam (Team team);
-    List<EmployeeViewDto> getAllProjectedBy(Pageable pageable);
-    void deleteByUsername(String username);
-
     Optional<EmployeeAuthDto> findByUsername (String username);
     Optional<EmployeeInfoDto> getById(Long id);
-
-    EmployeeActivitiesDto readByUsername(String username);
+    EmployeeViewDto readByUsername(String username);
     EmployeeActivitiesDto readByUsernameAndListedActivitiesActivityDateStartsWith(String username, String yearMonth);
-    EmployeeActivitiesDto getAllByTeamAndListedActivitiesActivityDateStartsWith(Team team, String yearMonth);
+
+    List<EmployeeViewDto> getAllByTeam (Team team);
+    List<EmployeeInfoDto> getAllProjectedBy(Pageable pageable);
+
+    //void patchByUsername(String username);
+
+    void deleteByUsername(String username);
 
 }

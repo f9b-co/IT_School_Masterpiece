@@ -14,14 +14,14 @@ public interface EmployeeService extends UserDetailsService {
 
     boolean userExists(String username);
     void create(EmployeeCreateDto dto);
-    EmployeeActivitiesDto getOne(String username);
-    List<EmployeeViewDto> getAll(Pageable pageable);
-    List<EmployeeViewDto> getUserTeamMembers(String username);
+    EmployeeViewDto getOne(String username);
     EmployeeInfoDto getCurrentUserInfo(Long id);
+    List<EmployeeInfoDto> getAll(Pageable pageable);
+    List<EmployeeViewDto> getUserTeamMembers(String username);
     void delete(String username);
 
     Department findOne(String DepartmentName);
 
-    List<EmployeeActivitiesDto> getAllActivities(String username, String yearMonth);
     EmployeeActivitiesDto getMonthActivities(String username, String yearMonth);
+    List<EmployeeActivitiesDto> getAllActivities(String username, String yearMonth);
 }

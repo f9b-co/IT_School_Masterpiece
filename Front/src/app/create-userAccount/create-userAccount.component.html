@@ -4,7 +4,7 @@
         <label>Identifiant :</label><br />
         <input type="text" placeholder="A123456 ou X000001 ..." class="form-control" formControlName="username"
             required>
-        <div class="errors" *ngIf="fc.username.errors && fc.username.touched">
+        <div class="errors" *ngIf="controls.username.errors && controls.username.touched">
             Identifiant requis, 7 car. (Axxxxxx/Xyyyyyy)
         </div>
     </div>
@@ -13,7 +13,7 @@
             <label>Mot de Passe :</label><br />
             <input type="password" placeholder="%xxxYxxx ou 0$YYYY1€ ..." class="form-control"
                 formControlName="password" required>
-            <div class="errors" *ngIf="fc.password.errors && fc.password.touched">
+            <div class="errors" *ngIf="controls.password.errors && controls.password.touched">
                 Mot de passe requis, de 8 à 20 car.<br />
                 d'au moins 3 sortes parmi :<br />
                 Majuscules-Minuscules-Chiffres-Spéciaux
@@ -23,7 +23,8 @@
             <label>Confirmer Mot de Passe :</label><br />
             <input type="text" placeholder="%xxxYxxx ou 0$YYYY1€ ..." class="form-control"
                 formControlName="passwordCheck" required>
-            <div class="errors" *ngIf="fc.passwordCheck.value != fc.password.value && fc.passwordCheck.touched">
+            <div class="errors"
+                *ngIf="controls.passwordCheck.value != controls.password.value && controls.passwordCheck.touched">
                 Saisies différentes!
             </div>
         </div>
@@ -32,32 +33,37 @@
         <div class="form-group">
             <label>Prénom :</label><br />
             <input type="text" placeholder="pn" class="form-control" formControlName="firstName" required>
-            <div class="errors" *ngIf="fc.firstName.errors && fc.firstName.touched">
+            <div class="errors" *ngIf="controls.firstName.errors && controls.firstName.touched">
                 Prénom requis, 64 caractères max
             </div>
         </div>
         <div class="form-group">
             <label>Nom :</label><br />
             <input type="text" placeholder="nm" class="form-control" formControlName="lastName" required>
-            <div class="errors" *ngIf="fc.lastName.errors && fc.lastName.touched">
+            <div class="errors" *ngIf="controls.lastName.errors && controls.lastName.touched">
                 Nom requis, 64 caractères max
             </div>
         </div>
     </div>
-    <div class="form-group">
-        <label>Courriel :</label><br />
-        <input type="text" placeholder="pn.nm@domaine.ext" class="form-control" formControlName="email" required>
-        <div class="errors" *ngIf="fc.email.errors && fc.email.touched">
-            Courriel requis, 128 caractères max<br />
-            Format xxx@yyy.zz
+    <div class="forms-group">
+        <div class="form-group">
+            <label>Courriel :</label><br />
+            <input type="text" placeholder="pn.nm@domaine.ext" class="form-control" formControlName="email" required>
+            <div class="errors" *ngIf="controls.email.errors && controls.email.touched">
+                Courriel requis, 128 caractères max<br />
+                Format xxx@yyy.zz
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Service :</label><br />
+            <select class="form-control" formControlName="department" required (change)="setBlack()">
+                <option value="" disabled selected checked hidden>Liste de choix</option>
+                <option *ngFor="let d of departments" [ngValue]="d.name">{{d.name}}</option>
+            </select>
+            <div class="errors" *ngIf="controls.department.errors && controls.department.touched">
+                Service requis
+            </div>
         </div>
     </div>
-    <div class="form-group">
-        <label>Service :</label><br />
-        <input type="text" placeholder="Abc/Def/Ghi" class="form-control" formControlName="department" required>
-        <div class="errors" *ngIf="fc.department.errors && fc.department.touched">
-            Service requis, 64 caractères max
-        </div>
-    </div>
-    <button type="submit" class="button" [disabled]="!createUserAccountForm.valid">Valider</button>
+    <button type="submit" class="button" [disabled]="!createForm.valid">Valider</button>
 </form>

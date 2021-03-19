@@ -8,7 +8,7 @@
             (click)="isTooLow? false : previousMonth()">
             <img src="assets/images/previous-arrow_grey.svg" alt="Mois précédent" title="Mois précédent">
         </button>
-        <span>{{yearMonth | date:'MMM yyyy':'fr'}}</span>
+        <span class="askedMonth" id="askedMonth">{{yearMonth | date:'MMM yyyy':'fr'}}</span>
         <button type="button" class="navButtons" name="next" id="next" (click)="istooHigh? false : nextMonth()">
             <img src="assets/images/next-arrow_grey.svg" alt="Mois suivant" title="Mois suivant">
         </button>

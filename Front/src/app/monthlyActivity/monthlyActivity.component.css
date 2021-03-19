@@ -15,3 +15,12 @@
 .navButtons img {
   height: 1.1em;
 }
+.askedMonth {
+  display: inline-block;
+  padding: 2px 4px;
+  min-width: 55px;
+  vertical-align:text-top;
+  text-align: center;
+  font-size: 0.7em;
+  color: hsl(0, 0%, 50%);
+}

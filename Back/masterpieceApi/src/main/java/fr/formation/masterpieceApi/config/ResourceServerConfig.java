@@ -13,24 +13,24 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-    /**
+    /*
      * Configures the HTTP security for this application.
-     * <p>
-     * Defines this application as stateless (no HTTP session), and disables
-     * HTTP basic auth, CSRF and Spring default login form.
      *
-     * @param  the HttpSecurity to configure
+     * Defines this application as stateless (no HTTP session),
+     * disables HTTP basic auth and CSRF (no need with JWT if not cookie-based).
+     *
+     * Defines access level for HttpMethod and endpoints URL.
+     * .cors().disable()
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
-	// Disable CSRF, no need with JWT if not cookie-based.
-	// Disable CORS if API is public, better to enable in general.
-	// Anonymous is enabled by default.
-	http.httpBasic().disable().csrf().disable().cors().disable()
+	http.httpBasic().disable().csrf().disable()
 		.sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 		.authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll()
-		.antMatchers(HttpMethod.POST, "/api/employees", "/api/activities").permitAll()
-		.antMatchers("/api/userInfo").authenticated();
+		.antMatchers(HttpMethod.POST, "/api/employees").permitAll()
+		.antMatchers(HttpMethod.GET, "/api/departments", "/api/tasks").permitAll()
+		.antMatchers(HttpMethod.GET, "/api/employees", "/api/activities").authenticated()
+		.antMatchers("/api/employees", "/api/activities").authenticated();
     }
 }
