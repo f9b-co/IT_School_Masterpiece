@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, 
-  HttpErrorResponse }  from "@angular/common/http";
+import {
+  HttpInterceptor, HttpRequest, HttpHandler, HttpEvent,
+  HttpErrorResponse
+} from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 
@@ -16,17 +18,17 @@ export class ErrorsInterceptorService implements HttpInterceptor {
     let errorMessage = "Unknown error!";
     if (error.error instanceof ErrorEvent) {
       // Client-side errors
-      errorMessage = `Error: ${error.error.message}`;
+      errorMessage = `Client Error: ${error.error.message}`;
     } else {
       // Server-side errors
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      errorMessage =`Server Error Code: ${error.status}\nMessage: ${error.message}`;
       // auto logout if 401 Unauthorized or 403 Forbidden response returned from api
       if ([401, 403].indexOf(error.status) !== -1) {
-        this.authenticationService.logout();
-        location.reload(true);
+        //this.authenticationService.logout();
+        //location.reload(true);
       }
     }
-    window.alert(errorMessage);
+    //window.alert(errorMessage);
     return throwError(errorMessage);
   }
 

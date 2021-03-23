@@ -1,7 +1,7 @@
 package fr.formation.masterpieceApi.services;
 
 import fr.formation.masterpieceApi.config.EmployeeDetails;
-import fr.formation.masterpieceApi.config.ResourceNotFoundException;
+import fr.formation.masterpieceApi.exceptions.ResourceNotFoundException;
 import fr.formation.masterpieceApi.dtos.*;
 import fr.formation.masterpieceApi.entities.*;
 import fr.formation.masterpieceApi.repositories.*;
@@ -71,7 +71,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setListedActivities(listedActivities);
         employee.setFirstName(dto.getFirstName());
         employee.setLastName(dto.getLastName());
-        employee.setDepartment(this.findOne(dto.getDepartment()));
+        employee.setDepartment(departmentsRepo.findByName(dto.getDepartment()).get());
         employee.setEmail(dto.getEmail());
         employee.setAccountNonExpired(true);
         employee.setAccountNonLocked(true);
@@ -81,46 +81,53 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeViewDto getOne(String username) { return employeesRepo.readByUsername(username); }
+    public EmployeeViewDto getOne(String username) { return employeesRepo.readByUsername(username).orElseThrow(
+            () -> new ResourceNotFoundException("with username:" + username)); }
 
     @Override
     public List<EmployeeInfoDto> getAll(Pageable pageable) { return employeesRepo.getAllProjectedBy(pageable); }
 
-    @Override
-    public List<EmployeeViewDto> getUserTeamMembers(String username) {
-        Team team = employeesRepo.getByUsername(username).get().getTeam();
-         return employeesRepo.getAllByTeam(team);
+    public List<EmployeeShortDto> getTeamMembers(String teamName) {
+        Team team = teamsRepo.findByName(teamName).get();
+        return employeesRepo.getAllDistinctByTeam(team);
     }
 
     @Override
-    public List<EmployeeActivitiesDto> getAllActivities(String username, String yearMonth) {
-        List<EmployeeActivitiesDto> teamActivities = new ArrayList<>();
-        List<EmployeeViewDto> teamMembers = getUserTeamMembers(username);
-        for (EmployeeViewDto member : teamMembers) {
-            teamActivities.add(getMonthActivities(member.getUsername(), yearMonth));
+    public List<EmployeeShortDto> getUserTeamMembers(String username) {
+        return getTeamMembers(getOne(username).getTeam().getName());
+    }
+
+    @Override
+    public List<List<EmployeeShortDto>> getManagerTeamsMembers(Long managerId) {
+        List<TeamShortDto> teams = teamsRepo.findAllByManagerId(managerId);
+        List<List<EmployeeShortDto>> teamsMembers = new ArrayList<>();
+        for (TeamShortDto team: teams) {
+                teamsMembers.add(getTeamMembers(team.getName()));
         }
-        return teamActivities; //ByListedActivitiesActivityDateStartsWith(yearMonth);
+        return teamsMembers;
     }
 
     @Override
-    public EmployeeActivitiesDto getMonthActivities(String username, String yearMonth) {
-/*        EmployeeActivitiesDto monthWithoutActivities =
-                (EmployeeActivitiesDto) new Employee("username","",new HashSet<Role>(),true);
-        monthWithoutActivities.setListedActivities(new HashSet<>());*/
+    public List<EmployeeActivitiesDto> getTeamMonthActivities(String teamName, String yearMonth, String username) {
+        List<EmployeeActivitiesDto> teamActivities = new ArrayList<>();
+        if (teamName.isEmpty()){
+            teamActivities.add(getUserMonthActivities(username, yearMonth));
+        } else {
+            List<EmployeeShortDto> teamMembers = getTeamMembers(teamName);
+            for (EmployeeShortDto member : teamMembers) {
+                teamActivities.add(getUserMonthActivities(member.getUsername(), yearMonth));
+            }
+        }
+        return teamActivities;
+    }
+    // Throws ResourceNotFoundException (restful practice)
+    public EmployeeActivitiesDto getUserMonthActivities(String username, String yearMonth) {
         return employeesRepo.readByUsernameAndListedActivitiesActivityDateStartsWith(username, yearMonth);
-        //.orElse(monthWithoutActivities);
-        //.orElseThrow(() -> new ResourceNotFoundException("with username:" + username + " for " + yearMonth));
+                //.orElseThrow(() -> new ResourceNotFoundException("No activities for month: " + yearMonth));
     }
 
     @Transactional
     @Override
     public void delete(String username) { employeesRepo.deleteByUsername(username); }
-
-    // Throws ResourceNotFoundException (restful practice)
-    @Override
-    public Department findOne(String departmentName) {
-        return departmentsRepo.findByName(departmentName).orElseThrow(
-                () -> new ResourceNotFoundException("with name:" + departmentName));
-    }
 
 }

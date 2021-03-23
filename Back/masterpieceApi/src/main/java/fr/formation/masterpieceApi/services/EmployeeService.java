@@ -1,10 +1,6 @@
 package fr.formation.masterpieceApi.services;
 
-import fr.formation.masterpieceApi.dtos.EmployeeActivitiesDto;
-import fr.formation.masterpieceApi.dtos.EmployeeCreateDto;
-import fr.formation.masterpieceApi.dtos.EmployeeInfoDto;
-import fr.formation.masterpieceApi.dtos.EmployeeViewDto;
-import fr.formation.masterpieceApi.entities.Department;
+import fr.formation.masterpieceApi.dtos.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -17,11 +13,10 @@ public interface EmployeeService extends UserDetailsService {
     EmployeeViewDto getOne(String username);
     EmployeeInfoDto getCurrentUserInfo(Long id);
     List<EmployeeInfoDto> getAll(Pageable pageable);
-    List<EmployeeViewDto> getUserTeamMembers(String username);
     void delete(String username);
 
-    Department findOne(String DepartmentName);
-
-    EmployeeActivitiesDto getMonthActivities(String username, String yearMonth);
-    List<EmployeeActivitiesDto> getAllActivities(String username, String yearMonth);
+    List<EmployeeShortDto> getUserTeamMembers(String teamName);
+    List<List<EmployeeShortDto>> getManagerTeamsMembers(Long managerId);
+    //EmployeeActivitiesDto getUserMonthActivities(String username, String yearMonth);
+    List<EmployeeActivitiesDto> getTeamMonthActivities(String teamName, String yearMonth, String username);
 }

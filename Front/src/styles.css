@@ -67,10 +67,9 @@ input.form-control, select.form-control {
 ::-webkit-scrollbar {
   display: none;
 }
+app-create-userAccount,
 app-login-account,
-app-create-userAccount {
+app-monthlyActivity {
   overflow: scroll;
   padding-left: 20px;
-  min-width: 560px;
-  background-color: silver;
 }

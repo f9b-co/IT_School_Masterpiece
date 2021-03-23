@@ -1,6 +1,9 @@
-package fr.formation.masterpieceApi.config;
+package fr.formation.masterpieceApi.exceptions;
 
-@SuppressWarnings("serial")
+/*
+ * Exception thrown if resource is not found.
+ * Used to handle 404 Http error.
+ */
 public class ResourceNotFoundException extends RuntimeException {
 
     public ResourceNotFoundException() {

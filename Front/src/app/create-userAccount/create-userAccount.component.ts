@@ -108,7 +108,7 @@ export class CreateUserAccountComponent implements OnInit {
         this.router.navigate(['/login']);
       },
       (error) => {
-        console.warn("Enregistrement impossible \n" + error);
+        alert("Enregistrement impossible \n" + error);
       }
     );
   }

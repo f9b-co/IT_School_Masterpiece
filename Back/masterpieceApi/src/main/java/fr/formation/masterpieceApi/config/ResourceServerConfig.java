@@ -10,7 +10,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 
 @Configuration
 @EnableResourceServer
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     /*
@@ -20,17 +20,20 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
      * disables HTTP basic auth and CSRF (no need with JWT if not cookie-based).
      *
      * Defines access level for HttpMethod and endpoints URL.
-     * .cors().disable()
+     *
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
-	http.httpBasic().disable().csrf().disable()
+	http
+		.httpBasic().disable()
+		.csrf().disable()
 		.sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-		.authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll()
+		.authorizeRequests()
+		.antMatchers(HttpMethod.OPTIONS).permitAll()
 		.antMatchers(HttpMethod.POST, "/api/employees").permitAll()
 		.antMatchers(HttpMethod.GET, "/api/departments", "/api/tasks").permitAll()
-		.antMatchers(HttpMethod.GET, "/api/employees", "/api/activities").authenticated()
-		.antMatchers("/api/employees", "/api/activities").authenticated();
+		.antMatchers("/api/employees/**", "/api/activities/**").authenticated();
+
     }
 }

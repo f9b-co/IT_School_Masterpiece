@@ -1,10 +1,7 @@
 <h1>Welcome {{user.username}}!</h1>
-<section name="timeline" id="timeline">
-    <img src="assets/images/timeline.png" alt="timelineImg">
-</section>
 <section name="monthlyActivityTable" id="monthlyActivityTable">
     <div name="navMonth" id="navMonth">
-        <button type="button" class="navButtons" name="previous" id="previous" 
+        <button type="button" class="navButtons" name="previous" id="previous"
             (click)="isTooLow? false : previousMonth()">
             <img src="assets/images/previous-arrow_grey.svg" alt="Mois précédent" title="Mois précédent">
         </button>
@@ -14,20 +11,17 @@
         </button>
     </div>
     <div id="activitiesHeaders">
-        <table id="activitiesTableHead">
-            <tr>
-                <th>titre ligne test</th>
-                <td>col 1</td>
-                <td>col 2</td>
-                <td>col 3</td>
-            </tr>
+        <table #activitiesTableHead>
         </table>
     </div>
     <div id="activitiesList">
-        <table id="activitiesTableBody">
+        <table #activitiesTableBody>
         </table>
     </div>
 </section>
 <section name="tasksCaption" id="tasksCaption">
+    <section name="timeline" id="timeline">
+        <img src="assets/images/timeline.png" alt="timelineImg">
+    </section>
 
 </section>

@@ -1,7 +1,37 @@
 :host {
   overflow: scroll;
-  width: 100%;
+  min-width: 560px;
   background-color: white;
+}
+table {
+  border: 1px solid grey;
+  width: 800px;
+
+}
+table tr {
+  border: 0px solid blue;
+}
+table th, td {
+  border: 0px solid grey;
+  font-size: 0.6em;
+  color:black;
+  overflow-x: scroll;
+}
+.days-tr{
+  border-spacing: 1px 0px;
+}
+.days-tr-user{
+  background-color: slategrey;
+}
+.days-tr div{
+  display: inherit;
+  background-color: lightgrey;
+  height: 1.4em;
+  width: 0.7em
+}
+.days-tr-div-AM{
+}
+.days-tr-div-PM{
 }
 .navButtons {
   padding: 2px;

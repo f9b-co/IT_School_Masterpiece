@@ -10,16 +10,16 @@ import { AuthenticationService } from '../_services/authentication.service';
 
 export class JwtInterceptorService implements HttpInterceptor {
   constructor(private authenticationService: AuthenticationService,
-    private OauthTokenService: OauthTokenService) { }
+    private oauthTokenService: OauthTokenService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // add auth header with access token if user is logged in and request is to api url
     const isLoggedIn = this.authenticationService.isCurrentUserLoggedIn();
-    const isApiUrl = request.url.startsWith(`${environment.baseUrl}/papi`);
+    const isApiUrl = request.url.startsWith(`${environment.baseUrl}/api`);
     if (isLoggedIn && isApiUrl) {
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${this.OauthTokenService.getAccesToken()}`
+          Authorization: `Bearer ${this.oauthTokenService.getAccesToken()}`
         }
       });
     }

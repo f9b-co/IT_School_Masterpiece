@@ -1,9 +1,6 @@
 package fr.formation.masterpieceApi.repositories;
 
-import fr.formation.masterpieceApi.dtos.EmployeeActivitiesDto;
-import fr.formation.masterpieceApi.dtos.EmployeeAuthDto;
-import fr.formation.masterpieceApi.dtos.EmployeeInfoDto;
-import fr.formation.masterpieceApi.dtos.EmployeeViewDto;
+import fr.formation.masterpieceApi.dtos.*;
 import fr.formation.masterpieceApi.entities.Employee;
 import fr.formation.masterpieceApi.entities.Team;
 import org.springframework.data.domain.Pageable;
@@ -18,12 +15,13 @@ import java.util.Optional;
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     Optional<Employee> getByUsername (String username);
+    Optional<EmployeeViewDto> readByUsername(String username);
     Optional<EmployeeAuthDto> findByUsername (String username);
     Optional<EmployeeInfoDto> getById(Long id);
-    EmployeeViewDto readByUsername(String username);
     EmployeeActivitiesDto readByUsernameAndListedActivitiesActivityDateStartsWith(String username, String yearMonth);
+    //Optional<EmployeeActivitiesDto> readByUsernameAndListedActivitiesActivityDateStartsWith(String username, String yearMonth);
 
-    List<EmployeeViewDto> getAllByTeam (Team team);
+    List<EmployeeShortDto> getAllDistinctByTeam (Team team);
     List<EmployeeInfoDto> getAllProjectedBy(Pageable pageable);
 
     //void patchByUsername(String username);

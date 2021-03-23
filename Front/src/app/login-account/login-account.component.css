@@ -1,4 +1,7 @@
-
+:host {
+  min-width: 560px;
+  background-color: silver;
+}
 .accountNedded {
   margin-top: 1.5em;
   padding: 1em;

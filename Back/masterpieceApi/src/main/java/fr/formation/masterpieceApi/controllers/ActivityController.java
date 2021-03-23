@@ -2,9 +2,6 @@ package fr.formation.masterpieceApi.controllers;
 
 import fr.formation.masterpieceApi.dtos.*;
 import fr.formation.masterpieceApi.services.ActivityService;
-import fr.formation.masterpieceApi.services.EmployeeService;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

@@ -1,18 +1,14 @@
 package fr.formation.masterpieceApi.controllers;
 
-import fr.formation.masterpieceApi.dtos.EmployeeActivitiesDto;
-import fr.formation.masterpieceApi.dtos.EmployeeCreateDto;
-import fr.formation.masterpieceApi.dtos.EmployeeInfoDto;
-import fr.formation.masterpieceApi.dtos.EmployeeViewDto;
+import fr.formation.masterpieceApi.dtos.*;
 import fr.formation.masterpieceApi.services.EmployeeService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 
 @RestController
@@ -31,36 +27,28 @@ public class EmployeeController {
         service.create(dto);
     }
 
+    @PreAuthorize("hasAuthority('User') or hasAuthority('Manager')")
     @GetMapping("/{username}")
     protected EmployeeViewDto getOne(@PathVariable("username") String username) {
         return service.getOne(username);
     }
 
-    @GetMapping("/{username}/teamMembers/{yearMonth}")
-    protected List<EmployeeViewDto> getUserTeamMembersByMonth(@PathVariable("username") String username, @PathVariable("yearMonth") String yearMonth) {
-        List<EmployeeViewDto> teamMembers = new ArrayList<>();
-        return teamMembers;
+    @PreAuthorize("hasAuthority('User')")
+    @GetMapping("/{username}/team-members")
+    protected List<EmployeeShortDto> getUserTeamMembers(@PathVariable("username") String username) {
+        return service.getUserTeamMembers(username);
     }
 
-    @GetMapping("/{username}/teamsMembers/{yearMonth}")
-    protected List<List<EmployeeViewDto>> getManagerTeamsMembersByMonth(@PathVariable("username") String username, @PathVariable("yearMonth") String yearMonth) {
-        List<List<EmployeeViewDto>> teamsMembers = new ArrayList<List<EmployeeViewDto>>();
-        return teamsMembers;
+    @PreAuthorize("hasAuthority('Manager')")
+    @GetMapping("/{id}/teams-members")
+    protected List<List<EmployeeShortDto>> getManagerTeamsMembers(@PathVariable("id") Long id) {
+        return service.getManagerTeamsMembers(id);
     }
 
-/*    @GetMapping("/{username}/activities")
-    protected EmployeeActivitiesDto getUserActivities(@PathVariable("username") String username) {
-        return service.getOne(username);
-    }*/
-
-    @GetMapping("/{username}/activities/{yearMonth}")
-    protected EmployeeActivitiesDto getUserActivities(@PathVariable("username") String username, @PathVariable("yearMonth") String yearMonth) {
-        return service.getMonthActivities(username, yearMonth); //.getOne(username);
-    }
-
-    @GetMapping("{username}/teamActivities/{yearMonth}") //{username}/teamActivities
-    protected List<EmployeeActivitiesDto> getUserTeamActivitiesByMonth(@PathVariable("username") String username, @PathVariable("yearMonth") String yearMonth) {
-        return service.getAllActivities(username, yearMonth);
+    @PreAuthorize("hasAuthority('User') or hasAuthority('Manager')")
+    @GetMapping("/listed-activities")
+    protected List<EmployeeActivitiesDto> getTeamActivitiesByMonth(@RequestParam("team") String teamName, @RequestParam("period") String yearMonth, @RequestParam("username") String username) {
+        return service.getTeamMonthActivities(teamName, yearMonth, username);
     }
 
     /*@GetMapping("/userInfo")
@@ -68,12 +56,15 @@ public class EmployeeController {
         return service.getCurrentUserInfo(userId);
     }
 */
+
+    @PreAuthorize("hasAuthority('Admin')")
     @GetMapping
     protected List<EmployeeInfoDto> getAll(@RequestParam("p") int page, @RequestParam("s") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return service.getAll(pageable);
     }
 
+    @PreAuthorize("hasAuthority('Admin')")
     @DeleteMapping("/{username}")
     protected void delete(@PathVariable("username") String username) {
         service.delete(username);

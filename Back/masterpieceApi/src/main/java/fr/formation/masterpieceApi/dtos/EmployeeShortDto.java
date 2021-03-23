@@ -2,8 +2,9 @@ package fr.formation.masterpieceApi.dtos;
 
 public interface EmployeeShortDto {
 
-    Long getId();
+    String getUsername();
     String getFirstName();
     String getLastName();
+    TeamShortDto getTeam();
 
 }
