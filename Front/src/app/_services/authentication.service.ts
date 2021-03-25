@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -16,7 +17,7 @@ export class AuthenticationService {
   private user: User = this.OauthTokenService.getUserFromToken() || new User("guest");
   public currentUser: Observable<User>;
 
-  constructor(private http: HttpClient, private OauthTokenService: OauthTokenService) {
+  constructor(private router: Router, private http: HttpClient, private OauthTokenService: OauthTokenService) {
     this.currentUserSubject = new BehaviorSubject<User>(this.user);
     this.currentUser = this.currentUserSubject.asObservable();
   }
@@ -40,9 +41,10 @@ export class AuthenticationService {
           window.sessionStorage.setItem('token', JSON.stringify(response));
           user = this.OauthTokenService.getUserFromToken();
           this.currentUserSubject.next(user);
-        }
-        console.log(user);
-        console.log("Connexion réussie");
+          console.log("Connexion réussie");
+        } /* else {
+          alert("erreur de connexion\n" + response.error)
+        } */
         return user;
       }));
   }
@@ -51,6 +53,7 @@ export class AuthenticationService {
     // remove token from session storage to log user out
     window.sessionStorage.removeItem('token');
     this.currentUserSubject.next(null);
+    this.router.navigate(['/login']);
     console.log("Déconnexion réussie");
   }
 

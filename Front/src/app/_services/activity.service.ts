@@ -12,27 +12,12 @@ export class ActivityService {
 
   constructor(private http: HttpClient) { }
 
-  listClosedDays(year: number, month: number, daysInMonth: number) {
-    this.http.get<any>('../../assets/jsons/api-gouv-fr_jours-feries_2020-2022.json')
-      .subscribe((res: any) => {
-        const publicHoliday = [];
-        for (let date in res) {
-          const monthDay = new Date(date)
-          if (monthDay.getFullYear() == year && monthDay.getMonth() == month) {
-            publicHoliday.push(monthDay.getDate());
-          }
-        }
-        console.log(year + "-" + month + " publicHoliday = " + publicHoliday)
-        const closedDays: number[] = [];
-        for (let i = 1; i <= daysInMonth; i++) {
-          const weekDay = new Date(year, month, i).getDay();
-          if (weekDay == 0 || weekDay == 6 || publicHoliday.includes(i)) {
-            closedDays.push(i);
-          }
-        }
-        console.log(closedDays);
-        return closedDays;
-      });
+  listCloseAndOpenDays(): Observable<any> {
+    return this.http.get<any>('../../assets/jsons/api-gouv-fr_jours-feries_2020-2022.json');
+  }
+
+  getAllTasks(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/tasks`, { headers: this.headers })
   }
 
   getManagerTeamsMembers(userId: number): Observable<any> {
@@ -41,7 +26,6 @@ export class ActivityService {
   getUserTeamMembers(username: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/employees/${username}/team-members`, { headers: this.headers })
   }
-
 
   getMonthListedActivities(yearMonth: string, team: string, username: string): Observable<any> {
     const httpOptions = {

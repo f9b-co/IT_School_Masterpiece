@@ -6,7 +6,7 @@ import fr.formation.masterpieceApi.entities.Employee;
 public interface ListedActivitiesViewDto {
 
     EmployeeViewDto getEmployee();
-    ActivityViewDto getActivity();
+    ActivityViewInterfaceDto getActivity();
     boolean isValidated();
 
 

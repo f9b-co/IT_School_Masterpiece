@@ -35,19 +35,19 @@ public class EmployeeController {
 
     @PreAuthorize("hasAuthority('User')")
     @GetMapping("/{username}/team-members")
-    protected List<EmployeeShortDto> getUserTeamMembers(@PathVariable("username") String username) {
+    protected List<EmployeeShortInterfaceDto> getUserTeamMembers(@PathVariable("username") String username) {
         return service.getUserTeamMembers(username);
     }
 
     @PreAuthorize("hasAuthority('Manager')")
     @GetMapping("/{id}/teams-members")
-    protected List<List<EmployeeShortDto>> getManagerTeamsMembers(@PathVariable("id") Long id) {
+    protected List<List<EmployeeShortInterfaceDto>> getManagerTeamsMembers(@PathVariable("id") Long id) {
         return service.getManagerTeamsMembers(id);
     }
 
     @PreAuthorize("hasAuthority('User') or hasAuthority('Manager')")
     @GetMapping("/listed-activities")
-    protected List<EmployeeActivitiesDto> getTeamActivitiesByMonth(@RequestParam("team") String teamName, @RequestParam("period") String yearMonth, @RequestParam("username") String username) {
+    protected List<EmployeeActivitiesInterfaceDto> getTeamActivitiesByMonth(@RequestParam("team") String teamName, @RequestParam("period") String yearMonth, @RequestParam("username") String username) {
         return service.getTeamMonthActivities(teamName, yearMonth, username);
     }
 

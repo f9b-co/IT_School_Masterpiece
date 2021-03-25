@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ActivityServiceImpl implements ActivityService {
+public class ActivityServiceImpl extends AbstractService implements ActivityService {
 
     private final ActivityRepository activityRepo;
     private final ListedActivitiesRepository listedActivitiesRepo;

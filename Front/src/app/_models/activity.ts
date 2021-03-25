@@ -1,15 +1,15 @@
-import { HalfDay } from "./halfday";
+import { HalfDay } from "./halfDay";
 import { Task } from "./task";
 
 export class Activity {
 
     date: String;
-    halfday: HalfDay;
+    halfDay: HalfDay;
     task: Task;
 
-    constructor(date: String, halfday: HalfDay, task: Task) {
+    constructor(date: String, halfDay: HalfDay, task: Task) {
         this.date = date;
-        this.halfday = halfday;
+        this.halfDay = halfDay;
         this.task = task;
     }
 

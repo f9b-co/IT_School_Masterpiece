@@ -1,5 +1,8 @@
 package fr.formation.masterpieceApi.dtos;
 
+import validations.UniqueEmail;
+import validations.UniqueUsername;
+
 import javax.validation.constraints.*;
 
 public class EmployeeCreateDto {
@@ -18,10 +21,12 @@ public class EmployeeCreateDto {
     @NotBlank
     @Size(max = 64)
     private String department;
+    @UniqueEmail
     @NotNull
     @Size(max = 128)
     @Email
     private String email;
+    @UniqueUsername
     @NotBlank
     @Size(min = 7, max = 7)
     private String username;

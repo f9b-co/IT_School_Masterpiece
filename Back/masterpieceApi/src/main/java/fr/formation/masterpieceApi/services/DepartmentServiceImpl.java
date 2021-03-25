@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DepartmentServiceImpl implements DepartmentService {
+public class DepartmentServiceImpl extends AbstractService implements DepartmentService {
 
     private final DepartmentRepository departmentsRepo;
 

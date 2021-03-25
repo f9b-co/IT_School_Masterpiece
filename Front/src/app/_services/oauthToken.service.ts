@@ -20,8 +20,12 @@ export class OauthTokenService {
     return this.decoded
   }
 
+  haveToken(): boolean {
+    return (sessionStorage.getItem('token')) ? true : false;
+  }
+
   getUserFromToken() {
-    if (sessionStorage.getItem('token')) {
+    if (this.haveToken()) {
       this.decoded = this.getDecodedAccesToken();
       return new User(this.decoded.user_name, this.decoded.userId, this.decoded.authorities);
     }

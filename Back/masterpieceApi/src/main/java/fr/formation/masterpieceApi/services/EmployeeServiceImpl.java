@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService {
+public class EmployeeServiceImpl extends AbstractService implements EmployeeService {
 
     private final EmployeeRepository employeesRepo;
     private final DepartmentRepository departmentsRepo;
@@ -52,8 +52,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public boolean userExists(String username) {
+    public boolean usernameExists(String username) {
         return employeesRepo.findByUsername(username).isPresent();
+    }
+
+    @Override
+    public boolean emailExists(String email) {
+        return employeesRepo.findByEmail(email).isPresent();
     }
 
 
@@ -87,42 +92,42 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeInfoDto> getAll(Pageable pageable) { return employeesRepo.getAllProjectedBy(pageable); }
 
-    public List<EmployeeShortDto> getTeamMembers(String teamName) {
+    public List<EmployeeShortInterfaceDto> getTeamMembers(String teamName) {
         Team team = teamsRepo.findByName(teamName).get();
         return employeesRepo.getAllDistinctByTeam(team);
     }
 
     @Override
-    public List<EmployeeShortDto> getUserTeamMembers(String username) {
+    public List<EmployeeShortInterfaceDto> getUserTeamMembers(String username) {
         return getTeamMembers(getOne(username).getTeam().getName());
     }
 
     @Override
-    public List<List<EmployeeShortDto>> getManagerTeamsMembers(Long managerId) {
-        List<TeamShortDto> teams = teamsRepo.findAllByManagerId(managerId);
-        List<List<EmployeeShortDto>> teamsMembers = new ArrayList<>();
-        for (TeamShortDto team: teams) {
+    public List<List<EmployeeShortInterfaceDto>> getManagerTeamsMembers(Long managerId) {
+        List<TeamShortInterfaceDto> teams = teamsRepo.findAllByManagerId(managerId);
+        List<List<EmployeeShortInterfaceDto>> teamsMembers = new ArrayList<>();
+        for (TeamShortInterfaceDto team: teams) {
                 teamsMembers.add(getTeamMembers(team.getName()));
         }
         return teamsMembers;
     }
 
     @Override
-    public List<EmployeeActivitiesDto> getTeamMonthActivities(String teamName, String yearMonth, String username) {
-        List<EmployeeActivitiesDto> teamActivities = new ArrayList<>();
+    public List<EmployeeActivitiesInterfaceDto> getTeamMonthActivities(String teamName, String yearMonth, String username) {
+        List<EmployeeActivitiesInterfaceDto> teamActivities = new ArrayList<>();
         if (teamName.isEmpty()){
             teamActivities.add(getUserMonthActivities(username, yearMonth));
         } else {
-            List<EmployeeShortDto> teamMembers = getTeamMembers(teamName);
-            for (EmployeeShortDto member : teamMembers) {
+            List<EmployeeShortInterfaceDto> teamMembers = getTeamMembers(teamName);
+            for (EmployeeShortInterfaceDto member : teamMembers) {
                 teamActivities.add(getUserMonthActivities(member.getUsername(), yearMonth));
             }
         }
         return teamActivities;
     }
     // Throws ResourceNotFoundException (restful practice)
-    public EmployeeActivitiesDto getUserMonthActivities(String username, String yearMonth) {
-        return employeesRepo.readByUsernameAndListedActivitiesActivityDateStartsWith(username, yearMonth);
+    public EmployeeActivitiesInterfaceDto getUserMonthActivities(String username, String yearMonth) {
+        return employeesRepo.readByUsernameAndListedActivitiesActivityDateStartsWith(username, yearMonth); //yearMonth readByUsernameAndListedActivitiesActivityDateStartsWith
                 //.orElseThrow(() -> new ResourceNotFoundException("No activities for month: " + yearMonth));
     }
 

@@ -1,9 +1,7 @@
 package fr.formation.masterpieceApi.controllers;
 
-import fr.formation.masterpieceApi.dtos.EmployeeCreateDto;
-import fr.formation.masterpieceApi.dtos.EmployeeViewDto;
 import fr.formation.masterpieceApi.dtos.TeamCreateDto;
-import fr.formation.masterpieceApi.dtos.TeamShortDto;
+import fr.formation.masterpieceApi.dtos.TeamShortInterfaceDto;
 import fr.formation.masterpieceApi.services.TeamService;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +25,7 @@ public class TeamController {
     }
 
     @GetMapping("/{managerId}")
-    protected List<TeamShortDto> getManagerTeams(@PathVariable("managerId") Long managerId) {
+    protected List<TeamShortInterfaceDto> getManagerTeams(@PathVariable("managerId") Long managerId) {
         return service.getManagerTeams(managerId);
     }
 

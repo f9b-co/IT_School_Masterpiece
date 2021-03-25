@@ -3,13 +3,15 @@
   min-width: 560px;
   background-color: white;
 }
+section {
+  margin-top: 10px;;
+}
 table {
-  border: 1px solid grey;
-  width: 800px;
-
+  border: 1px solid lightgrey;
+  width: 900px;
 }
 table tr {
-  border: 0px solid blue;
+  border: 0px solid blue;  
 }
 table th, td {
   border: 0px solid grey;
@@ -20,18 +22,23 @@ table th, td {
 .days-tr{
   border-spacing: 1px 0px;
 }
-.days-tr-user{
-  background-color: slategrey;
+.nom-equipe{
+  height: 20px;
+  font-weight: 600;
+  color: darkred;
+  vertical-align: bottom;
 }
-.days-tr div{
+.td-user{
+  background-color: papayawhip  ;
+}
+.days-td div{
   display: inherit;
   background-color: lightgrey;
   height: 1.4em;
-  width: 0.7em
+  width: 1em;
 }
-.days-tr-div-AM{
-}
-.days-tr-div-PM{
+.days-td-div-closed-days{
+  background-color: dimgrey;
 }
 .navButtons {
   padding: 2px;
@@ -39,8 +46,24 @@ table th, td {
   background: none;
   cursor: pointer;
 }
-#timeline img {
-  width: 800px;
+#tasksCaption {
+  height: auto;
+}
+#tasksCaption table{
+  width: fit-content;
+}
+#tasksCaption td {
+  display: inline-flex;
+  border: 0px solid grey;
+}
+.taskColor {
+  height: 10px;
+  width: 10px;
+}
+.taskName {
+  margin-left: 5px;
+  height: 10px;
+  width: 95px;
 }
 .navButtons img {
   height: 1.1em;

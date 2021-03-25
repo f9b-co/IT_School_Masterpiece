@@ -1,14 +1,14 @@
 package fr.formation.masterpieceApi.services;
 
 import fr.formation.masterpieceApi.dtos.TeamCreateDto;
-import fr.formation.masterpieceApi.dtos.TeamShortDto;
+import fr.formation.masterpieceApi.dtos.TeamShortInterfaceDto;
 import fr.formation.masterpieceApi.repositories.TeamRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class TeamServiceImpl implements TeamService {
+public class TeamServiceImpl extends AbstractService implements TeamService {
 
     private final TeamRepository teamsRepo;
 
@@ -22,7 +22,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public List<TeamShortDto> getManagerTeams(Long managerId) {
+    public List<TeamShortInterfaceDto> getManagerTeams(Long managerId) {
         return teamsRepo.findAllByManagerId(managerId);
     }
 

@@ -1,6 +1,6 @@
 package fr.formation.masterpieceApi.dtos;
 
-public interface TaskShortDto {
+public interface TaskShortInterfaceDto {
 
     String getName();
     String getColor();

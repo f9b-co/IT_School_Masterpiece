@@ -50,8 +50,7 @@ export class LoginAccountComponent implements OnInit {
         this.router.navigate(['/monthlyActivity']);
       },
       (error) => {
-        console.log(error);
-        console.log("Connexion impossible");
+        alert("Connexion impossible\n"+error);
       }
     );
   }

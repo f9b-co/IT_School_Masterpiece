@@ -1,6 +1,6 @@
 export enum HalfDay {
 
-    AM = "matin",
-    PM = "apres-midi"
+    AM = "AM",
+    PM = "PM"
 
 }

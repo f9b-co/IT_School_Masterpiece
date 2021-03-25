@@ -1,9 +1,9 @@
 package fr.formation.masterpieceApi.dtos;
 
-public interface TeamInfoDto {
+public interface TeamInfoInterfaceDto {
 
     Long getId();
     String getName();
-    EmployeeShortDto getManager();
+    EmployeeShortInterfaceDto getManager();
 
 }

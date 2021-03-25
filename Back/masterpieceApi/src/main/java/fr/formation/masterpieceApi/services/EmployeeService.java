@@ -8,15 +8,16 @@ import java.util.List;
 
 public interface EmployeeService extends UserDetailsService {
 
-    boolean userExists(String username);
+    boolean usernameExists(String username);
+    boolean emailExists(String username);
     void create(EmployeeCreateDto dto);
     EmployeeViewDto getOne(String username);
     EmployeeInfoDto getCurrentUserInfo(Long id);
     List<EmployeeInfoDto> getAll(Pageable pageable);
     void delete(String username);
 
-    List<EmployeeShortDto> getUserTeamMembers(String teamName);
-    List<List<EmployeeShortDto>> getManagerTeamsMembers(Long managerId);
-    //EmployeeActivitiesDto getUserMonthActivities(String username, String yearMonth);
-    List<EmployeeActivitiesDto> getTeamMonthActivities(String teamName, String yearMonth, String username);
+    List<EmployeeShortInterfaceDto> getUserTeamMembers(String teamName);
+    List<List<EmployeeShortInterfaceDto>> getManagerTeamsMembers(Long managerId);
+    //EmployeeActivitiesInterfaceDto getUserMonthActivities(String username, String yearMonth);
+    List<EmployeeActivitiesInterfaceDto> getTeamMonthActivities(String teamName, String yearMonth, String username);
 }
