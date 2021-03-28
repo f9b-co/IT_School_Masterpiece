@@ -1,7 +1,7 @@
 package fr.formation.masterpieceApi.controllers;
 
 import fr.formation.masterpieceApi.dtos.TaskCreateDto;
-import fr.formation.masterpieceApi.dtos.TaskShortInterfaceDto;
+import fr.formation.masterpieceApi.dtos.TaskShortDto;
 import fr.formation.masterpieceApi.services.TaskService;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +25,7 @@ public class TaskController {
     }
 
     @GetMapping
-    protected List<TaskShortInterfaceDto> getAllTasks() {
+    protected List<TaskShortDto> getAllTasks() {
         return service.getAllTasks();
     }
 

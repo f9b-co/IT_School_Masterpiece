@@ -12,4 +12,6 @@ public interface ListedActivitiesRepository  extends JpaRepository<ListedActivit
 
     List<ListedActivitiesViewDto> getAllProjectedBy();
 
+    List<ListedActivitiesViewDto> findAllByEmployeeIdAndActivityDateStartsWith(Long userId, String yearMonth);
+
 }

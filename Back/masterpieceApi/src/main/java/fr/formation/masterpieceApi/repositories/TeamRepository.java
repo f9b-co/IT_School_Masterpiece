@@ -1,6 +1,6 @@
 package fr.formation.masterpieceApi.repositories;
 
-import fr.formation.masterpieceApi.dtos.TeamShortInterfaceDto;
+import fr.formation.masterpieceApi.dtos.TeamShortDto;
 import fr.formation.masterpieceApi.entities.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -12,8 +12,9 @@ import java.util.Optional;
 public interface TeamRepository extends JpaRepository<Team, Long> {
 
     Optional<Team> findByName (String teamName);
+    Optional<Team> findById (Long id);
 
-    List<TeamShortInterfaceDto> findAllByManagerId(Long id);
+    List<TeamShortDto> findAllByManagerId(Long id);
 
 
 }

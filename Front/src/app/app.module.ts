@@ -14,8 +14,7 @@ import { LoginAccountComponent } from "./login-account/login-account.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { CreateUserAccountComponent } from "./create-userAccount/create-userAccount.component";
 import { NavbarComponent } from "./navbar/navbar.component";
-import { ErrorsInterceptorService } from './_services/errors.interceptor.service';
-import { JwtInterceptorService } from './_services/jwt.interceptor.service';
+import { HttpInterceptorService } from './_services/Http.interceptor.service';
 import { HomeComponent } from './home/home.component';
 import { TopRibbonComponent } from './top-ribbon/top-ribbon.component';
 import { MonthlyActivityComponent } from './monthlyActivity/monthlyActivity.component';
@@ -41,8 +40,7 @@ import { MonthlyActivityComponent } from './monthlyActivity/monthlyActivity.comp
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'fr' },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorsInterceptorService, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorService, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true }
   ],
   bootstrap: [AppComponent]
 })

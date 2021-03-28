@@ -23,12 +23,12 @@ public class ActivityController {
         service.create(dto);
     }
 
-/*    @GetMapping("/listed/filtered")
-    protected List<ListedActivitiesViewDto> getAllListed(@RequestParam("mo") int monthOffset, @RequestParam("ui") Long userId) {
-        return null; //service.getMonthlyListedActivities(monthOffset, userId);
-    }*/
-
     @GetMapping("/listed")
+    protected List<ListedActivitiesViewDto> getActivitiesByUsernameAndMonth(@RequestParam("ui") Long userId, @RequestParam("ym") String yearMonth) {
+        return service.getAllByUserIdAndMonth(userId, yearMonth); //service.getMonthlyListedActivities(monthOffset, userId);
+    }
+
+    @GetMapping("/list")
     protected List<ListedActivitiesViewDto> getAllListed() {
         return service.getAllProjectedBy();
     }

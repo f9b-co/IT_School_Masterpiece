@@ -48,12 +48,14 @@ public class Employee extends AbstractEntity {
     protected Employee() {
         // Empty no-arg constructor (Hibernate)
     }
+
     /*
      * Creates a new enabled employee using employee's 4 args constructor.
      */
     public Employee(String username, String password, Set<Role> roles) {
         this(username, password, roles, true);
     }
+
     /*
      * Creates a new employee:
      * username as a unique username

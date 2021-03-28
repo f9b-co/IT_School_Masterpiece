@@ -1,10 +1,10 @@
 package fr.formation.masterpieceApi.dtos;
 
-public interface EmployeeShortInterfaceDto {
+public interface EmployeeShortDto {
 
     String getUsername();
     String getFirstName();
     String getLastName();
-    TeamShortInterfaceDto getTeam();
+    TeamShortDto getTeam();
 
 }

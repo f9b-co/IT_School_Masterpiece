@@ -66,10 +66,10 @@ option {
 }
 input.form-control, select.form-control {
   margin: 0.25rem 0rem;
-}
+}/* 
 ::-webkit-scrollbar {
   display: none;
-}
+} */
 app-create-userAccount,
 app-login-account,
 app-monthlyActivity {

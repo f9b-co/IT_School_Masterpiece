@@ -1,6 +1,7 @@
 :host {
   overflow: scroll;
-  min-width: 560px;
+  min-width: 640px;
+  width: 100%;
   background-color: white;
 }
 section {
@@ -8,19 +9,28 @@ section {
 }
 table {
   border: 1px solid lightgrey;
-  width: 900px;
+  width: 980px;
 }
-table tr {
-  border: 0px solid blue;  
+#activitiesTable thead{
+  display: block;
 }
-table th, td {
-  border: 0px solid grey;
-  font-size: 0.6em;
-  color:black;
-  overflow-x: scroll;
+#activitiesTable thead tr{
+  width: 98.3%;
+  display: inline-table;
+  table-layout: fixed;
 }
-.days-tr{
-  border-spacing: 1px 0px;
+#activitiesTable tbody{
+  width: 100%;
+  max-height: 40vh;
+  overflow-y: scroll;
+  display: block;
+  table-layout: fixed;
+  word-wrap:break-word;
+}
+.thead-col0-width, .thead-col0-width  {
+  margin: 0;
+  width: 130px;
+  text-align: left;
 }
 .nom-equipe{
   height: 20px;
@@ -28,23 +38,78 @@ table th, td {
   color: darkred;
   vertical-align: bottom;
 }
-.td-user{
-  background-color: papayawhip  ;
+table th, td {
+  border: 0px solid grey;
+  font-size: 0.6em;
+  color:black;
 }
-.days-td div{
+select, option{
+  height: 14px;
+  padding: 0;
+  font-size: 0.6em;
+}
+select{  
+  appearance: menulist;
+  box-sizing: content-box;
+  border-style: none;
+  background-color:transparent;
+  cursor: pointer;
+  border-spacing: 0px;
+  width: 9px;
+}
+option{  
+  border-style: none;
+  min-height: 0.5em;
+  width: 10px;
+}
+.tr-days{
+  border-spacing: 1px 0px;
+}
+.tr-user{
+  background-color: blanchedalmond  ;
+}
+.tr-user-checked{
+  background-color:lightslategray  ;
+}
+.nom-equipe{
+  height: 20px;
+  font-weight: 600;
+  color: darkred;
+  vertical-align: bottom;
+}
+.td-days div{
   display: inherit;
   background-color: lightgrey;
-  height: 1.4em;
-  width: 1em;
+  height: 14px;
+  width: 9px;
 }
-.days-td-div-closed-days{
+.td-days-div-closed-days{
   background-color: dimgrey;
+}
+.td-check {
+  text-align: center;
+}
+input {
+  height: 6px;
+  width: 6px;
 }
 .navButtons {
   padding: 2px;
   border: none;
   background: none;
   cursor: pointer;
+}
+.navButtons img {
+  height: 1.1em;
+}
+.askedMonth {
+  display: inline-block;
+  padding: 2px 4px;
+  min-width: 55px;
+  vertical-align:text-top;
+  text-align: center;
+  font-size: 0.7em;
+  color: hsl(0, 0%, 50%);
 }
 #tasksCaption {
   height: auto;
@@ -64,16 +129,4 @@ table th, td {
   margin-left: 5px;
   height: 10px;
   width: 95px;
-}
-.navButtons img {
-  height: 1.1em;
-}
-.askedMonth {
-  display: inline-block;
-  padding: 2px 4px;
-  min-width: 55px;
-  vertical-align:text-top;
-  text-align: center;
-  font-size: 0.7em;
-  color: hsl(0, 0%, 50%);
 }

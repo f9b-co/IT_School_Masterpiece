@@ -5,7 +5,7 @@ public interface EmployeeViewDto {
     String getFirstName();
     String getLastName();
     DepartmentShortDto getDepartment();
-    TeamShortInterfaceDto getTeam();
+    TeamShortDto getTeam();
     String getEmail();
     String getUsername();
 

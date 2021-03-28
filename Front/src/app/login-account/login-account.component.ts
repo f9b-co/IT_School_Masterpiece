@@ -22,7 +22,7 @@ export class LoginAccountComponent implements OnInit {
 
   ngOnInit() { }
 
-  loginForm = new FormGroup({
+  userLoginForm = new FormGroup({
     username: new FormControl(
       "",
       Validators.compose([
@@ -35,12 +35,12 @@ export class LoginAccountComponent implements OnInit {
     client_id: new FormControl("masterpiece-spa"),
     grant_type: new FormControl("password"),
   });
-  lF = this.loginForm;
-  lFc = this.loginForm.controls;
+  loginForm = this.userLoginForm;
+  controls = this.userLoginForm.controls;
 
   onSubmit() {
-    this.requiredAuthData = Object.keys(this.lF.value)
-      .map((key) => key + "=" + this.lF.value[key])
+    this.requiredAuthData = Object.keys(this.loginForm.value)
+      .map((key) => key + "=" + this.loginForm.value[key])
       .join("&");
 
     // Send http request with form values to back api

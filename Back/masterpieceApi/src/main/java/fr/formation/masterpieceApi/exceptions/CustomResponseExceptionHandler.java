@@ -1,5 +1,7 @@
 package fr.formation.masterpieceApi.exceptions;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +23,10 @@ import java.util.List;
 
 /*
  * Custom controller advice to handle all RestController exceptions.
+ *Manages handlers for exceptions to mutualize and standardize exception handling.
  *
- * Manages handlers for exceptions to mutualize and standardize exception handling.
  */
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
 public class CustomResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -57,26 +60,26 @@ public class CustomResponseExceptionHandler extends ResponseEntityExceptionHandl
 			errors.add(violation.getRootBeanClass().getName() + " "
 				+ violation.getPropertyPath() + ": " + violation.getMessage());
 		}
-		CustomError customError = new CustomError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
+		CustomError customError = new CustomError(HttpStatus.BAD_REQUEST, ex.getMessage(), errors);
 		return customResponse(customError);
     }
 
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-		HttpHeaders headers, HttpStatus status, WebRequest request) {
+	@Override
+	public ResponseEntity<Object> handleMethodArgumentNotValid( MethodArgumentNotValidException ex, HttpHeaders headers,
+		HttpStatus status, WebRequest request) {
 			List<String> errors = new ArrayList<>();
 			for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-				errors.add(error.getField() + ": " + error.getCode());
+				errors.add(error.getField() + ": " + error.getDefaultMessage());
 			}
-			for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
-				errors.add(error.getObjectName() + ": " + error.getCode());
-			}
+/*			for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
+				errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
+			}*/
 			CustomError customError = new CustomError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
-			return handleExceptionInternal(ex, customError, headers, customError.getStatus(), request);
-    }
+			return handleExceptionInternal(ex, customError.getErrors(), headers, customError.getStatus(), request);
+	}
 
     @Override
-    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,
+    public ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,
 		HttpHeaders headers, HttpStatus status, WebRequest request) {
 			StringBuilder builder = new StringBuilder();
 			builder.append(ex.getMethod());
@@ -88,7 +91,7 @@ public class CustomResponseExceptionHandler extends ResponseEntityExceptionHandl
     }
 
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+    public ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 		 HttpHeaders headers, HttpStatus status, WebRequest request) {
 			String error = "JsonParseError";
 			CustomError customError = new CustomError(HttpStatus.BAD_REQUEST, ex.getMessage(), error);

@@ -12,6 +12,9 @@ import { Activity } from '../_models/activity';
 import { ListedActivity } from '../_models/listedActivity';
 import { Employee } from '../_models/employee';
 import { HalfDay } from '../_models/halfDay';
+import { HostListener } from '@angular/core';
+import { find } from 'rxjs/operators';
+import { Inject } from '@angular/core';
 
 @Component({
   selector: 'app-monthlyActivity',
@@ -37,10 +40,12 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
   daysInMonth: number;
   closeDaysInMonth: number[] = [];
   openDaysInMonth: number[] = [];
-  selectedTaskColor: string = "";
+  elementRef: ElementRef;
 
-  constructor(private authenticationService: AuthenticationService,
-    private activityService: ActivityService, private renderer: Renderer2) { }
+  constructor(private authenticationService: AuthenticationService, private activityService: ActivityService,
+    private renderer: Renderer2, @Inject(ElementRef) elementRef: ElementRef) {
+    this.elementRef = elementRef
+  }
 
   @ViewChild('activitiesTableHead', { static: false }) tableHead: ElementRef;
   @ViewChild('activitiesTableBody', { static: false }) tableBody: ElementRef;
@@ -57,20 +62,20 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
 
     this.daysInMonth = this.findDaysInMonth(this.targetMonth + 1, this.targetYear);
     this.yearMonth = this.yearMonthToString(this.targetYear, this.targetMonth)
-    this.LoadOpenAndCloseDays();
     this.buildActivityTableHead();
+    this.LoadMonthDaysAndActivities();
     this.checkNavMonthButtons();
   }
 
 
-  /*month about functions (init & nav)*/
+  /* month linked functions (init & nav) */
   yearMonthToString(year: number, month: number): string {
     return String(this.targetYear) + "-" + String(this.targetMonth + 1).padStart(2, '0');
   }
   findDaysInMonth(year: number, month: number): number {
     return new Date(year, month, 0).getDate();
   }
-  LoadOpenAndCloseDays() {
+  LoadMonthDaysAndActivities(): void {
     this.openDaysInMonth.length = 0;
     this.closeDaysInMonth.length = 0;
     this.activityService.listCloseAndOpenDays()
@@ -134,7 +139,7 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
   }
 
 
-  /*Activity table about functions (dynamic table by current user, current teams and target month)*/
+  /*Activity table linked functions (dynamic table by current user, current teams and target month)*/
   loadTasks() {
     this.activityService.getAllTasks().subscribe(
       (tasksList: Task[]) => {
@@ -151,12 +156,13 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     and with direct context access to definition of used instance members */
     const render = this.renderer;
     const tH = this.tableHead;
+    const tB = this.tableBody;
     const crEl = this.createElement;
     const apd = this.append;
     let newCol, newRow, newHeader;
 
-    /* Define columms witdth via html5 <col> */
-    newCol = crEl(render, "col", "", "", "", "width:15%")
+    /* Define thead columms witdth via html5 <col> */
+    newCol = crEl(render, "col", "thead-colNom", "colNom", "", "width:15%")
     apd(render, tH.nativeElement, newCol);
     for (let i = 0; i < this.daysInMonth + 1; i++) {
       const width = 0.85 / (this.daysInMonth + 1) * 100;
@@ -164,30 +170,35 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
       apd(render, tH.nativeElement, newCol);
     }
     /* Add space blank row */
-    newRow = crEl(render, "tr", "firstBlankRow", "");
+    newRow = crEl(render, "tr", "firstBlankRow");
     apd(render, tH.nativeElement, newRow);
     /* Add colums'headers row */
     newRow = crEl(render, "tr", this.yearMonth, "");
-    newHeader = crEl(render, "th", "nomPrenom", "", "Nom")
+    newHeader = crEl(render, "th", "th-nom", "thead-col0-width", "Nom");
     apd(render, newRow, newHeader)
     for (let i = 0; i < this.daysInMonth; i++) {
       const day = String(i + 1).padStart(2, '0');
       newHeader = crEl(render, "th", this.yearMonth + "-" + day, "", day);
       apd(render, newRow, newHeader);
     }
-    (this.isManager) ?
-      newHeader = crEl(render, "th", "checkActivity", "", "&#10003") :
-      newHeader = crEl(render, "th", "checkActivity", "hidden", "&#10003");
+    newHeader = crEl(render, "th", "th-checkActivity", "", "&#10003");
     apd(render, newRow, newHeader);
     apd(render, tH.nativeElement, newRow);
+    /* Define tbody columms witdth via html5 <col> */
+    newCol = crEl(render, "col", "tbody-colNom", "colNom", "", "width:15%")
+    apd(render, tB.nativeElement, newCol);
+    for (let i = 0; i < this.daysInMonth + 1; i++) {
+      const width = 0.85 / (this.daysInMonth + 1) * 100;
+      newCol = crEl(render, "col", "col" + (i + 1), "", "", "width:" + width + "%");
+      apd(render, tB.nativeElement, newCol);
+    }
   }
   loadMonthlyActivity(userId: number, username: string, isManager: boolean) {
-    console.log(this.closeDaysInMonth);
     if (isManager) {
       this.activityService.getManagerTeamsMembers(userId).subscribe(
         (managerTeamsMembers: Employee[][]) => {
           managerTeamsMembers.forEach(tm => {
-            this.teamsInit(userId, tm);
+            this.teamsInit(tm);
           });
           this.loadActivities(this.yearMonth, username);
         },
@@ -196,18 +207,20 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     } else {
       this.activityService.getUserTeamMembers(username).subscribe(
         (userTeamMembers: Employee[]) => {
-          this.teamsInit(username, userTeamMembers);
+          console.log(userTeamMembers)
+          this.teamsInit(userTeamMembers);
           this.loadActivities(this.yearMonth, username);
         },
         (error) => { alert(error); }
       );
     }
   }
-  teamsInit(userRef: any, gottenTeam: Employee[]) {
+  teamsInit(gottenTeam: Employee[]) {
     if (this.monthChange == 0) {
       (isNullOrUndefined(gottenTeam[0].team)) ?
         this.teams.push("") :
         this.teams.push(gottenTeam[0].team.name);
+      console.log(this.teams);
       gottenTeam.forEach(member => this.teamsMembers.push(member));
     }
   }
@@ -220,7 +233,6 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     } else {
       alert("pas d'employés à afficher!");
     }
-    console.log(this.teams)
   }
   getTeamsActivities(yearMonth: string, teamName: string, username: string): any {
     this.activityService.getMonthListedActivities(yearMonth, teamName, username).subscribe(
@@ -239,15 +251,19 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     create substitute empty listedActivities[]*/
     const completed: Employee[] = [];
     /*at least one team member have listed activities, else no one have...*/
-    if (!isNullOrUndefined(teamActivities[0])) {
+    if (!isNullOrUndefined(teamActivities) && teamActivities.length > 0) {
+      const membersWithActivities = teamActivities.filter(emp => emp != null)
       this.teamsMembers
         .filter(m => m.team.name == teamName)
-        .map(m => {
-          const tmpEmp: Employee = teamActivities.filter(employee => employee.username == m.username)[0];
-          if (isNullOrUndefined(tmpEmp)) {
-            completed.push(new Employee(m.username, m.firstName, m.lastName, m.team, new Array(0)));
+        .forEach(m => {
+          const memberWithActivities = membersWithActivities.find(e => e.username.match(m.username));
+          if (memberWithActivities) {
+            const tmp = memberWithActivities.listedActivities
+              .filter(la => la.activity.date.startsWith(this.yearMonth))
+            memberWithActivities.listedActivities = tmp;
+            completed.push(memberWithActivities);
           } else {
-            completed.push(tmpEmp);
+            completed.push(new Employee(m.username, m.firstName, m.lastName, m.team, new Array(0)));
           }
         });
     } else {
@@ -257,9 +273,6 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
           completed.push(new Employee(m.username, m.firstName, m.lastName, m.team, new Array(0)))
         });
     }
-    completed.forEach(emp => emp.listedActivities
-      .filter(la => la.activity.date.startsWith(this.yearMonth)));
-
     return completed;
   }
   tableize(teamName: string, teamActivities: Employee[]): void {
@@ -272,48 +285,44 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     const sElP = this.setElProperty;
     const mElC = this.makeElClickable;
     const crSelTBC = this.createSelectTaskByColor;
-    let newCol, newRow, newCell, newDiv;
+    let newRow, newCell, newDiv;
 
-    /* Define columms witdth via html5 <col> */
-    newCol = crEl(render, "col", "colNom", "", "", "width:15%")
-    apd(render, tB.nativeElement, newCol);
-    for (let i = 0; i < this.daysInMonth + 1; i++) {
-      const width = 0.85 / (this.daysInMonth + 1) * 100;
-      newCol = crEl(render, "col", "col" + (i + 1), "", "", "width:" + width + "%");
-      apd(render, tB.nativeElement, newCol);
-    }
     /* insert Team name title-row */
     newRow = crEl(render, "tr", teamName + "-titleRow", "");
-    newCell = crEl(render, "td", teamName + "-titleCell", "nom-equipe", teamName)
+    newCell = crEl(render, "td", teamName + "-titleCell", "nom-equipe tbody-col0-width", teamName,)
     apd(render, newRow, newCell)
     apd(render, tB.nativeElement, newRow);
     /* insert each team member monthly activity row */
     teamActivities.forEach(member => {
+      /* defines local boolean variables and associated list used to qualify each halDay */
       const isCurrentUser: boolean = (member.username == this.user.username);
-      const userHighlight: string = (isCurrentUser) ? "background-color: blanchedalmond" : "";
       const closeDays = this.closeDaysInMonth;
       const openDays = this.openDaysInMonth;
-      const ListedActivities: ListedActivity[] = member.listedActivities
-        .filter(la => la.activity.date.startsWith(this.yearMonth));
-      const listedDays: number[] = ListedActivities
+      const listedActivities: ListedActivity[] = member.listedActivities
+      const listedDays: number[] = listedActivities
         .filter(la => la.activity.halfDay == HalfDay.AM)
         .map(la => parseInt(la.activity.date.split('-')[2])).sort();
-      const validatedDays: number[] = ListedActivities
+      const validatedDays: number[] = listedActivities
         .filter(la => la.isValidated && la.activity.halfDay == HalfDay.AM)
         .map(la => parseInt(la.activity.date.split('-')[2])).sort();
-      const validatedMonth: boolean =
+      const isMonthValidated: boolean =
         (listedDays.length == openDays.length) && (validatedDays.length == openDays.length);
+      const userHighlight: string = (isCurrentUser && isMonthValidated) ? "background-color: lightslategray" :
+        (isCurrentUser) ? "background-color: blanchedalmond" : "";
 
-      console.log(ListedActivities);
+      console.log(listedActivities);
 
+      /* insert employee row */
       newRow = crEl(render, "tr", member.username, "nom-prenom", "", userHighlight);
       newCell = crEl(render, "td", member.username + "nomPrenom", "", member.lastName + "," + member.firstName)
       apd(render, newRow, newCell)
+      /* loop for each day in month */
       for (let i = 0; i < this.daysInMonth; i++) {
+        /* set for each day local boolean variables and associated list used to qualify each halDay properties/display*/
         const day = String(i + 1).padStart(2, '0');
-        const dayActivities = ListedActivities.map(la => la.activity).filter(a => a.date.endsWith(day));
-        const taskColorAM = dayActivities.filter(a => a.halfDay == HalfDay.AM).map(a => a.task.color);
-        const taskColorPM = dayActivities.filter(a => a.halfDay == HalfDay.PM).map(a => a.task.color);
+        const dayActivities = listedActivities.map(la => la.activity).filter(a => a.date.endsWith(day));
+        const taskColorAM = dayActivities.filter(a => a.halfDay == HalfDay.AM).map(a => a.task.color).shift();
+        const taskColorPM = dayActivities.filter(a => a.halfDay == HalfDay.PM).map(a => a.task.color).shift();
         const isListed: boolean = listedDays.includes(i + 1)
         const listedAMBgC: string = (isListed) ? "background-color: " + taskColorAM : "";
         const listedPMBgC: string = (isListed) ? "background-color: " + taskColorPM : "";
@@ -322,19 +331,31 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
         const isOpen: boolean = openDays.includes(i + 1)
         const openBgC: string = (isOpen && !isListed) ? "background-color: lightgrey" : "";
 
-        newCell = crEl(render, "td", member.username + "-" + day, "days-td");
-        newDiv = crEl(render, "div", member.username + "-" + day + "-" + "AM", "", "", listedAMBgC + openBgC + closeBgC);
-        (isCurrentUser && !isClose && !validatedMonth) ? mElC(render, newDiv, "OnClickScript") : 1 > 1;
-        //(isCurrentUser && !isClose && !validatedMonth) ? crSelTBC(render, newDiv) : 1 > 1;
+        /* insert employee day with 2 halfdays in, setted/displayed according to booleans states */
+        newCell = crEl(render, "td", member.username + "-" + day, "td-days");
+        newDiv = crEl(render, "div", "div-" + member.username + "-" + day + "-" + "AM", taskColorAM, "", listedAMBgC + openBgC + closeBgC);
+        (isCurrentUser && !isClose && !isMonthValidated) ?
+          crSelTBC(render, "sel-" + member.username + "-" + day + "-" + "AM", newDiv, this.tasksList, crEl.bind(this)) : 1 > 1;
         apd(render, newCell, newDiv);
-        newDiv = crEl(render, "div", member.username + "-" + day + "-" + "PM", "", "", listedPMBgC + openBgC + closeBgC);
-        (isCurrentUser && !isClose && !validatedMonth) ? mElC(render, newDiv, "OnClickScript") : 1 > 1;
+        newDiv = crEl(render, "div", "div-" + member.username + "-" + day + "-" + "PM", taskColorPM, "", listedPMBgC + openBgC + closeBgC);
+        (isCurrentUser && !isClose && !isMonthValidated) ?
+          crSelTBC(render, "sel-" + member.username + "-" + day + "-" + "PM", newDiv, this.tasksList, crEl.bind(this)) : 1 > 1;
         apd(render, newCell, newDiv);
         apd(render, newRow, newCell);
       }
-      (this.isManager) ?
-        newCell = crEl(render, "td", member.username + "-" + this.yearMonth, "", "") :
-        newCell = crEl(render, "td", member.username + "-" + this.yearMonth, "hidden", "[]");
+      /* insert last cell of row "check for this employee month activities", setted/displayed according user role:
+         adding a checkbox for manager, and a ckeck mark for user */
+      if (this.isManager) {
+        newCell = crEl(render, "td", member.username + "-" + this.yearMonth, "", "");
+        const newIn = crEl(render, "input", member.username + "-" + this.yearMonth + "-check", "td-check");
+        render.setAttribute(newIn, 'type', "checkbox");
+        //render.setAttribute(newIn, 'checked', "false");
+        newIn['checked'] = isMonthValidated;
+        apd(render, newCell, newIn);
+      } else {
+        const checkStyle = (isMonthValidated) ? "color: black" : "color: lightgrey";
+        newCell = crEl(render, "td", member.username + "-" + this.yearMonth, "td-check", "&#10003", checkStyle);
+      }
       apd(render, newRow, newCell);
       apd(render, tB.nativeElement, newRow);
     });
@@ -390,18 +411,41 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
   append(renderer: Renderer2, parent, el): void {
     renderer.appendChild(parent, el);
   }
-  createSelectTaskByColor(renderer: Renderer2, parent: string) {
+  createSelectTaskByColor(renderer: Renderer2, id: string, parent: string, tasksList: Task[], createElement: Function) {
+    createElement(renderer, "select", id = id)
     const newSel: HTMLElement = renderer.createElement("select");
-    renderer.setProperty(newSel, '(change)', "onChange($event.target.color)");
-    renderer.setProperty(newSel, '[ngStyle]=', "{'background-color':selectedTaskColor}");
-    const newOpt: HTMLElement = renderer.createElement("option");
-    renderer.setProperty(newOpt, '*ngFor', "let task of tasksList");
-    renderer.setProperty(newOpt, '[value]', "task.color");
-    renderer.setProperty(newOpt, '[ngStyle]', "{'background-color':task.color}");
-    renderer.appendChild(newSel, newOpt);
+    //renderer.listen(newSel, 'change', event => { onChange(event) });
+    //renderer.setProperty(newSel, 'style', "{'background-color':selectedTaskColor}");
+    tasksList.forEach(t => {
+      const newOpt: HTMLElement = renderer.createElement("option");
+      renderer.setProperty(newOpt, 'value', t.color);
+      renderer.setProperty(newOpt, 'style', "background-color:" + t.color);
+      renderer.appendChild(newSel, newOpt);
+      //console.log(newOpt)
+    })
     renderer.appendChild(parent, newSel);
+
   }
-  onChange(color: string): void {
-    this.selectedTaskColor = color;
+
+  @HostListener('change', ['$event'])
+  onClick(event: any): void {
+    /*get parent Id*/
+    const parentId: String = event.path[1].id;
+    const parent = this.elementRef.nativeElement.querySelector('#' + parentId);
+    this.renderer.setProperty(parent, 'style', "background-color:" + event.target.value);
+
+    const parentClass: String = event.path[1].classList.value;
+
+    //.shift().substring(search)
+    //@ViewChild(parentId, { static: false }) halfDayDiv: ElementRef;
+
+    console.log(parent)
+    console.log(parentId + " " + parentClass)
+    console.log(event.path)
+    console.log(event.target.value)
+    console.log(event)
+
+    /*     let parent = event.nativeElement.parentNode;
+        this.elm.nativeElement.classList.add('red'); */
   }
 }

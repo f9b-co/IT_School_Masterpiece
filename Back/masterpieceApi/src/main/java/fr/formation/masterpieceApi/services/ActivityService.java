@@ -13,4 +13,6 @@ public interface ActivityService {
 
     List<ListedActivitiesViewDto> getAllProjectedBy(); //getMonthlyListedActivities(int monthOffset, Long userId);
 
+    List<ListedActivitiesViewDto> getAllByUserIdAndMonth(Long userId, String yearMonth);
 }
+

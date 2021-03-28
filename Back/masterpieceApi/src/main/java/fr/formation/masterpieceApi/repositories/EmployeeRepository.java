@@ -19,7 +19,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Optional<EmployeeAuthDto> findByUsername (String username);
     Optional<EmployeeInfoDto> getById(Long id);
 
-/*    @Query("select new fr.formation.masterpieceApi.dtos.EmployeeActivitiesInterfaceDto" +
+/*    @Query("select new fr.formation.masterpieceApi.dtos.EmployeeActivitiesDto" +
             "(e.username, e.firstName, e.lastName, e.teamName, e.listedActivities) " +
             "from Team te join Employee e on te.name = e.teamName " +
             "inner join e.listedActivities la " +
@@ -27,11 +27,12 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             "inner join a.task ta " +
             "where e.username = :username " +
             "and a.date like :yearMonth% " )*/
-    EmployeeActivitiesInterfaceDto readByUsernameAndListedActivitiesActivityDateStartsWith(String username, String yearMonth);
-    //Optional<EmployeeActivitiesInterfaceDto> readByUsernameAndListedActivitiesActivityDateStartsWith(String username, String yearMonth);
+    EmployeeActivitiesDto readByUsernameAndListedActivitiesActivityDateStartsWith(String username, String yearMonth);
+    //Optional<EmployeeActivitiesDto> readByUsernameAndListedActivitiesActivityDateStartsWith(String username, String yearMonth);
     //findByUsernameAndActivityDateLike
+    List<EmployeeActivitiesDto> readByListedActivitiesActivityDateStartsWith(String yearMonth);
 
-    List<EmployeeShortInterfaceDto> getAllDistinctByTeam (Team team);
+    List<EmployeeShortDto> getAllDistinctByTeam (Team team);
     List<EmployeeInfoDto> getAllProjectedBy(Pageable pageable);
 
     //void patchByUsername(String username);

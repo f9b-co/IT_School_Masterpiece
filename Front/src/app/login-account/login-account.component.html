@@ -1,21 +1,21 @@
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="userLoginForm" (ngSubmit)="onSubmit()">
     <h3>Connexion</h3>
     <div class="form-group">
         <label>Identifiant :</label><br />
         <input type="text" placeholder="A123456 ou X000001 ..." class="form-control" formControlName="username"
             required>
-        <div class="errors" *ngIf="lFc.username.errors && lFc.username.touched">
+        <div class="errors" *ngIf="controls.username.errors && controls.username.touched">
             Identifiant requis, 7 car. (Axxxxxx/Xyyyyyy)
         </div>
     </div>
     <div class="form-group">
         <label>Mot de Passe :</label><br />
         <input type="password" placeholder="Mot de Passe" class="form-control" formControlName="password" required>
-        <div class="errors" *ngIf="lFc.password.errors && lFc.password.touched">
+        <div class="errors" *ngIf="controls.password.errors && controls.password.touched">
             Mot de passe requis
         </div>
     </div>
-    <button type="submit" class="button" [disabled]="!loginForm.valid">Valider</button>
+    <button type="submit" class="button" [disabled]="!userLoginForm.valid">Valider</button>
 </form>
 <div class="accountNedded">
     <span>Besoin d'un compte?  >>>  </span><b><a routerLink="/create">Inscription</a></b>

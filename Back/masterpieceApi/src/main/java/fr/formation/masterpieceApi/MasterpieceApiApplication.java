@@ -27,14 +27,4 @@ public class MasterpieceApiApplication {
 		return new BCryptPasswordEncoder();
 	}
 
-	/*
-	 * The model mapper bean for the application, to map entities with dto
-	 * return a model mapper
-	 */
-	@Bean
-	public ModelMapper modelMapper() {
-		ModelMapper mapper = new ModelMapper();
-		return mapper;
-	}
-
 }

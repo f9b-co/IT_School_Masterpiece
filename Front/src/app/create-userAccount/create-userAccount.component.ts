@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 
 import { environment } from "../../environments/environment";
+import { AuthenticationService } from '../_services/authentication.service';
 
 @Component({
   selector: "app-create-userAccount",
@@ -12,7 +13,8 @@ import { environment } from "../../environments/environment";
   styleUrls: ["./create-userAccount.component.css"],
 })
 export class CreateUserAccountComponent implements OnInit {
-  constructor(private router: Router, private http: HttpClient) { }
+  constructor(private router: Router, private http: HttpClient,
+    private authenticationService: AuthenticationService) { }
 
   private apiUrl = `${environment.apiUrl}`;
   private headers = new HttpHeaders().set("Content-Type", "application/json");
@@ -102,10 +104,20 @@ export class CreateUserAccountComponent implements OnInit {
     this.http.post(employeesUrl, dataToSend, { headers }).subscribe(
       (data) => {
         this.createForm.reset();
-        alert(
-          "Enregistrement réussi! \n" + "Veuillez vous connecter..."
+        alert("Enregistrement réussi!");
+        // Send http request to api for auto-login
+        const sent = JSON.parse(dataToSend)
+        const requiredAuthData =
+          `username=${sent.username}&password=${sent.password}&client_id=masterpiece-spa&grant_type=password`;
+        this.authenticationService.login(requiredAuthData).subscribe(
+          (data) => {
+            console.log(data);
+            this.router.navigate(['/monthlyActivity']);
+          },
+          (error) => {
+            alert("Connexion impossible\n" + error);
+          }
         );
-        this.router.navigate(['/login']);
       },
       (error) => {
         alert("Enregistrement impossible \n" + error);

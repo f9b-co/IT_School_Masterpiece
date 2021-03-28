@@ -33,6 +33,6 @@ export class OauthTokenService {
 
   isTokenExpired(): boolean {
     const expiry = this.getDecodedAccesToken().exp;
-    return (Math.floor((new Date).getTime() / 1000)) >= expiry;
+    return (this.haveToken()) ? (Math.floor((new Date).getTime() / 1000)) >= expiry : true;
   }
 }

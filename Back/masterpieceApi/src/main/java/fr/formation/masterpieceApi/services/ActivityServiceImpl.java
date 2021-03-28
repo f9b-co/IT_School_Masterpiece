@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ActivityServiceImpl extends AbstractService implements ActivityService {
+public class ActivityServiceImpl implements ActivityService {
 
     private final ActivityRepository activityRepo;
     private final ListedActivitiesRepository listedActivitiesRepo;
@@ -32,6 +32,11 @@ public class ActivityServiceImpl extends AbstractService implements ActivityServ
     @Override
     public List<ListedActivitiesViewDto> getAllProjectedBy() {
         return listedActivitiesRepo.getAllProjectedBy();
+    }
+
+    @Override
+    public List<ListedActivitiesViewDto> getAllByUserIdAndMonth(Long userId, String yearMonth) {
+        return listedActivitiesRepo.findAllByEmployeeIdAndActivityDateStartsWith(userId, yearMonth);
     }
 
 /*    @Override

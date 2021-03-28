@@ -2,10 +2,10 @@ package fr.formation.masterpieceApi.dtos;
 
 import fr.formation.masterpieceApi.entities.HalfDay;
 
-public interface ActivityViewInterfaceDto {
+public interface ActivityViewDto {
 
     String getDate();
     HalfDay getHalfDay();
-    TaskShortInterfaceDto getTask();
+    TaskShortDto getTask();
 
 }
