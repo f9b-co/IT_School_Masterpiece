@@ -1,20 +1,19 @@
-import { Component, AfterViewInit, ElementRef, ViewChild, Renderer2, OnInit } from '@angular/core';
-import { AuthenticationService } from '../_services/authentication.service';
-import { ActivityService } from '../_services/activity.service';
+import {
+  Component, OnInit, AfterViewInit, Inject,
+  HostListener, ElementRef, ViewChild, Renderer2
+} from '@angular/core';
+import { Router } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 
+import { AuthenticationService } from '../_services/authentication.service';
+import { ActivityService } from '../_services/activity.service';
 import { User } from '../_models/user';
 import { Role } from '../_models/role';
-import { Department } from '../_models/department';
-import { Team } from '../_models/team';
+import { Employee } from '../_models/employee';
+import { HalfDay } from '../_models/halfDay';
 import { Task } from '../_models/task';
 import { Activity } from '../_models/activity';
 import { ListedActivity } from '../_models/listedActivity';
-import { Employee } from '../_models/employee';
-import { HalfDay } from '../_models/halfDay';
-import { HostListener } from '@angular/core';
-import { find } from 'rxjs/operators';
-import { Inject } from '@angular/core';
 
 @Component({
   selector: 'app-monthlyActivity',
@@ -22,7 +21,12 @@ import { Inject } from '@angular/core';
   styleUrls: ['./monthlyActivity.component.css']
 })
 export class MonthlyActivityComponent implements AfterViewInit, OnInit {
+  activitiesToUpdate: ListedActivity[] = [];
+  modifiedElements: [String, number][] = [];
+  iUpdate: number = 0;
+  isModified: boolean = false;
   user: User = this.authenticationService.currentUserValue;
+  welcomeMsg: String = "Bienvenue " + this.user.username;
   isManager: boolean = this.user.roles.includes(Role.Manager);
   teams: string[] = [];
   tasksList: Task[] = [];
@@ -42,7 +46,7 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
   openDaysInMonth: number[] = [];
   elementRef: ElementRef;
 
-  constructor(private authenticationService: AuthenticationService, private activityService: ActivityService,
+  constructor(private router: Router, private authenticationService: AuthenticationService, private activityService: ActivityService,
     private renderer: Renderer2, @Inject(ElementRef) elementRef: ElementRef) {
     this.elementRef = elementRef
   }
@@ -52,23 +56,32 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
   @ViewChild('tasksTable', { static: false }) tasksTable: ElementRef;
 
   ngOnInit() {
+    setTimeout(() => this.welcomeMsg = "\xa0", 10000);
     this.loadTasks();
   }
 
   ngAfterViewInit() {
+    this.monthDisplay();
+  }
+
+  ngAfterViewChecked() {
+    this.tasksTable.nativeElement.innerHTML = "";
+    this.diplayTasksRefList(this.tasksList);
+  }
+
+
+  /*month linked functions (init & nav)*/
+  monthDisplay() {
     this.tableHead.nativeElement.innerHTML = "";
     this.tableBody.nativeElement.innerHTML = "";
-    this.tasksTable.nativeElement.innerHTML = "";
 
     this.daysInMonth = this.findDaysInMonth(this.targetMonth + 1, this.targetYear);
     this.yearMonth = this.yearMonthToString(this.targetYear, this.targetMonth)
     this.buildActivityTableHead();
     this.LoadMonthDaysAndActivities();
     this.checkNavMonthButtons();
+
   }
-
-
-  /* month linked functions (init & nav) */
   yearMonthToString(year: number, month: number): string {
     return String(this.targetYear) + "-" + String(this.targetMonth + 1).padStart(2, '0');
   }
@@ -117,7 +130,7 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     this.monthOffset--;
     this.monthChange++;
     this.checkMonthOffset();
-    this.ngAfterViewInit();
+    this.monthDisplay();
   }
   nextMonth(): void {
     if (this.targetMonth == 11) {
@@ -129,7 +142,7 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     this.monthOffset++;
     this.monthChange++;
     this.checkMonthOffset();
-    this.ngAfterViewInit();
+    this.monthDisplay();
   }
   checkNavMonthButtons(): void {
     const prev = document.getElementById("previous");
@@ -159,16 +172,18 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     const tB = this.tableBody;
     const crEl = this.createElement;
     const apd = this.append;
-    let newCol, newRow, newHeader;
+    let newCol, newRow, newHeader, newDiv;
 
     /* Define thead columms witdth via html5 <col> */
-    newCol = crEl(render, "col", "thead-colNom", "colNom", "", "width:15%")
+    newCol = crEl(render, "col", "thead-colNom", "colNom", "", "width:13%")
     apd(render, tH.nativeElement, newCol);
     for (let i = 0; i < this.daysInMonth + 1; i++) {
       const width = 0.85 / (this.daysInMonth + 1) * 100;
       newCol = crEl(render, "col", "", "", "", "width:" + width + "%");
       apd(render, tH.nativeElement, newCol);
     }
+    newCol = crEl(render, "col", "thead-scrollBarSpace", "", "", "width: 1.5%");
+    apd(render, tH.nativeElement, newCol);
     /* Add space blank row */
     newRow = crEl(render, "tr", "firstBlankRow");
     apd(render, tH.nativeElement, newRow);
@@ -184,14 +199,21 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     newHeader = crEl(render, "th", "th-checkActivity", "", "&#10003");
     apd(render, newRow, newHeader);
     apd(render, tH.nativeElement, newRow);
+    newHeader = crEl(render, "td", "td-scrollBarSpace");
+    newDiv = crEl(render, "div", "div-scrollBarSpace", "hidden", "&#8863;");
+    apd(render, newHeader, newDiv);
+    apd(render, newRow, newHeader);
+    apd(render, tH.nativeElement, newRow);
     /* Define tbody columms witdth via html5 <col> */
-    newCol = crEl(render, "col", "tbody-colNom", "colNom", "", "width:15%")
+    newCol = crEl(render, "col", "tbody-colNom", "colNom", "", "width:13.5%")
     apd(render, tB.nativeElement, newCol);
     for (let i = 0; i < this.daysInMonth + 1; i++) {
-      const width = 0.85 / (this.daysInMonth + 1) * 100;
+      const width = 0.855 / (this.daysInMonth + 1) * 100;
       newCol = crEl(render, "col", "col" + (i + 1), "", "", "width:" + width + "%");
       apd(render, tB.nativeElement, newCol);
     }
+    newCol = crEl(render, "col", "tbody-scrollBarSpace", "", "", "width: 0%");
+    apd(render, tB.nativeElement, newCol);
   }
   loadMonthlyActivity(userId: number, username: string, isManager: boolean) {
     if (isManager) {
@@ -225,16 +247,15 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     }
   }
   loadActivities(yearMonth: string, username: string) {
-    this.diplayTasksRefList(this.tasksList);
     if (this.teams.length > 0) {
       this.teams.forEach(t => {
-        this.getTeamsActivities(yearMonth, t, username);
+        this.getTeamActivities(yearMonth, t, username);
       });
     } else {
       alert("pas d'employés à afficher!");
     }
   }
-  getTeamsActivities(yearMonth: string, teamName: string, username: string): any {
+  getTeamActivities(yearMonth: string, teamName: string, username: string): any {
     this.activityService.getMonthListedActivities(yearMonth, teamName, username).subscribe(
       (teamActivities: Employee[]) => {
         console.log(teamActivities);
@@ -263,14 +284,14 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
             memberWithActivities.listedActivities = tmp;
             completed.push(memberWithActivities);
           } else {
-            completed.push(new Employee(m.username, m.firstName, m.lastName, m.team, new Array(0)));
+            completed.push(new Employee(m.username, m.firstName, m.lastName, m.team, m.id, new Array(0)));
           }
         });
     } else {
       this.teamsMembers
         .filter(m => m.team.name == teamName)
         .map(m => {
-          completed.push(new Employee(m.username, m.firstName, m.lastName, m.team, new Array(0)))
+          completed.push(new Employee(m.username, m.firstName, m.lastName, m.team, m.id, new Array(0)))
         });
     }
     return completed;
@@ -314,7 +335,7 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
 
       /* insert employee row */
       newRow = crEl(render, "tr", member.username, "nom-prenom", "", userHighlight);
-      newCell = crEl(render, "td", member.username + "nomPrenom", "", member.lastName + "," + member.firstName)
+      newCell = crEl(render, "td", member.username + "nomPrenom", "tbody-col0-width", member.lastName + "," + member.firstName)
       apd(render, newRow, newCell)
       /* loop for each day in month */
       for (let i = 0; i < this.daysInMonth; i++) {
@@ -333,32 +354,43 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
 
         /* insert employee day with 2 halfdays in, setted/displayed according to booleans states */
         newCell = crEl(render, "td", member.username + "-" + day, "td-days");
-        newDiv = crEl(render, "div", "div-" + member.username + "-" + day + "-" + "AM", taskColorAM, "", listedAMBgC + openBgC + closeBgC);
+        newDiv = crEl(render, "div", `div-${member.id}-${member.username}-${day}-AM`, "AM", "", listedAMBgC + openBgC + closeBgC);
         (isCurrentUser && !isClose && !isMonthValidated) ?
-          crSelTBC(render, "sel-" + member.username + "-" + day + "-" + "AM", newDiv, this.tasksList, crEl.bind(this)) : 1 > 1;
+          crSelTBC(render, `sel-${member.id}-${member.username}-${day}-AM`, newDiv, this.tasksList, crEl.bind(this)) : 1 > 1;
         apd(render, newCell, newDiv);
-        newDiv = crEl(render, "div", "div-" + member.username + "-" + day + "-" + "PM", taskColorPM, "", listedPMBgC + openBgC + closeBgC);
+        newDiv = crEl(render, "div", `div-${member.id}-${member.username}-${day}-PM`, "", "", listedPMBgC + openBgC + closeBgC);
         (isCurrentUser && !isClose && !isMonthValidated) ?
-          crSelTBC(render, "sel-" + member.username + "-" + day + "-" + "PM", newDiv, this.tasksList, crEl.bind(this)) : 1 > 1;
+          crSelTBC(render, `sel-${member.id}-${member.username}-${day}-PM`, newDiv, this.tasksList, crEl.bind(this)) : 1 > 1;
         apd(render, newCell, newDiv);
         apd(render, newRow, newCell);
       }
       /* insert last cell of row "check for this employee month activities", setted/displayed according user role:
          adding a checkbox for manager, and a ckeck mark for user */
       if (this.isManager) {
-        newCell = crEl(render, "td", member.username + "-" + this.yearMonth, "", "");
-        const newIn = crEl(render, "input", member.username + "-" + this.yearMonth + "-check", "td-check");
+        newCell = crEl(render, "td", `${member.username}-${this.yearMonth}`, "", "");
+        const newIn = crEl(render, "input", `che-${member.username}-${this.yearMonth}-check`, "td-check");
         render.setAttribute(newIn, 'type', "checkbox");
-        //render.setAttribute(newIn, 'checked', "false");
         newIn['checked'] = isMonthValidated;
         apd(render, newCell, newIn);
       } else {
         const checkStyle = (isMonthValidated) ? "color: black" : "color: lightgrey";
-        newCell = crEl(render, "td", member.username + "-" + this.yearMonth, "td-check", "&#10003", checkStyle);
+        newCell = crEl(render, "td", `${member.username}-${this.yearMonth}`, "td-check", "&#10003", checkStyle);
       }
       apd(render, newRow, newCell);
       apd(render, tB.nativeElement, newRow);
     });
+    newRow = crEl(render, "tr", teamName + "spaceRow", "");
+    newCell = crEl(render, "td", teamName + "td-spaceRow-col0");
+    newDiv = crEl(render, "div", "div-spaceRow-col0", "div-spaceRow-col0");
+    apd(render, newCell, newDiv);
+    apd(render, newRow, newCell);
+    for (let i = 0; i < this.daysInMonth + 1; i++) {
+      newCell = crEl(render, "td", teamName + "td-spaceRow-day" + i + 1)
+      newDiv = crEl(render, "div", "div-spaceRow-day" + i + 1, "div-spaceRow-days");
+      apd(render, newCell, newDiv);
+      apd(render, newRow, newCell);
+    }
+    apd(render, tB.nativeElement, newRow);
   }
   diplayTasksRefList(tasksList: Task[]) {
     const render = this.renderer;
@@ -390,6 +422,21 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
       apd(render, tT.nativeElement, newRow);
     }
   }
+  saveChanges() { //&#128427;
+    this.activityService.patchListedActivities(JSON.stringify(this.activitiesToUpdate)).subscribe(
+      (ok) => {
+        console.log(ok);
+        this.activitiesToUpdate.length = 0;
+        this.modifiedElements.length = 0;
+        this.iUpdate = 0;
+        this.isModified = false;
+        alert("Modifications enregistrées")
+      },
+      (error) => {
+        alert(error);
+      }
+    );
+  }
 
 
   /*Custom DOM interraction functions*/
@@ -412,40 +459,111 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     renderer.appendChild(parent, el);
   }
   createSelectTaskByColor(renderer: Renderer2, id: string, parent: string, tasksList: Task[], createElement: Function) {
-    createElement(renderer, "select", id = id)
-    const newSel: HTMLElement = renderer.createElement("select");
-    //renderer.listen(newSel, 'change', event => { onChange(event) });
-    //renderer.setProperty(newSel, 'style', "{'background-color':selectedTaskColor}");
-    tasksList.forEach(t => {
-      const newOpt: HTMLElement = renderer.createElement("option");
-      renderer.setProperty(newOpt, 'value', t.color);
-      renderer.setProperty(newOpt, 'style', "background-color:" + t.color);
-      renderer.appendChild(newSel, newOpt);
-      //console.log(newOpt)
-    })
-    renderer.appendChild(parent, newSel);
 
+    const newSel: HTMLElement = createElement(renderer, "select", id); //renderer.createElement("select");
+    for (let i = 1; i < tasksList.length; i++) {
+      const newOpt: HTMLElement = renderer.createElement("option");
+      renderer.setProperty(newOpt, 'value', tasksList[i].color);
+      renderer.setProperty(newOpt, 'style', "background-color:" + tasksList[i].color);
+      renderer.appendChild(newSel, newOpt);
+    }
+    renderer.appendChild(parent, newSel);
   }
 
   @HostListener('change', ['$event'])
   onClick(event: any): void {
-    /*get parent Id*/
+    console.log(event);
+    console.log(event.path);
+    console.log(event.target.value + " / " + event.target.checked);
+    /* get el & parent Id &  HTMLElement*/
     const parentId: String = event.path[1].id;
-    const parent = this.elementRef.nativeElement.querySelector('#' + parentId);
-    this.renderer.setProperty(parent, 'style', "background-color:" + event.target.value);
+    const targetElId: String = event.target.id;
+    console.log(parentId);
+    console.log(targetElId);
+    const parent: HTMLElement = this.elementRef.nativeElement.querySelector('#' + parentId);
+    const targetEl: HTMLElement = this.elementRef.nativeElement.querySelector('#' + targetElId);
+    const idStartWith: String = event.target.type.substr(0, 3) + "-";
+    let isValidated: boolean = false
+    let taskColor: String = event.target.value
+    let listedActivity: ListedActivity;
+    /* update Html according to changes type and stock changes for backEnd in array */
+    switch (idStartWith) {
+      case ("sel-"):
+        isValidated = false;
+        taskColor = event.target.value;
+        /* update div BGcolor */
+        this.renderer.setProperty(parent, 'style', "background-color:" + taskColor);
+        listedActivity = this.changeToObject(targetElId, taskColor, isValidated);
+        this.checkIfAllreadyAndPushToUpdate(targetElId, listedActivity);
+        break;
+      case ("che-"):
+        isValidated = event.target.checked;
+        console.log(event.target.checked);
+        /* update row BGcolor */
+        const rowsHighlight: string = (event.target.checked) ? "background-color: lightsteelblue" :
+          "background-color: none";
+        const row: HTMLElement = event.target.parentElement.parentElement;
+        this.renderer.setProperty(row, 'style', rowsHighlight)
+        /* stock listedActivity change for backEnd */
+        const childrenList = Array.from(row.children);
+        for (let el of childrenList) {
+          if (el.classList.contains("td-days")) {
+            let divList = Array.from(el.children);
+            for (const subEl of divList) {
+              taskColor = subEl.getAttribute("style")
+                .replace("background-color: ", "").replace(";", "");
+              if (!taskColor.match("dimgrey")) {
+                console.log(event.target.checked);
+                listedActivity = this.changeToObject(subEl.id, taskColor, isValidated);
+                this.checkIfAllreadyAndPushToUpdate(subEl.id, listedActivity);
+              }
+            }
+          }
+        }
+        break;
+      default:
+        break;
+    }
+    console.log(this.modifiedElements);
+    console.log(this.activitiesToUpdate);
+    console.log("isModified = " + this.isModified)
+    console.log(event);
+  }
+  checkIsModified() {
+    this.isModified = (this.modifiedElements.length == 0) ? false : true;
+  }
+  changeToObject(targetElId, taskColor, isValidated): ListedActivity {
+    /* stock change in new ListedActivity Object */
+    const date: String = this.yearMonth + "-" + targetElId.split("-")[3];
+    const halfday: HalfDay = <HalfDay>targetElId.split("-")[4];
+    const task: Task = this.tasksList.find(t => t.color == taskColor);
+    const activity: Activity = new Activity(date, halfday, task)
+    const idToUse = (this.isManager) ? targetElId.split("-")[1] : this.user.userId;
+    return new ListedActivity(activity, isValidated, idToUse);
+  }
+  checkIfAllreadyAndPushToUpdate(targetElId: String, listedActivity: ListedActivity): any {
+    /* check if a change for ab halfDay is allready in update array waiting to be sent to backEnd,
+       if yes, replace it by the new one */
+    const iAllready = this.modifiedElements.indexOf(this.modifiedElements.find(el => el[0] == targetElId));
+    if (iAllready >= 0) {
+      const old: [String, number] = this.modifiedElements.find(el => el[0] == targetElId)
+      const indexToDelete: number =
+        this.activitiesToUpdate.indexOf(this.activitiesToUpdate.find(el => el[1] == old[1]));
+      this.modifiedElements.splice(iAllready, 1);
+      this.activitiesToUpdate.splice(indexToDelete, 1);
+    }
+    /* add new change in update array to be sent to backEnd */
+    this.activitiesToUpdate.push(listedActivity)
+    this.modifiedElements.push([targetElId, this.iUpdate]);
+    this.iUpdate++;
+    this.checkIsModified();
+  }
 
-    const parentClass: String = event.path[1].classList.value;
-
-    //.shift().substring(search)
-    //@ViewChild(parentId, { static: false }) halfDayDiv: ElementRef;
-
-    console.log(parent)
-    console.log(parentId + " " + parentClass)
-    console.log(event.path)
-    console.log(event.target.value)
-    console.log(event)
-
-    /*     let parent = event.nativeElement.parentNode;
-        this.elm.nativeElement.classList.add('red'); */
+  @HostListener('window:beforeunload', ['$event'])
+  canDeactivate(event: BeforeUnloadEvent): void {
+    // if unsaved changes, show confirm dialog box to the user to decide to stay in the page or not
+    if (this.activitiesToUpdate.length > 0) {
+      event.returnValue = confirm("!!! Modification(s) non sauvegardée(s) !!!. Voulez-vous quitez la page quand même?");
+    }
   }
 }

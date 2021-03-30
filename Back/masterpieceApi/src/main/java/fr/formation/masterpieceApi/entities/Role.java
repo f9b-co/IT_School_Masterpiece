@@ -18,8 +18,13 @@ public class Role extends AbstractEntity {
     @Column(length = 1, nullable = false)
     private boolean defaultRole;
 
-    public Role() {
-        //
+    protected Role() {
+        // Empty no-arg constructor (Hibernate)
+    }
+
+    public Role(String name, boolean defaultRole) {
+        this.name = name;
+        this.defaultRole = defaultRole;
     }
 
     public String getName() { return name; }

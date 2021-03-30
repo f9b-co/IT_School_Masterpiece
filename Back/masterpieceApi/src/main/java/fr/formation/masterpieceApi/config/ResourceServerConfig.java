@@ -36,7 +36,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		.antMatchers(HttpMethod.GET, "/api/employees/**").authenticated()
 		.antMatchers(HttpMethod.PATCH).authenticated()
 		.antMatchers(HttpMethod.DELETE).authenticated()
-		.antMatchers("/api/tasks/**", "/api/activities/**").authenticated();
+		.antMatchers("/api/tasks/**", "/api/listed-activities/**").authenticated();
 
     }
 }

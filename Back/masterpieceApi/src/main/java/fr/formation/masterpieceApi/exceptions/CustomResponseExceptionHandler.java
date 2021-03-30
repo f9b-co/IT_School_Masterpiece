@@ -71,9 +71,10 @@ public class CustomResponseExceptionHandler extends ResponseEntityExceptionHandl
 			for (FieldError error : ex.getBindingResult().getFieldErrors()) {
 				errors.add(error.getField() + ": " + error.getDefaultMessage());
 			}
-/*			for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
+			for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
 				errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
-			}*/
+			}
+
 			CustomError customError = new CustomError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
 			return handleExceptionInternal(ex, customError.getErrors(), headers, customError.getStatus(), request);
 	}

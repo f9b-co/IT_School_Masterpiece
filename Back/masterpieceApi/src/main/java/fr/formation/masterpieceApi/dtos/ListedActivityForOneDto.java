@@ -1,10 +1,8 @@
 package fr.formation.masterpieceApi.dtos;
 
-public interface ListedActivitiesViewDto {
+public interface ListedActivityForOneDto {
 
-    EmployeeViewDto getEmployee();
     ActivityViewDto getActivity();
     boolean isValidated();
-
 
 }

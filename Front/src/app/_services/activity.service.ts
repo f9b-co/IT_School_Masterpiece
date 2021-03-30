@@ -3,6 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
+import { ListedActivity } from '../_models/listedActivity';
 
 @Injectable({ providedIn: 'root' })
 
@@ -35,8 +36,8 @@ export class ActivityService {
     return this.http.get(`${this.apiUrl}/employees/listed-activities`, httpOptions);
   }
 
-  updateMonthListedActivities(): void {
-
+  patchListedActivities(dto): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/listed-activities`, dto, { headers: this.headers })
   }
 
   unsubscribe(subscription: Subscription): void {

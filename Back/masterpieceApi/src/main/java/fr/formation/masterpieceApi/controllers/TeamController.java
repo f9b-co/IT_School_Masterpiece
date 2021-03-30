@@ -3,6 +3,7 @@ package fr.formation.masterpieceApi.controllers;
 import fr.formation.masterpieceApi.dtos.TeamCreateDto;
 import fr.formation.masterpieceApi.dtos.TeamShortDto;
 import fr.formation.masterpieceApi.services.TeamService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,6 +19,7 @@ public class TeamController {
         this.service = service;
     }
 
+    @PreAuthorize("hasAuthority('Admin')")
     @PostMapping
     protected void create(@Valid @RequestBody TeamCreateDto dto) {
         System.out.println(dto.toString());

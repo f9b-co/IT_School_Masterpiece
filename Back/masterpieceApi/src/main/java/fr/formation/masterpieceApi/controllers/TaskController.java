@@ -1,8 +1,9 @@
 package fr.formation.masterpieceApi.controllers;
 
-import fr.formation.masterpieceApi.dtos.TaskCreateDto;
+import fr.formation.masterpieceApi.dtos.TaskInputDto;
 import fr.formation.masterpieceApi.dtos.TaskShortDto;
 import fr.formation.masterpieceApi.services.TaskService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,8 +19,9 @@ public class TaskController {
         this.service = service;
     }
 
+    @PreAuthorize("hasAuthority('Admin')")
     @PostMapping
-    protected void create(@Valid @RequestBody TaskCreateDto dto) {
+    protected void create(@Valid @RequestBody TaskInputDto dto) {
         System.out.println(dto.toString());
         service.create(dto);
     }

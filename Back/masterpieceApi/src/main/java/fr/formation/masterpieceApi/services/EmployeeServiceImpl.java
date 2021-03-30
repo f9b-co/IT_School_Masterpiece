@@ -68,7 +68,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void create(EmployeeCreateDto dto) {
         Role defaultRole = rolesRepo.findByDefaultRoleTrue().get();
         Set<Role> roles = new HashSet<Role>();
-        Set<ListedActivities> listedActivities = new HashSet<ListedActivities>();
+        Set<ListedActivity> listedActivities = new HashSet<ListedActivity>();
         roles.add(defaultRole);
         Employee employee = new Employee(
                 dto.getUsername(),

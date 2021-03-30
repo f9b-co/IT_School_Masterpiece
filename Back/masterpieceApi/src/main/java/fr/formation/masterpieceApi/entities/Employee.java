@@ -43,7 +43,7 @@ public class Employee extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
     @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
-    private Set<ListedActivities> listedActivities;
+    private Set<ListedActivity> listedActivities;
 
     protected Employee() {
         // Empty no-arg constructor (Hibernate)
@@ -94,8 +94,8 @@ public class Employee extends AbstractEntity {
     public void setCredentialsNonExpired(boolean credentialsNonExpired) { this.credentialsNonExpired = credentialsNonExpired; }
     public Set<Role> getRoles() { return roles; }
     public void setRoles(Set<Role> roles) { this.roles = roles; }
-    public Set<ListedActivities> getListedActivities() { return listedActivities; }
-    public void setListedActivities(Set<ListedActivities> listedActivities) { this.listedActivities = listedActivities; }
+    public Set<ListedActivity> getListedActivities() { return listedActivities; }
+    public void setListedActivities(Set<ListedActivity> listedActivities) { this.listedActivities = listedActivities; }
 
     @Override
     public String toString() {

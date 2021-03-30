@@ -1,6 +1,6 @@
 package fr.formation.masterpieceApi.services;
 
-import fr.formation.masterpieceApi.dtos.TaskCreateDto;
+import fr.formation.masterpieceApi.dtos.TaskInputDto;
 import fr.formation.masterpieceApi.dtos.TaskShortDto;
 import fr.formation.masterpieceApi.repositories.TaskRepository;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void create(TaskCreateDto dto){
+    public void create(TaskInputDto dto){
         //
     }
 

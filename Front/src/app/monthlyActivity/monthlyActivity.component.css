@@ -12,24 +12,20 @@ table {
   width: 980px;
 }
 #activitiesTable thead{
+  width: 100%;
   display: block;
-}
-#activitiesTable thead tr{
-  width: 98.3%;
-  display: inline-table;
-  table-layout: fixed;
 }
 #activitiesTable tbody{
   width: 100%;
-  max-height: 40vh;
+  height: 40vh;
   overflow-y: scroll;
   display: block;
-  table-layout: fixed;
-  word-wrap:break-word;
 }
 .thead-col0-width, .thead-col0-width  {
   margin: 0;
-  width: 130px;
+  min-width: 120px;
+  max-width: 120px;
+  overflow-wrap: break-word;
   text-align: left;
 }
 .nom-equipe{
@@ -38,29 +34,42 @@ table {
   color: darkred;
   vertical-align: bottom;
 }
+table tr {
+  border: 1px solid blue;
+}
 table th, td {
   border: 0px solid grey;
   font-size: 0.6em;
   color:black;
 }
+.div-spaceRow-col0{
+  margin: 0;
+  min-width: 120px;
+  max-width: 120px;
+  
+}
+.div-spaceRow-days{
+  margin: 0;
+  width: 18px;
+
+}
 select, option{
-  height: 14px;
+  width: 9px;
   padding: 0;
   font-size: 0.6em;
 }
-select{  
+select{
+  border-spacing: 0px;
+  border-style: none;
+  height: 14px;
   appearance: menulist;
   box-sizing: content-box;
-  border-style: none;
   background-color:transparent;
   cursor: pointer;
-  border-spacing: 0px;
-  width: 9px;
 }
 option{  
   border-style: none;
-  min-height: 0.5em;
-  width: 10px;
+  height: 8px;
 }
 .tr-days{
   border-spacing: 1px 0px;
@@ -71,12 +80,6 @@ option{
 .tr-user-checked{
   background-color:lightslategray  ;
 }
-.nom-equipe{
-  height: 20px;
-  font-weight: 600;
-  color: darkred;
-  vertical-align: bottom;
-}
 .td-days div{
   display: inherit;
   background-color: lightgrey;
@@ -85,13 +88,19 @@ option{
 }
 .td-days-div-closed-days{
   background-color: dimgrey;
+  min-width: 8px;
 }
 .td-check {
+  width: 13px;
   text-align: center;
 }
 input {
   height: 6px;
   width: 6px;
+}
+#navMonth {
+  display: flex;
+  align-items: stretch;
 }
 .navButtons {
   padding: 2px;
@@ -99,8 +108,21 @@ input {
   background: none;
   cursor: pointer;
 }
-.navButtons img {
-  height: 1.1em;
+.saveButton {
+  display: flex;
+  align-items: center;
+  margin-left: 25px;
+  padding-bottom: 4px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.6em;
+}
+.navButtons img, .saveButton img {
+  height: 13px;
+  width: 13px;
+  border: none;
+  background: none;
 }
 .askedMonth {
   display: inline-block;
@@ -129,4 +151,6 @@ input {
   margin-left: 5px;
   height: 10px;
   width: 95px;
+}
+.welcome {margin: 5px 0px;
 }

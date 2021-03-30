@@ -19,7 +19,7 @@ public class Activity extends AbstractEntity {
     private Task task;
 
     @OneToMany(mappedBy = "activity", fetch = FetchType.EAGER)
-    private Set<ListedActivities> listedActivities;
+    private Set<ListedActivity> listedActivities;
 
     protected Activity() {
         // Empty no-arg constructor (Hibernate)
@@ -37,7 +37,7 @@ public class Activity extends AbstractEntity {
     public void setHalfDay(HalfDay halfDay) { this.halfDay = halfDay; }
     public Task getTask() { return task; }
     public void setTask(Task task) { this.task = task; }
-    public Set<ListedActivities> getListedActivities() { return listedActivities; }
-    public void setListedActivities(Set<ListedActivities> listedActivities) { this.listedActivities = listedActivities; }
+    public Set<ListedActivity> getListedActivities() { return listedActivities; }
+    public void setListedActivities(Set<ListedActivity> listedActivities) { this.listedActivities = listedActivities; }
 
 }
