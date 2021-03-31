@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ListedActivityService {
 
-/*    void createAllListed(List<ListedActivityInputDto> dto);*/
+    void createAllListed(List<ListedActivityInputDto> dto);
 
     void patchAllListed(List<ListedActivityInputDto> dtoList);
 

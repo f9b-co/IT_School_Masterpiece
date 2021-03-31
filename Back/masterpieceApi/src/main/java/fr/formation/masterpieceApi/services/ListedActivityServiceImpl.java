@@ -2,14 +2,12 @@ package fr.formation.masterpieceApi.services;
 
 import fr.formation.masterpieceApi.dtos.ActivityInputDto;
 import fr.formation.masterpieceApi.dtos.ListedActivityInputDto;
-import fr.formation.masterpieceApi.entities.Activity;
-import fr.formation.masterpieceApi.entities.Employee;
-import fr.formation.masterpieceApi.entities.ListedActivity;
-import fr.formation.masterpieceApi.entities.Task;
+import fr.formation.masterpieceApi.entities.*;
 import fr.formation.masterpieceApi.repositories.ActivityRepository;
 import fr.formation.masterpieceApi.repositories.EmployeeRepository;
 import fr.formation.masterpieceApi.repositories.ListedActivityRepository;
 import fr.formation.masterpieceApi.repositories.TaskRepository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -49,19 +47,15 @@ public class ListedActivityServiceImpl implements ListedActivityService {
         return listedActivitiesRepo.findByEmployeeAndActivity(employee, activity).isPresent();
     }
 
-    @Transactional /* delete if exists, any old listedActivity on the same date & halfDay */
-    private ListedActivity findOrCreateListedActivity(Employee employee, Activity activity) {
-        try {
-            List<ListedActivity> oldSameHalfDay =
-                    listedActivitiesRepo.findByEmployeeAndActivityDateAndActivityHalfDay(
-                    employee, activity.getDate(), activity.getHalfDay());
-            oldSameHalfDay.forEach(oldLA -> { listedActivitiesRepo.deleteById(oldLA.getId()); });
-            return listedActivitiesRepo.findByEmployeeAndActivity(employee, activity).get();
-        } catch (final NoSuchElementException ex) {
-            ListedActivity newLA = new ListedActivity(employee, activity, false);
+    @Transactional
+    @Override
+    public void createAllListed(List<ListedActivityInputDto> dtoList) {
+        dtoList.forEach(dto -> {
+            Employee employee = employeesRepo.getOne(dto.getEmployeeId());
+            Activity activity = findOrCreateActivity(dto.getActivity());
+            ListedActivity newLA = new ListedActivity(employee, activity, dto.isValidated());
             listedActivitiesRepo.save(newLA);
-            return newLA;
-        }
+        });
     }
 
     @Transactional
@@ -70,7 +64,8 @@ public class ListedActivityServiceImpl implements ListedActivityService {
         dtoList.forEach(dto -> {
             Employee employee = employeesRepo.getOne(dto.getEmployeeId());
             Activity activity = findOrCreateActivity(dto.getActivity());
-            ListedActivity listedActivity = findOrCreateListedActivity(employee, activity);
+            ListedActivity listedActivity = listedActivitiesRepo.findByEmployeeAndActivityDateAndActivityHalfDay(
+                    employee, dto.getActivity().getDate(), dto.getActivity().getHalfDay()).get();;
             listedActivity.setActivity(activity);
             listedActivity.setValidated(dto.isValidated());
             listedActivitiesRepo.save(listedActivity);

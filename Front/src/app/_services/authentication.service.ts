@@ -42,9 +42,7 @@ export class AuthenticationService {
           user = this.OauthTokenService.getUserFromToken();
           this.currentUserSubject.next(user);
           console.log("Connexion réussie");
-        } /* else {
-          alert("erreur de connexion\n" + response.error)
-        } */
+        }
         return user;
       }));
   }

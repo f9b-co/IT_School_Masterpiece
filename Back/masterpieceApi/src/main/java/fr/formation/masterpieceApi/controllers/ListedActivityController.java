@@ -19,6 +19,13 @@ public class ListedActivityController {
     }
 
     @PreAuthorize("hasAuthority('User')")
+    @PostMapping
+    protected void createAllListed(@Valid @RequestBody List<ListedActivityInputDto> dto) {
+        System.out.println(dto.toString());
+        service.createAllListed(dto);
+    }
+
+    @PreAuthorize("hasAuthority('User')")
     @PatchMapping
     protected void patchAllListed(@Valid @RequestBody List<ListedActivityInputDto> dto) {
         System.out.println(dto.toString());

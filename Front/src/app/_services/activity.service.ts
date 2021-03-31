@@ -36,6 +36,10 @@ export class ActivityService {
     return this.http.get(`${this.apiUrl}/employees/listed-activities`, httpOptions);
   }
 
+  postListedActivities(dto): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/listed-activities`, dto, { headers: this.headers })
+  }
+
   patchListedActivities(dto): Observable<any> {
     return this.http.patch<any>(`${this.apiUrl}/listed-activities`, dto, { headers: this.headers })
   }

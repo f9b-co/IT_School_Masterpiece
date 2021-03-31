@@ -21,10 +21,6 @@ import { ListedActivity } from '../_models/listedActivity';
   styleUrls: ['./monthlyActivity.component.css']
 })
 export class MonthlyActivityComponent implements AfterViewInit, OnInit {
-  activitiesToUpdate: ListedActivity[] = [];
-  modifiedElements: [String, number][] = [];
-  iUpdate: number = 0;
-  isModified: boolean = false;
   user: User = this.authenticationService.currentUserValue;
   welcomeMsg: String = "Bienvenue " + this.user.username;
   isManager: boolean = this.user.roles.includes(Role.Manager);
@@ -45,6 +41,14 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
   closeDaysInMonth: number[] = [];
   openDaysInMonth: number[] = [];
   elementRef: ElementRef;
+  isModified: boolean = false;
+  activitiesToCreate: ListedActivity[] = [];
+  activitiesToUpdate: ListedActivity[] = [];
+  modifiedElements: [String, String, number][] = [];
+  iCreate: number = 0;
+  iUpdate: number = 0;
+  createsDone: any;
+  updatesDone: any;
 
   constructor(private router: Router, private authenticationService: AuthenticationService, private activityService: ActivityService,
     private renderer: Renderer2, @Inject(ElementRef) elementRef: ElementRef) {
@@ -71,7 +75,7 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
 
 
   /*month linked functions (init & nav)*/
-  monthDisplay() {
+  monthDisplay(): void {
     this.tableHead.nativeElement.innerHTML = "";
     this.tableBody.nativeElement.innerHTML = "";
 
@@ -80,7 +84,6 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     this.buildActivityTableHead();
     this.LoadMonthDaysAndActivities();
     this.checkNavMonthButtons();
-
   }
   yearMonthToString(year: number, month: number): string {
     return String(this.targetYear) + "-" + String(this.targetMonth + 1).padStart(2, '0');
@@ -153,7 +156,7 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
 
 
   /*Activity table linked functions (dynamic table by current user, current teams and target month)*/
-  loadTasks() {
+  loadTasks(): void {
     this.activityService.getAllTasks().subscribe(
       (tasksList: Task[]) => {
         tasksList.forEach(task => this.tasksList.push(task));
@@ -197,6 +200,7 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
       apd(render, newRow, newHeader);
     }
     newHeader = crEl(render, "th", "th-checkActivity", "", "&#10003");
+    render.setAttribute(newHeader, 'title', "validation\noui/non");
     apd(render, newRow, newHeader);
     apd(render, tH.nativeElement, newRow);
     newHeader = crEl(render, "td", "td-scrollBarSpace");
@@ -215,7 +219,7 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     newCol = crEl(render, "col", "tbody-scrollBarSpace", "", "", "width: 0%");
     apd(render, tB.nativeElement, newCol);
   }
-  loadMonthlyActivity(userId: number, username: string, isManager: boolean) {
+  loadMonthlyActivity(userId: number, username: string, isManager: boolean): void {
     if (isManager) {
       this.activityService.getManagerTeamsMembers(userId).subscribe(
         (managerTeamsMembers: Employee[][]) => {
@@ -237,7 +241,7 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
       );
     }
   }
-  teamsInit(gottenTeam: Employee[]) {
+  teamsInit(gottenTeam: Employee[]): void {
     if (this.monthChange == 0) {
       (isNullOrUndefined(gottenTeam[0].team)) ?
         this.teams.push("") :
@@ -246,7 +250,7 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
       gottenTeam.forEach(member => this.teamsMembers.push(member));
     }
   }
-  loadActivities(yearMonth: string, username: string) {
+  loadActivities(yearMonth: string, username: string): void {
     if (this.teams.length > 0) {
       this.teams.forEach(t => {
         this.getTeamActivities(yearMonth, t, username);
@@ -255,7 +259,7 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
       alert("pas d'employés à afficher!");
     }
   }
-  getTeamActivities(yearMonth: string, teamName: string, username: string): any {
+  getTeamActivities(yearMonth: string, teamName: string, username: string): void {
     this.activityService.getMonthListedActivities(yearMonth, teamName, username).subscribe(
       (teamActivities: Employee[]) => {
         console.log(teamActivities);
@@ -267,7 +271,7 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
       }
     );
   }
-  completeExtractedActivities(teamName: string, teamActivities: Employee[]) {
+  completeExtractedActivities(teamName: string, teamActivities: Employee[]): Employee[] {
     /*if no activities are retrieved from DB for a month for a team member, 
     create substitute empty listedActivities[]*/
     const completed: Employee[] = [];
@@ -298,7 +302,6 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
   }
   tableize(teamName: string, teamActivities: Employee[]): void {
     console.log(teamName);
-    //console.log(teamActivities);
     const render = this.renderer;
     const tB = this.tableBody;
     const crEl = this.createElement;
@@ -315,19 +318,15 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     apd(render, tB.nativeElement, newRow);
     /* insert each team member monthly activity row */
     teamActivities.forEach(member => {
-      /* defines local boolean variables and associated list used to qualify each halDay */
+      /* defines local variables and associated list used to qualify each halfday */
       const isCurrentUser: boolean = (member.username == this.user.username);
       const closeDays = this.closeDaysInMonth;
       const openDays = this.openDaysInMonth;
       const listedActivities: ListedActivity[] = member.listedActivities
-      const listedDays: number[] = listedActivities
-        .filter(la => la.activity.halfDay == HalfDay.AM)
-        .map(la => parseInt(la.activity.date.split('-')[2])).sort();
-      const validatedDays: number[] = listedActivities
-        .filter(la => la.isValidated && la.activity.halfDay == HalfDay.AM)
-        .map(la => parseInt(la.activity.date.split('-')[2])).sort();
+      const listeHalfdDays: number = listedActivities.length;
+      const validatedHalfDays: number = listedActivities.filter(la => la.isValidated == true).length;
       const isMonthValidated: boolean =
-        (listedDays.length == openDays.length) && (validatedDays.length == openDays.length);
+        (listeHalfdDays == openDays.length * 2) && (validatedHalfDays == openDays.length * 2);
       const userHighlight: string = (isCurrentUser && isMonthValidated) ? "background-color: lightslategray" :
         (isCurrentUser) ? "background-color: blanchedalmond" : "";
 
@@ -339,29 +338,27 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
       apd(render, newRow, newCell)
       /* loop for each day in month */
       for (let i = 0; i < this.daysInMonth; i++) {
-        /* set for each day local boolean variables and associated list used to qualify each halDay properties/display*/
+        /* set for each day local variables and associated list used to qualify each halfday properties/display*/
         const day = String(i + 1).padStart(2, '0');
-        const dayActivities = listedActivities.map(la => la.activity).filter(a => a.date.endsWith(day));
-        const taskColorAM = dayActivities.filter(a => a.halfDay == HalfDay.AM).map(a => a.task.color).shift();
-        const taskColorPM = dayActivities.filter(a => a.halfDay == HalfDay.PM).map(a => a.task.color).shift();
-        const isListed: boolean = listedDays.includes(i + 1)
-        const listedAMBgC: string = (isListed) ? "background-color: " + taskColorAM : "";
-        const listedPMBgC: string = (isListed) ? "background-color: " + taskColorPM : "";
-        const isClose: boolean = closeDays.includes(i + 1)
+        const isOpen: boolean = openDays.includes(i + 1);
+        const isClose: boolean = closeDays.includes(i + 1);
         const closeBgC: string = (isClose) ? "background-color: dimgrey" : "";
-        const isOpen: boolean = openDays.includes(i + 1)
-        const openBgC: string = (isOpen && !isListed) ? "background-color: lightgrey" : "";
-
+        const halfdays: HalfDay[] = [HalfDay.AM, HalfDay.PM];
+        const dayActivities = listedActivities.map(la => la.activity).filter(a => a.date.endsWith(day));
         /* insert employee day with 2 halfdays in, setted/displayed according to booleans states */
         newCell = crEl(render, "td", member.username + "-" + day, "td-days");
-        newDiv = crEl(render, "div", `div-${member.id}-${member.username}-${day}-AM`, "AM", "", listedAMBgC + openBgC + closeBgC);
-        (isCurrentUser && !isClose && !isMonthValidated) ?
-          crSelTBC(render, `sel-${member.id}-${member.username}-${day}-AM`, newDiv, this.tasksList, crEl.bind(this)) : 1 > 1;
-        apd(render, newCell, newDiv);
-        newDiv = crEl(render, "div", `div-${member.id}-${member.username}-${day}-PM`, "", "", listedPMBgC + openBgC + closeBgC);
-        (isCurrentUser && !isClose && !isMonthValidated) ?
-          crSelTBC(render, `sel-${member.id}-${member.username}-${day}-PM`, newDiv, this.tasksList, crEl.bind(this)) : 1 > 1;
-        apd(render, newCell, newDiv);
+        halfdays.forEach(hd => {
+          const taskColor = dayActivities.filter(a => a.halfDay == hd).map(a => a.task.color).shift();
+          const isListed: boolean = dayActivities.filter(a => a.halfDay == hd).length == 1;
+          const listedBgC: string = (isListed) ? "background-color: " + taskColor : "";
+          const openBgC: string = (isOpen && !isListed) ? "background-color: lightgrey" : "";
+          newDiv = crEl(render, "div", `div-${member.id}-${member.username}-${day}-${hd}-${isListed}`, hd, "", listedBgC + openBgC + closeBgC);
+          (isCurrentUser && !isClose && !isMonthValidated) ?
+            crSelTBC(render, `sel-${member.id}-${member.username}-${day}-${hd}-${isListed}`, newDiv,
+              this.tasksList, crEl.bind(this)) : 1 > 1;
+          apd(render, newCell, newDiv);
+
+        })
         apd(render, newRow, newCell);
       }
       /* insert last cell of row "check for this employee month activities", setted/displayed according user role:
@@ -370,11 +367,13 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
         newCell = crEl(render, "td", `${member.username}-${this.yearMonth}`, "", "");
         const newIn = crEl(render, "input", `che-${member.username}-${this.yearMonth}-check`, "td-check");
         render.setAttribute(newIn, 'type', "checkbox");
+        render.setAttribute(newIn, 'title', "figer\ndéfiger");
         newIn['checked'] = isMonthValidated;
         apd(render, newCell, newIn);
       } else {
         const checkStyle = (isMonthValidated) ? "color: black" : "color: lightgrey";
         newCell = crEl(render, "td", `${member.username}-${this.yearMonth}`, "td-check", "&#10003", checkStyle);
+        render.setAttribute(newCell, 'title', "noir = oui\ngris = non");
       }
       apd(render, newRow, newCell);
       apd(render, tB.nativeElement, newRow);
@@ -422,19 +421,40 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
       apd(render, tT.nativeElement, newRow);
     }
   }
-  saveChanges() { //&#128427;
+  saveChanges(): void {
+    if (this.activitiesToCreate.length > 0) {
+      this.sendToCreate()
+    }
+    if (this.activitiesToUpdate.length > 0) {
+      this.sendToUpdate()
+    }
+  }
+  sendToCreate(): void {
+    this.activityService.postListedActivities(JSON.stringify(this.activitiesToCreate)).subscribe(
+      (ok) => {
+        this.activitiesToCreate.length = 0;
+        this.iCreate = 0;
+        if (this.activitiesToUpdate.length = 0) {
+          this.modifiedElements.length = 0;
+          this.isModified = false;
+        }
+        alert("Nouvelles activitées enregistrées")
+      },
+      (error) => { alert(error); }
+    );
+  }
+  sendToUpdate(): void {
     this.activityService.patchListedActivities(JSON.stringify(this.activitiesToUpdate)).subscribe(
       (ok) => {
-        console.log(ok);
         this.activitiesToUpdate.length = 0;
-        this.modifiedElements.length = 0;
         this.iUpdate = 0;
-        this.isModified = false;
+        if (this.activitiesToCreate.length = 0) {
+          this.modifiedElements.length = 0;
+          this.isModified = false;
+        }
         alert("Modifications enregistrées")
       },
-      (error) => {
-        alert(error);
-      }
+      (error) => { alert(error); }
     );
   }
 
@@ -500,8 +520,8 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
         isValidated = event.target.checked;
         console.log(event.target.checked);
         /* update row BGcolor */
-        const rowsHighlight: string = (event.target.checked) ? "background-color: lightsteelblue" :
-          "background-color: none";
+        const rowsHighlight: string =
+          (event.target.checked) ? "background-color: lightsteelblue" : "background-color: none";
         const row: HTMLElement = event.target.parentElement.parentElement;
         this.renderer.setProperty(row, 'style', rowsHighlight)
         /* stock listedActivity change for backEnd */
@@ -510,8 +530,7 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
           if (el.classList.contains("td-days")) {
             let divList = Array.from(el.children);
             for (const subEl of divList) {
-              taskColor = subEl.getAttribute("style")
-                .replace("background-color: ", "").replace(";", "");
+              taskColor = subEl.getAttribute("style").replace("background-color: ", "").replace(";", "");
               if (!taskColor.match("dimgrey")) {
                 console.log(event.target.checked);
                 listedActivity = this.changeToObject(subEl.id, taskColor, isValidated);
@@ -525,6 +544,7 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
         break;
     }
     console.log(this.modifiedElements);
+    console.log(this.activitiesToCreate);
     console.log(this.activitiesToUpdate);
     console.log("isModified = " + this.isModified)
     console.log(event);
@@ -541,22 +561,35 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     const idToUse = (this.isManager) ? targetElId.split("-")[1] : this.user.userId;
     return new ListedActivity(activity, isValidated, idToUse);
   }
-  checkIfAllreadyAndPushToUpdate(targetElId: String, listedActivity: ListedActivity): any {
-    /* check if a change for ab halfDay is allready in update array waiting to be sent to backEnd,
+  checkIfAllreadyAndPushToUpdate(touchedId: String, listedActivity: ListedActivity): any {
+    /* check if a change for ab halfDay is allready in create or update array waiting to be sent to backEnd,
        if yes, replace it by the new one */
-    const iAllready = this.modifiedElements.indexOf(this.modifiedElements.find(el => el[0] == targetElId));
+    const iAllready = this.modifiedElements.indexOf(this.modifiedElements.find(el => el[0] == touchedId));
     if (iAllready >= 0) {
-      const old: [String, number] = this.modifiedElements.find(el => el[0] == targetElId)
-      const indexToDelete: number =
-        this.activitiesToUpdate.indexOf(this.activitiesToUpdate.find(el => el[1] == old[1]));
+      const old: [String, String, number] = this.modifiedElements.find(el => el[0] == touchedId);
+      let indexToDelete: number;
+      if (old[1].match("upd")) {
+        indexToDelete = this.activitiesToUpdate.indexOf(this.activitiesToUpdate.find(el => el[1] == old[2]));
+        this.activitiesToUpdate.splice(indexToDelete, 1);
+      } else {
+        indexToDelete = this.activitiesToCreate.indexOf(this.activitiesToCreate.find(el => el[1] == old[2]));
+        this.activitiesToCreate.splice(indexToDelete, 1);
+      }
       this.modifiedElements.splice(iAllready, 1);
-      this.activitiesToUpdate.splice(indexToDelete, 1);
     }
-    /* add new change in update array to be sent to backEnd */
-    this.activitiesToUpdate.push(listedActivity)
-    this.modifiedElements.push([targetElId, this.iUpdate]);
-    this.iUpdate++;
-    this.checkIsModified();
+    /* add new change in create or update array to be sent to backEnd */
+    if (touchedId.split("-")[5] == "false") {
+      this.activitiesToCreate.push(listedActivity)
+      this.modifiedElements.push([touchedId, "cre", this.iCreate]);
+      this.iCreate++;
+      this.checkIsModified();
+
+    } else {
+      this.activitiesToUpdate.push(listedActivity)
+      this.modifiedElements.push([touchedId, "upd", this.iUpdate]);
+      this.iUpdate++;
+      this.checkIsModified();
+    }
   }
 
   @HostListener('window:beforeunload', ['$event'])

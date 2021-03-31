@@ -17,5 +17,5 @@ public interface ListedActivityRepository extends JpaRepository<ListedActivity, 
     Optional<ListedActivity> findById(Long id);
     Optional<ListedActivity> findByEmployeeAndActivity(Employee employee, Activity activity);
 
-    List<ListedActivity> findByEmployeeAndActivityDateAndActivityHalfDay(Employee employee, String date, HalfDay halfDay);
+    Optional<ListedActivity> findByEmployeeAndActivityDateAndActivityHalfDay(Employee employee, String date, HalfDay halfDay);
 }
