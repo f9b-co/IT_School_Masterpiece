@@ -1,8 +1,9 @@
 package fr.formation.masterpieceApi.services;
 
 import fr.formation.masterpieceApi.config.EmployeeDetails;
+import fr.formation.masterpieceApi.dtos.in.EmployeeCreateDto;
+import fr.formation.masterpieceApi.dtos.out.*;
 import fr.formation.masterpieceApi.exceptions.ResourceNotFoundException;
-import fr.formation.masterpieceApi.dtos.*;
 import fr.formation.masterpieceApi.entities.*;
 import fr.formation.masterpieceApi.repositories.*;
 import org.springframework.data.domain.Pageable;
@@ -43,13 +44,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         return new EmployeeDetails(user);
     }
 
-    // Throws ResourceNotFoundException (restful practice)
-    @Override
-    public EmployeeInfoDto getCurrentUserInfo(Long id) {
-        return employeesRepo.getById(id).orElseThrow(
-                () -> new ResourceNotFoundException("with id:" + id));
-    }
-
     @Override
     public boolean usernameExists(String username) {
         return employeesRepo.findByUsername(username).isPresent();
@@ -58,7 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public boolean emailExists(String email) { return employeesRepo.findByEmail(email).isPresent(); }
 
-    public boolean isManager(String username) {
+    private boolean isManager(String username) {
         return employeesRepo.findByUsername(username).get()
                 .getRoles().stream().anyMatch(role -> role.getName().matches("Manager"));
     }
@@ -88,7 +82,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeViewDto getOne(String username) { return employeesRepo.readByUsername(username).orElseThrow(
+    public EmployeeShortDto getOne(String username) { return employeesRepo.readByUsername(username).orElseThrow(
             () -> new ResourceNotFoundException("with username:" + username)); }
 
     @Override

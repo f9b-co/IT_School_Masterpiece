@@ -1,13 +1,12 @@
 package fr.formation.masterpieceApi.services;
 
-import fr.formation.masterpieceApi.dtos.ActivityInputDto;
-import fr.formation.masterpieceApi.dtos.ListedActivityInputDto;
+import fr.formation.masterpieceApi.dtos.in.ActivityInputDto;
+import fr.formation.masterpieceApi.dtos.in.ListedActivityInputDto;
 import fr.formation.masterpieceApi.entities.*;
 import fr.formation.masterpieceApi.repositories.ActivityRepository;
 import fr.formation.masterpieceApi.repositories.EmployeeRepository;
 import fr.formation.masterpieceApi.repositories.ListedActivityRepository;
 import fr.formation.masterpieceApi.repositories.TaskRepository;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -49,18 +48,24 @@ public class ListedActivityServiceImpl implements ListedActivityService {
 
     @Transactional
     @Override
-    public void createAllListed(List<ListedActivityInputDto> dtoList) {
-        dtoList.forEach(dto -> {
-            Employee employee = employeesRepo.getOne(dto.getEmployeeId());
-            Activity activity = findOrCreateActivity(dto.getActivity());
-            ListedActivity newLA = new ListedActivity(employee, activity, dto.isValidated());
-            listedActivitiesRepo.save(newLA);
-        });
+    public boolean createAllListed(List<ListedActivityInputDto> dtoList) {
+        try {
+            dtoList.forEach(dto -> {
+                Employee employee = employeesRepo.getOne(dto.getEmployeeId());
+                Activity activity = findOrCreateActivity(dto.getActivity());
+                ListedActivity newLA = new ListedActivity(employee, activity, dto.isValidated());
+                listedActivitiesRepo.save(newLA);
+            });
+            return true;
+        } catch (final RuntimeException ex){
+            return false;
+        }
     }
 
     @Transactional
     @Override
-    public void patchAllListed(List<ListedActivityInputDto> dtoList) {
+    public boolean patchAllListed(List<ListedActivityInputDto> dtoList) {
+        try {
         dtoList.forEach(dto -> {
             Employee employee = employeesRepo.getOne(dto.getEmployeeId());
             Activity activity = findOrCreateActivity(dto.getActivity());
@@ -70,6 +75,10 @@ public class ListedActivityServiceImpl implements ListedActivityService {
             listedActivity.setValidated(dto.isValidated());
             listedActivitiesRepo.save(listedActivity);
         });
+            return true;
+        } catch (final RuntimeException ex){
+            return false;
+        }
     }
 
     @Override

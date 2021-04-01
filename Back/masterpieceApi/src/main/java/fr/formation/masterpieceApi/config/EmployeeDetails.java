@@ -1,7 +1,7 @@
 package fr.formation.masterpieceApi.config;
 
 
-import fr.formation.masterpieceApi.dtos.EmployeeAuthDto;
+import fr.formation.masterpieceApi.dtos.out.EmployeeAuthDto;
 import fr.formation.masterpieceApi.entities.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

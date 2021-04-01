@@ -1,4 +1,4 @@
-package fr.formation.masterpieceApi.dtos;
+package fr.formation.masterpieceApi.dtos.in;
 
 import fr.formation.masterpieceApi.entities.HalfDay;
 

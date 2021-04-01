@@ -1,7 +1,8 @@
 import {
-  Component, OnInit, AfterViewInit, Inject,
+  Component, OnInit, AfterViewInit, AfterViewChecked, OnDestroy, Inject,
   HostListener, ElementRef, ViewChild, Renderer2
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 
@@ -18,11 +19,20 @@ import { ListedActivity } from '../_models/listedActivity';
 @Component({
   selector: 'app-monthlyActivity',
   templateUrl: './monthlyActivity.component.html',
-  styleUrls: ['./monthlyActivity.component.css']
+  styleUrls: ['./monthlyActivity.component.css'],
+  providers: [ActivityService]
 })
-export class MonthlyActivityComponent implements AfterViewInit, OnInit {
+
+/* Handle main application feature : 
+ * prepare data collected through activity.service,
+ * build tailored table to display data depending on user type (manager/user),
+ * offering easy interractive interface to edit or validate activities.
+ * send captured changes (creates or updates) in arrays via activity.service to BackEnd for persistence
+ */
+export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
+  subscription: Subscription = new Subscription;
   user: User = this.authenticationService.currentUserValue;
-  welcomeMsg: String = "Bienvenue " + this.user.username;
+  welcomeMsg: String = "Bienvenue " + this.user.firstName;
   isManager: boolean = this.user.roles.includes(Role.Manager);
   teams: string[] = [];
   tasksList: Task[] = [];
@@ -63,18 +73,19 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     setTimeout(() => this.welcomeMsg = "\xa0", 10000);
     this.loadTasks();
   }
-
   ngAfterViewInit() {
     this.monthDisplay();
   }
-
   ngAfterViewChecked() {
     this.tasksTable.nativeElement.innerHTML = "";
     this.diplayTasksRefList(this.tasksList);
   }
+  ngOnDestroy() {
+    this.subscription.unsubscribe()
+  }
 
 
-  /*month linked functions (init & nav)*/
+  /* month linked functions (init & nav) */
   monthDisplay(): void {
     this.tableHead.nativeElement.innerHTML = "";
     this.tableBody.nativeElement.innerHTML = "";
@@ -94,7 +105,7 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
   LoadMonthDaysAndActivities(): void {
     this.openDaysInMonth.length = 0;
     this.closeDaysInMonth.length = 0;
-    this.activityService.listCloseAndOpenDays()
+    const subs1: Subscription = this.activityService.listCloseAndOpenDays()
       .subscribe((res: any) => {
         const publicHoliday = [];
         const year = this.targetYear;
@@ -105,7 +116,6 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
             publicHoliday.push(monthDay.getDate());
           }
         }
-        console.log(year + "-" + month + " publicHoliday = " + publicHoliday)
         for (let i = 1; i <= this.daysInMonth; i++) {
           const weekDay = new Date(year, month, i).getDay();
           if (weekDay == 0 || weekDay == 6 || publicHoliday.includes(i)) {
@@ -114,14 +124,11 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
             this.openDaysInMonth.push(i);
           }
         }
-        this.loadMonthlyActivity(this.user.userId, this.user.username, this.isManager);
+        this.getTeamsAndCallActivities(this.user.userId, this.user.username, this.isManager);
       },
         (error) => { alert(error); }
       );
-  }
-  checkMonthOffset(): void {
-    this.isTooLow = this.monthOffset < -4 ? true : false;
-    this.isTooHigh = this.monthOffset > 5 ? true : false;
+    this.subscription.add(subs1);
   }
   previousMonth(): void {
     if (this.targetMonth == 0) {
@@ -147,6 +154,10 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     this.checkMonthOffset();
     this.monthDisplay();
   }
+  checkMonthOffset(): void {
+    this.isTooLow = this.monthOffset < -4 ? true : false;
+    this.isTooHigh = this.monthOffset > 5 ? true : false;
+  }
   checkNavMonthButtons(): void {
     const prev = document.getElementById("previous");
     const next = document.getElementById("next");
@@ -155,15 +166,16 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
   }
 
 
-  /*Activity table linked functions (dynamic table by current user, current teams and target month)*/
+  /* Activity table linked functions (dynamic table by current user, current teams and target month) */
   loadTasks(): void {
-    this.activityService.getAllTasks().subscribe(
+    /* retrieve all tasks from BackEnd and store it in array */
+    const subs2: Subscription = this.activityService.getAllTasks().subscribe(
       (tasksList: Task[]) => {
         tasksList.forEach(task => this.tasksList.push(task));
-        console.log(this.tasksList);
       },
       (error) => { alert(error); }
     );
+    this.subscription.add(subs2);
   }
   buildActivityTableHead(): void {
     /* define local variables to store most used needed instance members
@@ -187,10 +199,10 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     }
     newCol = crEl(render, "col", "thead-scrollBarSpace", "", "", "width: 1.5%");
     apd(render, tH.nativeElement, newCol);
-    /* Add space blank row */
+    //Add space blank row
     newRow = crEl(render, "tr", "firstBlankRow");
     apd(render, tH.nativeElement, newRow);
-    /* Add colums'headers row */
+    //Add colums'headers row
     newRow = crEl(render, "tr", this.yearMonth, "");
     newHeader = crEl(render, "th", "th-nom", "thead-col0-width", "Nom");
     apd(render, newRow, newHeader)
@@ -219,9 +231,9 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     newCol = crEl(render, "col", "tbody-scrollBarSpace", "", "", "width: 0%");
     apd(render, tB.nativeElement, newCol);
   }
-  loadMonthlyActivity(userId: number, username: string, isManager: boolean): void {
+  getTeamsAndCallActivities(userId: number, username: string, isManager: boolean): void {
     if (isManager) {
-      this.activityService.getManagerTeamsMembers(userId).subscribe(
+      const subs3: Subscription = this.activityService.getManagerTeamsMembers(userId).subscribe(
         (managerTeamsMembers: Employee[][]) => {
           managerTeamsMembers.forEach(tm => {
             this.teamsInit(tm);
@@ -230,15 +242,16 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
         },
         (error) => { alert(error); }
       );
+      this.subscription.add(subs3);
     } else {
-      this.activityService.getUserTeamMembers(username).subscribe(
+      const subs4: Subscription = this.activityService.getUserTeamMembers(username).subscribe(
         (userTeamMembers: Employee[]) => {
-          console.log(userTeamMembers)
           this.teamsInit(userTeamMembers);
           this.loadActivities(this.yearMonth, username);
         },
         (error) => { alert(error); }
       );
+      this.subscription.add(subs4);
     }
   }
   teamsInit(gottenTeam: Employee[]): void {
@@ -246,7 +259,6 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
       (isNullOrUndefined(gottenTeam[0].team)) ?
         this.teams.push("") :
         this.teams.push(gottenTeam[0].team.name);
-      console.log(this.teams);
       gottenTeam.forEach(member => this.teamsMembers.push(member));
     }
   }
@@ -260,9 +272,8 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     }
   }
   getTeamActivities(yearMonth: string, teamName: string, username: string): void {
-    this.activityService.getMonthListedActivities(yearMonth, teamName, username).subscribe(
+    const subs5: Subscription = this.activityService.getMonthListedActivities(yearMonth, teamName, username).subscribe(
       (teamActivities: Employee[]) => {
-        console.log(teamActivities);
         const allMembersActivitiesLists: Employee[] = this.completeExtractedActivities(teamName, teamActivities);
         this.tableize(teamName, allMembersActivitiesLists);
       },
@@ -270,12 +281,13 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
         alert(error);
       }
     );
+    this.subscription.add(subs5);
   }
   completeExtractedActivities(teamName: string, teamActivities: Employee[]): Employee[] {
-    /*if no activities are retrieved from DB for a month for a team member, 
-    create substitute empty listedActivities[]*/
+    /* if no activities are retrieved from DB for a month for a team member, 
+    create substitute empty listedActivities[] */
     const completed: Employee[] = [];
-    /*at least one team member have listed activities, else no one have...*/
+    /* at least one team member have listed activities, else no one have... */
     if (!isNullOrUndefined(teamActivities) && teamActivities.length > 0) {
       const membersWithActivities = teamActivities.filter(emp => emp != null)
       this.teamsMembers
@@ -301,13 +313,10 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     return completed;
   }
   tableize(teamName: string, teamActivities: Employee[]): void {
-    console.log(teamName);
     const render = this.renderer;
     const tB = this.tableBody;
     const crEl = this.createElement;
     const apd = this.append;
-    const sElP = this.setElProperty;
-    const mElC = this.makeElClickable;
     const crSelTBC = this.createSelectTaskByColor;
     let newRow, newCell, newDiv;
 
@@ -324,16 +333,14 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
       const openDays = this.openDaysInMonth;
       const listedActivities: ListedActivity[] = member.listedActivities
       const listeHalfdDays: number = listedActivities.length;
-      const validatedHalfDays: number = listedActivities.filter(la => la.isValidated == true).length;
+      const validatedHalfDays: number = listedActivities.filter(la => la.validated == true).length;
       const isMonthValidated: boolean =
         (listeHalfdDays == openDays.length * 2) && (validatedHalfDays == openDays.length * 2);
-      const userHighlight: string = (isCurrentUser && isMonthValidated) ? "background-color: lightslategray" :
-        (isCurrentUser) ? "background-color: blanchedalmond" : "";
-
-      console.log(listedActivities);
-
+      const userHighlight: string =
+        (isCurrentUser && !isMonthValidated) ? "background-color: blanchedalmond" : "";
+      const checkedHighlight: string = (isMonthValidated) ? "background-color: lightsteelblue" : "";
       /* insert employee row */
-      newRow = crEl(render, "tr", member.username, "nom-prenom", "", userHighlight);
+      newRow = crEl(render, "tr", member.username, "nom-prenom", "", userHighlight + checkedHighlight);
       newCell = crEl(render, "td", member.username + "nomPrenom", "tbody-col0-width", member.lastName + "," + member.firstName)
       apd(render, newRow, newCell)
       /* loop for each day in month */
@@ -357,7 +364,6 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
             crSelTBC(render, `sel-${member.id}-${member.username}-${day}-${hd}-${isListed}`, newDiv,
               this.tasksList, crEl.bind(this)) : 1 > 1;
           apd(render, newCell, newDiv);
-
         })
         apd(render, newRow, newCell);
       }
@@ -391,7 +397,7 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     }
     apd(render, tB.nativeElement, newRow);
   }
-  diplayTasksRefList(tasksList: Task[]) {
+  diplayTasksRefList(tasksList: Task[]): void {
     const render = this.renderer;
     const tT = this.tasksTable;
     const crEl = this.createElement;
@@ -422,44 +428,39 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     }
   }
   saveChanges(): void {
-    if (this.activitiesToCreate.length > 0) {
-      this.sendToCreate()
-    }
-    if (this.activitiesToUpdate.length > 0) {
-      this.sendToUpdate()
-    }
-  }
-  sendToCreate(): void {
-    this.activityService.postListedActivities(JSON.stringify(this.activitiesToCreate)).subscribe(
-      (ok) => {
-        this.activitiesToCreate.length = 0;
-        this.iCreate = 0;
-        if (this.activitiesToUpdate.length = 0) {
+    const creDto = JSON.stringify(this.activitiesToCreate)
+    const updDto = JSON.stringify(this.activitiesToUpdate)
+    /* send creates and updates arrays to BackEnd via service and manage both return status to inform user */
+    const subs6: Subscription = this.activityService.saveListedActivities(creDto, updDto).subscribe(
+      (responses: boolean[]) => {
+        let CreMsg = "";
+        let updMsg = "";
+        if (responses[0] == true) {
+          this.activitiesToCreate.length = 0;
+          this.iCreate = 0;
+          CreMsg += "Nouvelles activitées enregistrées\n";
+        } else if (responses[0] == false) {
+          CreMsg += "Nouvelles activitées non-enregistrées !!!\nVeuillez réessayer dans quelques minutes,\npuis contacter le support si besoin (icone email en haut à droite)\n";
+        }
+        if (responses[1] == true) {
+          this.activitiesToUpdate.length = 0;
+          this.iUpdate = 0;
+          CreMsg += (this.isManager) ? "Statut du mois changé\n" : "Activitées modifiées enregistrées\n";
+        } else if (responses[1] == false) {
+          CreMsg += ((this.isManager) ? "Statut du mois non-changé!!!\n" : "Activitées modifiées non-enregistrées !!!\n") + "Veuillez réessayer dans quelques minutes,\npuis contacter le support si besoin (icone email en haut à droite)\n";
+        }
+        if (this.activitiesToCreate.length == 0 && this.activitiesToUpdate.length == 0) {
           this.modifiedElements.length = 0;
           this.isModified = false;
         }
-        alert("Nouvelles activitées enregistrées")
+        alert(CreMsg + "\n" + updMsg)
       },
       (error) => { alert(error); }
     );
-  }
-  sendToUpdate(): void {
-    this.activityService.patchListedActivities(JSON.stringify(this.activitiesToUpdate)).subscribe(
-      (ok) => {
-        this.activitiesToUpdate.length = 0;
-        this.iUpdate = 0;
-        if (this.activitiesToCreate.length = 0) {
-          this.modifiedElements.length = 0;
-          this.isModified = false;
-        }
-        alert("Modifications enregistrées")
-      },
-      (error) => { alert(error); }
-    );
+    this.subscription.add(subs6);
   }
 
-
-  /*Custom DOM interraction functions*/
+  /* Custom DOM interraction functions */
   createElement(renderer: Renderer2, elType: string, id = "", classes = "", innerhtml = "", style = ""): HTMLElement {
     const el = renderer.createElement(elType);
     renderer.setAttribute(el, 'id', id);
@@ -468,17 +469,10 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     renderer.setProperty(el, 'style', style);
     return el;
   }
-  setElProperty(renderer: Renderer2, el: any, name: string, value: any): void {
-    renderer.setProperty(el, name, value);
-  }
-  makeElClickable(renderer: Renderer2, el: any, script: string) {
-    renderer.setProperty(el, "(click)", script);
-    renderer.addClass(el, "clickable")
-  }
   append(renderer: Renderer2, parent, el): void {
     renderer.appendChild(parent, el);
   }
-  createSelectTaskByColor(renderer: Renderer2, id: string, parent: string, tasksList: Task[], createElement: Function) {
+  createSelectTaskByColor(renderer: Renderer2, id: string, parent: string, tasksList: Task[], createElement: Function): void {
 
     const newSel: HTMLElement = createElement(renderer, "select", id); //renderer.createElement("select");
     for (let i = 1; i < tasksList.length; i++) {
@@ -490,23 +484,19 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     renderer.appendChild(parent, newSel);
   }
 
+  /* Event onClick 'change' listener, to capture all changes and process them before sendding to back if needed */
   @HostListener('change', ['$event'])
   onClick(event: any): void {
-    console.log(event);
-    console.log(event.path);
-    console.log(event.target.value + " / " + event.target.checked);
-    /* get el & parent Id &  HTMLElement*/
+    /* get el & parent Id & HTMLElement*/
     const parentId: String = event.path[1].id;
     const targetElId: String = event.target.id;
-    console.log(parentId);
-    console.log(targetElId);
     const parent: HTMLElement = this.elementRef.nativeElement.querySelector('#' + parentId);
     const targetEl: HTMLElement = this.elementRef.nativeElement.querySelector('#' + targetElId);
     const idStartWith: String = event.target.type.substr(0, 3) + "-";
     let isValidated: boolean = false
     let taskColor: String = event.target.value
     let listedActivity: ListedActivity;
-    /* update Html according to changes type and stock changes for backEnd in array */
+    /* update Html according to changes type and stock changes for backEnd in arrays */
     switch (idStartWith) {
       case ("sel-"):
         isValidated = false;
@@ -514,11 +504,10 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
         /* update div BGcolor */
         this.renderer.setProperty(parent, 'style', "background-color:" + taskColor);
         listedActivity = this.changeToObject(targetElId, taskColor, isValidated);
-        this.checkIfAllreadyAndPushToUpdate(targetElId, listedActivity);
+        this.checkIfAllreadyInChangeLists(targetElId, listedActivity);
         break;
       case ("che-"):
         isValidated = event.target.checked;
-        console.log(event.target.checked);
         /* update row BGcolor */
         const rowsHighlight: string =
           (event.target.checked) ? "background-color: lightsteelblue" : "background-color: none";
@@ -532,24 +521,16 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
             for (const subEl of divList) {
               taskColor = subEl.getAttribute("style").replace("background-color: ", "").replace(";", "");
               if (!taskColor.match("dimgrey")) {
-                console.log(event.target.checked);
                 listedActivity = this.changeToObject(subEl.id, taskColor, isValidated);
-                this.checkIfAllreadyAndPushToUpdate(subEl.id, listedActivity);
+                this.checkIfAllreadyInChangeLists(subEl.id, listedActivity);
               }
             }
           }
         }
         break;
-      default:
-        break;
     }
-    console.log(this.modifiedElements);
-    console.log(this.activitiesToCreate);
-    console.log(this.activitiesToUpdate);
-    console.log("isModified = " + this.isModified)
-    console.log(event);
   }
-  checkIsModified() {
+  checkIsModified(): void {
     this.isModified = (this.modifiedElements.length == 0) ? false : true;
   }
   changeToObject(targetElId, taskColor, isValidated): ListedActivity {
@@ -561,8 +542,8 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
     const idToUse = (this.isManager) ? targetElId.split("-")[1] : this.user.userId;
     return new ListedActivity(activity, isValidated, idToUse);
   }
-  checkIfAllreadyAndPushToUpdate(touchedId: String, listedActivity: ListedActivity): any {
-    /* check if a change for ab halfDay is allready in create or update array waiting to be sent to backEnd,
+  checkIfAllreadyInChangeLists(touchedId: String, listedActivity: ListedActivity): void {
+    /* check if a change for an halfDay is allready in create or update array waiting to be sent to backEnd,
        if yes, replace it by the new one */
     const iAllready = this.modifiedElements.indexOf(this.modifiedElements.find(el => el[0] == touchedId));
     if (iAllready >= 0) {
@@ -589,14 +570,6 @@ export class MonthlyActivityComponent implements AfterViewInit, OnInit {
       this.modifiedElements.push([touchedId, "upd", this.iUpdate]);
       this.iUpdate++;
       this.checkIsModified();
-    }
-  }
-
-  @HostListener('window:beforeunload', ['$event'])
-  canDeactivate(event: BeforeUnloadEvent): void {
-    // if unsaved changes, show confirm dialog box to the user to decide to stay in the page or not
-    if (this.activitiesToUpdate.length > 0) {
-      event.returnValue = confirm("!!! Modification(s) non sauvegardée(s) !!!. Voulez-vous quitez la page quand même?");
     }
   }
 }

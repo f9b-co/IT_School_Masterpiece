@@ -20,7 +20,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
      * disables HTTP basic auth and CSRF (no need with JWT if not cookie-based).
      *
      * Defines access level for HttpMethod and endpoints URL.
-     *
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse, HttpResponse } from "@angular/common/http";
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 
@@ -45,6 +45,8 @@ export class HttpInterceptorService implements HttpInterceptor {
         }
         this.authenticationService.logout();
         this.router.navigate(['/login']);
+      } else if (error.status == 0) {
+        errorMessage = "Pas de réponse du serveur\nVeuillez réessayer dans quelques minutes";
       }
     }
     return throwError(errorMessage);

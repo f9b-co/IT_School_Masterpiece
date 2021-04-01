@@ -1,10 +1,12 @@
-package fr.formation.masterpieceApi.dtos;
+package fr.formation.masterpieceApi.dtos.out;
 
 import fr.formation.masterpieceApi.entities.Department;
 import fr.formation.masterpieceApi.entities.Team;
 
 /*
- * A projection of Employee main info-.
+ * An almost complete projection of Employee useful main fields
+ * (miss only some not yet used boolean dedicated to advanced auth management)
+ * for admin purpose.
  */
 public interface EmployeeInfoDto {
 

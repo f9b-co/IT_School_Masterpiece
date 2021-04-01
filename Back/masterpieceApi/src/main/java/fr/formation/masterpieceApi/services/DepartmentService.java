@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface DepartmentService {
 
-    Department findOne(String DepartmentName);
     List<Department> findAll();
 
 }

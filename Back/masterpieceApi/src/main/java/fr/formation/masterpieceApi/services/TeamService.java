@@ -1,7 +1,7 @@
 package fr.formation.masterpieceApi.services;
 
-import fr.formation.masterpieceApi.dtos.TeamCreateDto;
-import fr.formation.masterpieceApi.dtos.TeamShortDto;
+import fr.formation.masterpieceApi.dtos.in.TeamCreateDto;
+import fr.formation.masterpieceApi.dtos.out.TeamShortDto;
 
 import java.util.List;
 

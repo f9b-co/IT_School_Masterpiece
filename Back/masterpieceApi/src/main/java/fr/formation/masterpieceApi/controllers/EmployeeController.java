@@ -1,6 +1,10 @@
 package fr.formation.masterpieceApi.controllers;
 
-import fr.formation.masterpieceApi.dtos.*;
+import fr.formation.masterpieceApi.dtos.in.EmployeeCreateDto;
+import fr.formation.masterpieceApi.dtos.out.EmployeeActivitiesDto;
+import fr.formation.masterpieceApi.dtos.out.EmployeeInfoDto;
+import fr.formation.masterpieceApi.dtos.out.EmployeeShortDto;
+import fr.formation.masterpieceApi.dtos.out.EmployeeViewDto;
 import fr.formation.masterpieceApi.services.EmployeeService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +33,7 @@ public class EmployeeController {
 
     @PreAuthorize("hasAuthority('User') or hasAuthority('Manager')")
     @GetMapping("/{username}")
-    protected EmployeeViewDto getOne(@PathVariable("username") String username) {
+    protected EmployeeShortDto getOne(@PathVariable("username") String username) {
         return service.getOne(username);
     }
 
@@ -50,12 +54,6 @@ public class EmployeeController {
     protected List<EmployeeActivitiesDto> getTeamActivitiesByMonth(@RequestParam("team") String teamName, @RequestParam("period") String yearMonth, @RequestParam("username") String username) {
         return service.getTeamMonthActivities(teamName, yearMonth, username);
     }
-
-    /*@GetMapping("/userInfo")
-    public EmployeeInfoDto currentEmployeeInfo(Long userId) {
-        return service.getCurrentUserInfo(userId);
-    }
-*/
 
     @PreAuthorize("hasAuthority('Admin')")
     @GetMapping

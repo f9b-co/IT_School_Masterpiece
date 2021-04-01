@@ -1,7 +1,7 @@
 package fr.formation.masterpieceApi.controllers;
 
-import fr.formation.masterpieceApi.dtos.TeamCreateDto;
-import fr.formation.masterpieceApi.dtos.TeamShortDto;
+import fr.formation.masterpieceApi.dtos.in.TeamCreateDto;
+import fr.formation.masterpieceApi.dtos.out.TeamShortDto;
 import fr.formation.masterpieceApi.services.TeamService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

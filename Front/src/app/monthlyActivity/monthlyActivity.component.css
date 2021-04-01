@@ -54,7 +54,7 @@ table th, td {
 
 }
 select, option{
-  width: 9px;
+  width: 8px;
   padding: 0;
   font-size: 0.6em;
 }
@@ -84,7 +84,7 @@ option{
   display: inherit;
   background-color: lightgrey;
   height: 14px;
-  width: 9px;
+  width: 8px;
 }
 .td-days-div-closed-days{
   background-color: dimgrey;

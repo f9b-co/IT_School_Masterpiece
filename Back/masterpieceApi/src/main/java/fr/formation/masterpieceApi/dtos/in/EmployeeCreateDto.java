@@ -1,4 +1,4 @@
-package fr.formation.masterpieceApi.dtos;
+package fr.formation.masterpieceApi.dtos.in;
 
 import validations.UniqueEmail;
 import validations.UniqueUsername;

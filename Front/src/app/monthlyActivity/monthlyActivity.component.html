@@ -3,17 +3,17 @@
     <div name="navMonth" id="navMonth">
         <button type="button" class="navButtons" name="previous" id="previous"
             (click)="isTooLow? false : previousMonth()">
-            <img src="assets/images/previous-arrow_grey.svg" alt="Mois précédent" title="Mois précédent">
+            <img src="../../assets/images/previous-arrow_grey.svg" alt="Mois précédent" title="Mois précédent">
         </button>
         <span class="askedMonth" id="askedMonth">{{yearMonth | date:'MMM yyyy':'fr'}}</span>
         <button type="button" class="navButtons" name="next" id="next" (click)="istooHigh? false : nextMonth()">
-            <img src="assets/images/next-arrow_grey.svg" alt="Mois suivant" title="Mois suivant">
+            <img src="../../assets/images/next-arrow_grey.svg" alt="Mois suivant" title="Mois suivant">
         </button>
         <button type="button" class="saveButton" name="save" id="save" (click)="isModified? saveChanges() : false"
             [ngStyle]="{'color':isModified? 'crimson' : 'white' }">
-            <img *ngIf="isModified == true" src="assets/images/floppy-disk-save-svgrepo-com-Crimson.svg"
-                alt="enregistrer" title="enregistrer">
-            <img *ngIf="isModified == false" src="assets/images/floppy-disk-save-svgrepo-com-Grey.svg" alt="enregistrer"
+            <img *ngIf="isModified == true" src="../../assets/images/floppy-disk-save-Crimson.svg" alt="enregistrer"
+                title="enregistrer">
+            <img *ngIf="isModified == false" src="../../assets/images/floppy-disk-save-Grey.svg" alt="enregistrer"
                 title="enregistrer" style="cursor: not-allowed">
             &nbsp;Cliquez pour enregistrer
         </button>

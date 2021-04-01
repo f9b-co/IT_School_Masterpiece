@@ -1,6 +1,6 @@
 package fr.formation.masterpieceApi.controllers;
 
-import fr.formation.masterpieceApi.dtos.*;
+import fr.formation.masterpieceApi.dtos.in.ListedActivityInputDto;
 import fr.formation.masterpieceApi.services.ListedActivityService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,16 +20,14 @@ public class ListedActivityController {
 
     @PreAuthorize("hasAuthority('User')")
     @PostMapping
-    protected void createAllListed(@Valid @RequestBody List<ListedActivityInputDto> dto) {
-        System.out.println(dto.toString());
-        service.createAllListed(dto);
+    protected boolean createAllListed(@Valid @RequestBody List<ListedActivityInputDto> dto) {
+        return service.createAllListed(dto);
     }
 
     @PreAuthorize("hasAuthority('User')")
     @PatchMapping
-    protected void patchAllListed(@Valid @RequestBody List<ListedActivityInputDto> dto) {
-        System.out.println(dto.toString());
-        service.patchAllListed(dto);
+    protected boolean  patchAllListed(@Valid @RequestBody List<ListedActivityInputDto> dto) {
+        return service.patchAllListed(dto);
     }
 
 }

@@ -1,7 +1,7 @@
 package fr.formation.masterpieceApi.controllers;
 
-import fr.formation.masterpieceApi.dtos.TaskInputDto;
-import fr.formation.masterpieceApi.dtos.TaskShortDto;
+import fr.formation.masterpieceApi.dtos.in.TaskInputDto;
+import fr.formation.masterpieceApi.dtos.out.TaskShortDto;
 import fr.formation.masterpieceApi.services.TaskService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

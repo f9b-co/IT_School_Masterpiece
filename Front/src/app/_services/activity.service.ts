@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { forkJoin, Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/internal/operators/map';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
-import { ListedActivity } from '../_models/listedActivity';
 
 @Injectable({ providedIn: 'root' })
 
+/* Http service dedicated to monthlyActivity.component
+ * to handle http requests to BackEnd, and return corresponding responses through Observables
+ */
 export class ActivityService {
   private apiUrl = `${environment.apiUrl}`;
   private headers = new HttpHeaders().set("Content-Type", "application/json");
@@ -24,6 +27,7 @@ export class ActivityService {
   getManagerTeamsMembers(userId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/employees/${userId}/teams-members`, { headers: this.headers })
   }
+
   getUserTeamMembers(username: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/employees/${username}/team-members`, { headers: this.headers })
   }
@@ -36,19 +40,17 @@ export class ActivityService {
     return this.http.get(`${this.apiUrl}/employees/listed-activities`, httpOptions);
   }
 
-  postListedActivities(dto): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/listed-activities`, dto, { headers: this.headers })
-  }
-
-  patchListedActivities(dto): Observable<any> {
-    return this.http.patch<any>(`${this.apiUrl}/listed-activities`, dto, { headers: this.headers })
-  }
-
-  unsubscribe(subscription: Subscription): void {
-    if (subscription) {
-      subscription.unsubscribe();
-    }
-
+  saveListedActivities(creDto, updDto): Observable<any> {
+    return forkJoin([
+      this.http.post<any>(`${this.apiUrl}/listed-activities`, creDto, { headers: this.headers }),
+      this.http.patch<any>(`${this.apiUrl}/listed-activities`, updDto, { headers: this.headers })
+    ]).pipe(
+      map((responses: any[]) => {
+        let created: boolean = (JSON.parse(creDto).length > 0) ? responses[0] : null;
+        let updated: boolean = (JSON.parse(updDto).length > 0) ? responses[1] : null;
+        return new Array(created, updated);
+      })
+    );
   }
 
 }

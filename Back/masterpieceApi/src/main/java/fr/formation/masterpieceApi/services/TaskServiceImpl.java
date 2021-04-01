@@ -1,7 +1,7 @@
 package fr.formation.masterpieceApi.services;
 
-import fr.formation.masterpieceApi.dtos.TaskInputDto;
-import fr.formation.masterpieceApi.dtos.TaskShortDto;
+import fr.formation.masterpieceApi.dtos.in.TaskInputDto;
+import fr.formation.masterpieceApi.dtos.out.TaskShortDto;
 import fr.formation.masterpieceApi.repositories.TaskRepository;
 import org.springframework.stereotype.Service;
 

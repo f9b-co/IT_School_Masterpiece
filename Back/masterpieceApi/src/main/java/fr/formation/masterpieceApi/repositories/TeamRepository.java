@@ -1,6 +1,6 @@
 package fr.formation.masterpieceApi.repositories;
 
-import fr.formation.masterpieceApi.dtos.TeamShortDto;
+import fr.formation.masterpieceApi.dtos.out.TeamShortDto;
 import fr.formation.masterpieceApi.entities.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

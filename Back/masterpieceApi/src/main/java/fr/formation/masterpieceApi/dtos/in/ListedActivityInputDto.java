@@ -1,4 +1,4 @@
-package fr.formation.masterpieceApi.dtos;
+package fr.formation.masterpieceApi.dtos.in;
 
 import javax.validation.constraints.NotNull;
 
