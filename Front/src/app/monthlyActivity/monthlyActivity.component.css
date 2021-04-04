@@ -21,7 +21,7 @@ table {
   overflow-y: scroll;
   display: block;
 }
-.thead-col0-width, .thead-col0-width  {
+.thead-col0-width, .tbody-col0-width  {
   margin: 0;
   min-width: 120px;
   max-width: 120px;
@@ -34,42 +34,38 @@ table {
   color: darkred;
   vertical-align: bottom;
 }
-table tr {
-  border: 1px solid blue;
-}
 table th, td {
-  border: 0px solid grey;
   font-size: 0.6em;
   color:black;
 }
 .div-spaceRow-col0{
   margin: 0;
   min-width: 120px;
-  max-width: 120px;
-  
+  max-width: 120px;  
 }
 .div-spaceRow-days{
   margin: 0;
   width: 18px;
-
 }
 select, option{
-  width: 8px;
+  width: 8.5px;
   padding: 0;
-  font-size: 0.6em;
+  font-size: 0.8em;
 }
 select{
   border-spacing: 0px;
   border-style: none;
   height: 14px;
   appearance: menulist;
-  box-sizing: content-box;
+  box-sizing: border-box;
   background-color:transparent;
   cursor: pointer;
 }
 option{  
   border-style: none;
-  height: 8px;
+  color: currentColor;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  zoom: 1.25;
 }
 .tr-days{
   border-spacing: 1px 0px;
@@ -84,7 +80,7 @@ option{
   display: inherit;
   background-color: lightgrey;
   height: 14px;
-  width: 8px;
+  width: 8.5px;
 }
 .td-days-div-closed-days{
   background-color: dimgrey;

@@ -34,7 +34,7 @@ public class EmployeeController {
     @PreAuthorize("hasAuthority('User') or hasAuthority('Manager')")
     @GetMapping("/{username}")
     protected EmployeeShortDto getOne(@PathVariable("username") String username) {
-        return service.getOne(username);
+        return service.getOneByUsername(username);
     }
 
     @PreAuthorize("hasAuthority('User')")

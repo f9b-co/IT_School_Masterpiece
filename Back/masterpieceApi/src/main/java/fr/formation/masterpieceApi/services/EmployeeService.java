@@ -4,6 +4,7 @@ import fr.formation.masterpieceApi.dtos.in.EmployeeCreateDto;
 import fr.formation.masterpieceApi.dtos.out.EmployeeActivitiesDto;
 import fr.formation.masterpieceApi.dtos.out.EmployeeInfoDto;
 import fr.formation.masterpieceApi.dtos.out.EmployeeShortDto;
+import fr.formation.masterpieceApi.entities.Employee;
 import fr.formation.masterpieceApi.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,7 +17,8 @@ public interface EmployeeService extends UserDetailsService {
     boolean emailExists(String username);
 
     void create(EmployeeCreateDto dto);
-    EmployeeShortDto getOne(String username) throws ResourceNotFoundException;
+    Employee getOneById(Long id) throws ResourceNotFoundException;
+    EmployeeShortDto getOneByUsername(String username) throws ResourceNotFoundException;
     List<EmployeeInfoDto> getAll(Pageable pageable);
     void delete(String username);
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, concatMap, mergeMap } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
 
 import { environment } from '../../environments/environment';
@@ -47,7 +47,6 @@ export class AuthenticationService {
             user.lastName = shortEmployee.lastName;
             user.teamName = shortEmployee.teamName;
             this.currentUserSubject.next(user);
-            console.log("Connexion réussie");
           }
           return user;
         }))
@@ -59,7 +58,10 @@ export class AuthenticationService {
     window.sessionStorage.removeItem('token');
     this.currentUserSubject.next(null);
     this.router.navigate(['/login']);
-    console.log("Déconnexion réussie");
+  }
+
+  howOldIsToken(): number {
+    return this.OauthTokenService.getTokenAge();
   }
 
   isCurrentUserLoggedIn(): boolean {

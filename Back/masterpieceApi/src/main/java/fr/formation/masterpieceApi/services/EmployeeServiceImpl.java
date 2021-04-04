@@ -82,8 +82,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeShortDto getOne(String username) { return employeesRepo.readByUsername(username).orElseThrow(
-            () -> new ResourceNotFoundException("with username:" + username)); }
+    public Employee getOneById(Long id) { return employeesRepo.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("with id:" + id));
+    }
+
+    @Override
+    public EmployeeShortDto getOneByUsername(String username) { return employeesRepo.readByUsername(username).orElseThrow(
+            () -> new ResourceNotFoundException("with username:" + username));
+    }
 
     @Override
     public List<EmployeeInfoDto> getAll(Pageable pageable) { return employeesRepo.getAllProjectedBy(pageable); }
@@ -95,7 +101,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeShortDto> getUserTeamMembers(String username) {
-        String teamName = getOne(username).getTeam().getName();
+        String teamName = getOneByUsername(username).getTeam().getName();
         List<EmployeeShortDto> teamsMembers = getTeamMembers(teamName);
         if (teamName.equals("hors équipes")) {
             teamsMembers = teamsMembers.stream()
