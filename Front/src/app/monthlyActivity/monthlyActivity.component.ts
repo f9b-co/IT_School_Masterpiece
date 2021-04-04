@@ -2,8 +2,8 @@ import {
   Component, OnInit, AfterViewInit, AfterViewChecked, OnDestroy, Inject,
   HostListener, ElementRef, ViewChild, Renderer2
 } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { isNullOrUndefined } from 'util';
 
 import { AuthenticationService } from '../_services/authentication.service';
@@ -30,38 +30,36 @@ import { ListedActivity } from '../_models/listedActivity';
  * send captured changes (creates or updates) in arrays via activity.service to BackEnd for persistence
  */
 export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
-  subscription: Subscription = new Subscription;
-  user: User = this.authenticationService.currentUserValue;
-  welcomeMsg: String = "Bienvenue " + this.user.firstName;
-  isManager: boolean = this.user.roles.includes(Role.Manager);
-  teams: string[] = [];
-  tasksList: Task[] = [];
-  teamsMembers: Employee[] = [];
-  today: Date = new Date();
-  presentYear: number = this.today.getFullYear();
-  presentMonth: number = this.today.getMonth();
-  monthChange: number = 0;
-  monthOffset: number = 0;
-  targetYear: number = this.presentYear;
-  targetMonth: number = this.presentMonth;
-  isTooLow: boolean = false;
-  isTooHigh: boolean = false;
-  yearMonth: string = this.yearMonthToString(this.targetYear, this.targetMonth);
-  daysInMonth: number;
-  closeDaysInMonth: number[] = [];
-  openDaysInMonth: number[] = [];
-  elementRef: ElementRef;
-  isModified: boolean = false;
-  activitiesToCreate: ListedActivity[] = [];
-  activitiesToUpdate: ListedActivity[] = [];
-  modifiedElements: [String, String, number][] = [];
-  iCreate: number = 0;
-  iUpdate: number = 0;
-  createsDone: any;
-  updatesDone: any;
+  private subscription: Subscription = new Subscription;
+  private user: User = this.authenticationService.currentUserValue;
+  private tokenAge: number = this.authenticationService.howOldIsToken();
+  private welcomeMsg: String = (this.tokenAge < 3) ? "Bienvenue " + this.user.firstName : "\xa0";
+  private isManager: boolean = this.user.roles.includes(Role.Manager);
+  private teams: string[] = [];
+  private tasksList: Task[] = [];
+  private teamsMembers: Employee[] = [];
+  private today: Date = new Date();
+  private presentYear: number = this.today.getFullYear();
+  private presentMonth: number = this.today.getMonth();
+  private monthChange: number = 0;
+  private monthOffset: number = 0;
+  private targetYear: number = this.presentYear;
+  private targetMonth: number = this.presentMonth;
+  private isTooLow: boolean = false;
+  private isTooHigh: boolean = false;
+  private yearMonth: string = this.yearMonthToString(this.targetYear, this.targetMonth);
+  private daysInMonth: number;
+  private closeDaysInMonth: number[] = [];
+  private openDaysInMonth: number[] = [];
+  private elementRef: ElementRef;
+  private isModified: boolean = false;
+  private activitiesToCreate: ListedActivity[] = [];
+  private activitiesToUpdate: ListedActivity[] = [];
+  private modifiedElements: [String, String, number][] = [];
+  private iCreate: number = 0;
+  private iUpdate: number = 0;
 
-  constructor(private router: Router, private authenticationService: AuthenticationService, private activityService: ActivityService,
-    private renderer: Renderer2, @Inject(ElementRef) elementRef: ElementRef) {
+  constructor(private router: Router, private authenticationService: AuthenticationService, private activityService: ActivityService, private renderer: Renderer2, @Inject(ElementRef) elementRef: ElementRef) {
     this.elementRef = elementRef
   }
 
@@ -454,6 +452,9 @@ export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterVie
           this.isModified = false;
         }
         alert(CreMsg + "\n" + updMsg)
+        if (responses[0] == true || responses[1] == true) {
+          this.router.navigate([this.router.url]);
+        }
       },
       (error) => { alert(error); }
     );
@@ -478,7 +479,8 @@ export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterVie
     for (let i = 1; i < tasksList.length; i++) {
       const newOpt: HTMLElement = renderer.createElement("option");
       renderer.setProperty(newOpt, 'value', tasksList[i].color);
-      renderer.setProperty(newOpt, 'style', "background-color:" + tasksList[i].color);
+      renderer.setProperty(newOpt, 'text', tasksList[i].name);
+      renderer.setProperty(newOpt, 'style', "color:" + tasksList[i].color + "; background-color:" + tasksList[i].color);
       renderer.appendChild(newSel, newOpt);
     }
     renderer.appendChild(parent, newSel);
@@ -491,7 +493,6 @@ export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterVie
     const parentId: String = event.path[1].id;
     const targetElId: String = event.target.id;
     const parent: HTMLElement = this.elementRef.nativeElement.querySelector('#' + parentId);
-    const targetEl: HTMLElement = this.elementRef.nativeElement.querySelector('#' + targetElId);
     const idStartWith: String = event.target.type.substr(0, 3) + "-";
     let isValidated: boolean = false
     let taskColor: String = event.target.value

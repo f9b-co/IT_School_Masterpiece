@@ -1,7 +1,8 @@
 package fr.formation.masterpieceApi.services;
 
 import fr.formation.masterpieceApi.dtos.in.ActivityInputDto;
-import fr.formation.masterpieceApi.dtos.in.ListedActivityInputDto;
+import fr.formation.masterpieceApi.dtos.in.ListedActivityCreateDto;
+import fr.formation.masterpieceApi.dtos.in.ListedActivityUpdateDto;
 import fr.formation.masterpieceApi.entities.*;
 import fr.formation.masterpieceApi.repositories.ActivityRepository;
 import fr.formation.masterpieceApi.repositories.EmployeeRepository;
@@ -42,19 +43,24 @@ public class ListedActivityServiceImpl implements ListedActivityService {
         }
     }
 
-    private boolean listedActivityExists(Employee employee, Activity activity) {
+    public boolean listedActivityExists(Employee employee, Activity activity) {
         return listedActivitiesRepo.findByEmployeeAndActivity(employee, activity).isPresent();
+    }
+
+    public boolean simultaneousListedActivityForOneEmployeeExists(Employee employee, String date, HalfDay halfDay) {
+        return listedActivitiesRepo.findByEmployeeAndActivityDateAndActivityHalfDay(
+                employee, date, halfDay).isPresent();
     }
 
     @Transactional
     @Override
-    public boolean createAllListed(List<ListedActivityInputDto> dtoList) {
+    public boolean createAllListed(List<ListedActivityCreateDto> dtoList) {
         try {
             dtoList.forEach(dto -> {
                 Employee employee = employeesRepo.getOne(dto.getEmployeeId());
                 Activity activity = findOrCreateActivity(dto.getActivity());
-                ListedActivity newLA = new ListedActivity(employee, activity, dto.isValidated());
-                listedActivitiesRepo.save(newLA);
+                    ListedActivity newLA = new ListedActivity(employee, activity, dto.isValidated());
+                    listedActivitiesRepo.save(newLA);
             });
             return true;
         } catch (final RuntimeException ex){
@@ -64,13 +70,13 @@ public class ListedActivityServiceImpl implements ListedActivityService {
 
     @Transactional
     @Override
-    public boolean patchAllListed(List<ListedActivityInputDto> dtoList) {
+    public boolean patchAllListed(List<ListedActivityUpdateDto> dtoList) {
         try {
         dtoList.forEach(dto -> {
             Employee employee = employeesRepo.getOne(dto.getEmployeeId());
             Activity activity = findOrCreateActivity(dto.getActivity());
             ListedActivity listedActivity = listedActivitiesRepo.findByEmployeeAndActivityDateAndActivityHalfDay(
-                    employee, dto.getActivity().getDate(), dto.getActivity().getHalfDay()).get();;
+                    employee, dto.getActivity().getDate(), dto.getActivity().getHalfDay()).get();
             listedActivity.setActivity(activity);
             listedActivity.setValidated(dto.isValidated());
             listedActivitiesRepo.save(listedActivity);

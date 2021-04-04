@@ -62,6 +62,10 @@ export class AuthenticationService {
     console.log("Déconnexion réussie");
   }
 
+  howOldIsToken(): number {
+    return this.OauthTokenService.getTokenAge();
+  }
+
   isCurrentUserLoggedIn(): boolean {
     return ((this.currentUserValue) && !isNullOrUndefined(this.currentUserValue.roles)) ? true : false;
   }

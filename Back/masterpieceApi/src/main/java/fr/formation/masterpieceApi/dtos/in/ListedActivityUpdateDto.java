@@ -2,7 +2,7 @@ package fr.formation.masterpieceApi.dtos.in;
 
 import javax.validation.constraints.NotNull;
 
-public class ListedActivityInputDto {
+public class ListedActivityUpdateDto {
 
     @NotNull
     private Long employeeId;
@@ -13,7 +13,7 @@ public class ListedActivityInputDto {
     @NotNull
     private  boolean validated;
 
-    protected ListedActivityInputDto() {
+    protected ListedActivityUpdateDto() {
         // Empty no-arg constructor (Hibernate)
     }
 

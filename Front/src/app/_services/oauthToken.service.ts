@@ -12,43 +12,54 @@ export class OauthTokenService {
 
   constructor() { }
 
-  storeToken(token: Token) {
+  storeToken(token: Token): void {
     window.sessionStorage.setItem('token', JSON.stringify(token));
   }
 
-  haveToken(): boolean {
+  private haveToken(): boolean {
     return (sessionStorage.getItem('token')) ? true : false;
   }
 
-  getAccesToken() {
+  private getStoredToken(): Token {
     if (this.haveToken()) {
-    return JSON.parse(sessionStorage.getItem('token')).access_token
+      return JSON.parse(sessionStorage.getItem('token'))
     }
   }
 
-  getDecodedAccesToken() {
+  getAccesToken(): string {
+    if (this.haveToken()) {
+      return this.getStoredToken().access_token
+    }
+  }
+
+  private getDecodedAccesToken(): { [key: string]: any } {
     if (this.haveToken()) {
       this.decoded = jwt_decode(this.getAccesToken());
       return this.decoded
     }
   }
 
-  getUserFromStoredToken() {
+  getUserFromStoredToken(): User {
     if (this.haveToken()) {
       this.decoded = this.getDecodedAccesToken();
       return new User(this.decoded.user_name, this.decoded.userId, this.decoded.authorities);
     }
   }
 
-  getUserFromToken(token: Token) {
+  getUserFromToken(token: Token): User {
     this.decoded = jwt_decode(token.access_token);
     return new User(this.decoded.user_name, this.decoded.userId, this.decoded.authorities);
   }
 
-  isTokenExpired(): boolean {
+  getTokenAge(): number {
     if (this.haveToken()) {
       const expiry = this.getDecodedAccesToken().exp;
-      return (this.haveToken()) ? (Math.floor((new Date).getTime() / 1000)) >= expiry : true;
+      return this.getStoredToken().expires_in - (expiry - (Math.floor((new Date).getTime() / 1000)));
     }
+  }
+
+  isTokenExpired(): boolean {
+    const expiry = this.getDecodedAccesToken().exp;
+    return (this.haveToken()) ? (Math.floor((new Date).getTime() / 1000)) >= expiry : true;
   }
 }

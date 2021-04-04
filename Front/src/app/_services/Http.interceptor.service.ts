@@ -29,7 +29,6 @@ export class HttpInterceptorService implements HttpInterceptor {
 
   handleError(error: HttpErrorResponse) {
     let errorMessage = "Unknown error!";
-    console.log("inside handle error" + JSON.stringify(error))
     if (error.error instanceof ErrorEvent) {
       /* Client-side errors */
       errorMessage = `Erreur locale: ${error.error.message}`;
