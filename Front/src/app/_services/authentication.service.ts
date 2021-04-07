@@ -64,6 +64,10 @@ export class AuthenticationService {
     return this.OauthTokenService.getTokenAge();
   }
 
+  howOldIsToken(): number {
+    return this.OauthTokenService.getTokenAge();
+  }
+
   isCurrentUserLoggedIn(): boolean {
     return ((this.currentUserValue) && !isNullOrUndefined(this.currentUserValue.roles)) ? true : false;
   }
