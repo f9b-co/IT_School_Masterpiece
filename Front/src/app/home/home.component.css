@@ -1,14 +1,23 @@
 :host {
-  padding-top: 5em;
-  display: flex;
-  align-items: flex-start;
+  overflow-x: scroll;
+  width: 100%;
+  width: 100%;
+  padding-top: 3.5em;
+  display: block;
 }
 :visited {
   color: black;
 }
 div {
   min-width: 580px;
-  padding: auto 0;
+  width: 100%;
+  padding: 2em 0;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
+}
+h3 {
+  margin: 0 !important;
+  padding: 0 2em;
+  font-size: larger;
+  text-align: center;
 }

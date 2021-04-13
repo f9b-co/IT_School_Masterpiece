@@ -5,7 +5,8 @@
         <input type="text" placeholder="A123456 ou X000001 ..." class="form-control" formControlName="username"
             required>
         <div class="errors" *ngIf="controls.username.errors && controls.username.touched">
-            Identifiant requis, 7 car. (Axxxxxx/Xyyyyyy)
+            Identifiant requis, 7 car. (Axxxxxx/Xyyyyyy)<br />
+            1 lettre (a,A,x ou X) et 6 chiffres
         </div>
     </div>
     <div class="forms-group">
@@ -21,7 +22,7 @@
         </div>
         <div class="form-group">
             <label>Confirmer Mot de Passe :</label><br />
-            <input type="text" placeholder="%xxxYxxx ou 0$YYYY1€ ..." class="form-control"
+            <input type="password" placeholder="%xxxYxxx ou 0$YYYY1€ ..." class="form-control"
                 formControlName="passwordCheck" required>
             <div class="errors"
                 *ngIf="controls.passwordCheck.value != controls.password.value && controls.passwordCheck.touched">
@@ -34,14 +35,18 @@
             <label>Prénom :</label><br />
             <input type="text" placeholder="pn" class="form-control" formControlName="firstName" required>
             <div class="errors" *ngIf="controls.firstName.errors && controls.firstName.touched">
-                Prénom requis, 64 caractères max
+                Prénom requis, 64 caractères max<br />
+                caractères interdits :<br />
+                <>=+*~&|\/()[]"'`,.;:!?@#$%
             </div>
         </div>
         <div class="form-group">
             <label>Nom :</label><br />
             <input type="text" placeholder="nm" class="form-control" formControlName="lastName" required>
             <div class="errors" *ngIf="controls.lastName.errors && controls.lastName.touched">
-                Nom requis, 64 caractères max
+                Nom requis, 64 caractères max<br />
+                caractères interdits :<br />
+                <>=+*~&|\/()[]"'`,.;:!?@#$%
             </div>
         </div>
     </div>

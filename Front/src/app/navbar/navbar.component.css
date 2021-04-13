@@ -2,15 +2,17 @@ hr {
   border-style: none;
   border-top: 5px solid white;
   width: 40px;
-  margin-block-start: 0;
-  margin-block-end: 1em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
+  margin: 0;
 }
-.logout {
-  margin-top: auto;
+h2 {
+  margin: 5px 0;
+  font-size: 0.2em !important;
+  color: black;
 }
 img {
   margin: 0.5em auto;
   height: 2em;
+}
+.logout {
+  margin-top: auto;
 }

@@ -48,7 +48,7 @@ export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterVie
   private isTooLow: boolean = false;
   private isTooHigh: boolean = false;
   private yearMonth: string = this.yearMonthToString(this.targetYear, this.targetMonth);
-  private daysInMonth: number;
+  private daysInMonth: number = 0;
   private closeDaysInMonth: number[] = [];
   private openDaysInMonth: number[] = [];
   private elementRef: ElementRef;
@@ -63,6 +63,7 @@ export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterVie
     this.elementRef = elementRef
   }
 
+  @ViewChild('activitiesTable', { static: false }) table: ElementRef;
   @ViewChild('activitiesTableHead', { static: false }) tableHead: ElementRef;
   @ViewChild('activitiesTableBody', { static: false }) tableBody: ElementRef;
   @ViewChild('tasksTable', { static: false }) tasksTable: ElementRef;
@@ -85,6 +86,7 @@ export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterVie
 
   /* month linked functions (init & nav) */
   monthDisplay(): void {
+    this.table.nativeElement.querySelector("caption").innerText = "reset";
     this.tableHead.nativeElement.innerHTML = "";
     this.tableBody.nativeElement.innerHTML = "";
 
@@ -181,14 +183,17 @@ export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterVie
     with shorten code and very limited repetition of this,
     and with direct context access to definition of used instance members */
     const render = this.renderer;
+    const table = this.table;
     const tH = this.tableHead;
     const tB = this.tableBody;
     const crEl = this.createElement;
     const apd = this.append;
-    let newCol, newRow, newHeader, newDiv;
+    let newCap, newCol, newRow, newHeader, newDiv;
 
+    /* Define or update table caption content (accessibility improvement) */
+    render.setProperty(this.table.nativeElement.querySelector("caption"), 'innerText', "tableau des activités concernant " + this.user.firstName + " " + this.user.lastName + " pour le mois " + this.yearMonth);
     /* Define thead columms witdth via html5 <col> */
-    newCol = crEl(render, "col", "thead-colNom", "colNom", "", "width:13%")
+    newCol = crEl(render, "col", "thead-colNom", "colNom", "", "width:13%");
     apd(render, tH.nativeElement, newCol);
     for (let i = 0; i < this.daysInMonth + 1; i++) {
       const width = 0.85 / (this.daysInMonth + 1) * 100;
@@ -317,6 +322,8 @@ export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterVie
     const apd = this.append;
     const crSelTBC = this.createSelectTaskByColor;
     let newRow, newCell, newDiv;
+
+    console.log(this.user)
 
     /* insert Team name title-row */
     newRow = crEl(render, "tr", teamName + "-titleRow", "");
@@ -488,7 +495,7 @@ export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterVie
 
   /* Event onClick 'change' listener, to capture all changes and process them before sendding to back if needed */
   @HostListener('change', ['$event'])
-  onClick(event: any): void {
+  onChange(event: any): void {
     /* get el & parent Id & HTMLElement*/
     const parentId: String = event.path[1].id;
     const targetElId: String = event.target.id;

@@ -17,9 +17,12 @@ table {
 }
 #activitiesTable tbody{
   width: 100%;
-  height: 40vh;
+  height: 60vh;
   overflow-y: scroll;
   display: block;
+}
+.table-caption {
+  display: none;
 }
 .thead-col0-width, .tbody-col0-width  {
   margin: 0;

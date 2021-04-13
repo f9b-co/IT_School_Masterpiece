@@ -2,21 +2,24 @@ package fr.formation.masterpieceApi.dtos.in;
 
 import validations.UniqueEmail;
 import validations.UniqueUsername;
-
 import javax.validation.constraints.*;
 
 public class EmployeeCreateDto {
 
+    private final String noSpecialsPattern = "^[^<>=+*~&|\\\\()\\[\\]\"'`,.;:!?@#$%]*$";
     private final String passPattern = "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).*$|" +
             "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\\W).*$|" +
             "^(?=.*?[a-z])(?=.*?[0-9])(?=.*?\\W).*$|" +
             "^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?\\W).*$";
+    private final String usernamePattern = "^[axAX][0-9]{6}$";
 
     @NotBlank
     @Size(max = 64)
+    @Pattern(regexp = noSpecialsPattern)
     private String firstName;
     @NotBlank
     @Size(max = 64)
+    @Pattern(regexp = noSpecialsPattern)
     private String lastName;
     @NotBlank
     @Size(max = 64)
@@ -29,6 +32,7 @@ public class EmployeeCreateDto {
     @UniqueUsername
     @NotBlank
     @Size(min = 7, max = 7)
+    @Pattern(regexp = usernamePattern)
     private String username;
     @NotNull
     @Size(min = 8, max = 20)

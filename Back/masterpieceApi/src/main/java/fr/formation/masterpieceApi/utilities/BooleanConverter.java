@@ -2,16 +2,14 @@ package fr.formation.masterpieceApi.utilities;
 
 import javax.persistence.AttributeConverter;
 
-/**
- * A custom converter to convert entity {@code Boolean} attribute state into
+/*
+ * A custom converter to convert entity Boolean attribute state into
  * database column representation and back again.
- * <p>
- * This implementation converts {@code Boolean} from/to {@code String}s such as:
- * <ul>
- * <li>{@code Boolean.TRUE} from/to {@code "T"}
- * <li>{@code Boolean.FALSE} from/to {@code "F"}
- * <li>
- * </ul>
+ *
+ * This implementation converts Boolean from/to String such as:
+ *
+ * Boolean.TRUE from/to "T"
+ * Boolean.FALSE from/to "F"
  */
 public class BooleanConverter implements AttributeConverter<Boolean, String> {
 

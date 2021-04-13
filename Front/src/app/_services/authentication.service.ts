@@ -14,7 +14,7 @@ import { OauthTokenService } from './oauthToken.service';
 
 export class AuthenticationService {
   private currentUserSubject: BehaviorSubject<User>;
-  private user: User = this.OauthTokenService.getUserFromStoredToken() || new User("guest");
+  private user: User = (this.haveUser()) ? this.getUserFromStorage() : new User("guest");
   public currentUser: Observable<User>;
 
   constructor(private router: Router, private http: HttpClient, private OauthTokenService: OauthTokenService) {
@@ -46,6 +46,7 @@ export class AuthenticationService {
             user.firstName = shortEmployee.firstName;
             user.lastName = shortEmployee.lastName;
             user.teamName = shortEmployee.teamName;
+            this.storeUser(user);
             this.currentUserSubject.next(user);
           }
           return user;
@@ -58,6 +59,19 @@ export class AuthenticationService {
     window.sessionStorage.removeItem('token');
     this.currentUserSubject.next(null);
     this.router.navigate(['/login']);
+  }
+
+  storeUser(user: User): void {
+    window.sessionStorage.setItem('user', JSON.stringify(user));
+  }
+
+  haveUser(): boolean {
+    return (sessionStorage.getItem('user')) ? true : false;
+  }
+
+  getUserFromStorage(): User {
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    return new User(user.username, user.userId, user.roles, user.firstName, user.lastName, user.teamName);
   }
 
   howOldIsToken(): number {

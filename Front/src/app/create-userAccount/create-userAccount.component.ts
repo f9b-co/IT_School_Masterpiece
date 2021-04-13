@@ -44,6 +44,7 @@ export class CreateUserAccountComponent implements OnInit {
           Validators.required,
           Validators.minLength(7),
           Validators.maxLength(7),
+          Validators.pattern("^[axAX]{1}[0-9]{6}$")
         ])
       ),
       password: new FormControl(
@@ -67,6 +68,7 @@ export class CreateUserAccountComponent implements OnInit {
           Validators.required,
           Validators.minLength(1),
           Validators.maxLength(64),
+          Validators.pattern("^[^<>=+*~&|\\\\/()\\[\\]\"'`,.;:!?@#$%]*$")
         ])
       ),
       lastName: new FormControl(
@@ -75,6 +77,7 @@ export class CreateUserAccountComponent implements OnInit {
           Validators.required,
           Validators.minLength(1),
           Validators.maxLength(64),
+          Validators.pattern("^[^<>=+*~&|\\\\/()\\[\\]\"'`,.;:!?@#$%]*$")
         ])
       ),
       email: new FormControl(
