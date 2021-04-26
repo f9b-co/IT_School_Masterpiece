@@ -51,7 +51,10 @@ public class EmployeeController {
 
     @PreAuthorize("hasAuthority('User') or hasAuthority('Manager')")
     @GetMapping("/listed-activities")
-    protected List<EmployeeActivitiesDto> getTeamActivitiesByMonth(@RequestParam("team") String teamName, @RequestParam("period") String yearMonth, @RequestParam("username") String username) {
+    protected List<EmployeeActivitiesDto> getTeamActivitiesByMonth(
+            @RequestParam("team") String teamName,
+            @RequestParam("period") String yearMonth,
+            @RequestParam("username") String username) {
         return service.getTeamMonthActivities(teamName, yearMonth, username);
     }
 

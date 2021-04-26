@@ -122,7 +122,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeActivitiesDto> getTeamMonthActivities(String teamName, String yearMonth, String username) {
+    public List<EmployeeActivitiesDto> getTeamMonthActivities(
+            String teamName, String yearMonth, String username) {
         List<EmployeeActivitiesDto> teamActivities = new ArrayList<>();
         if (teamName.equals("hors équipes") && !isManager(username)){
             teamActivities.add(getUserMonthActivities(username, yearMonth));

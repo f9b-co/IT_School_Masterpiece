@@ -26,7 +26,7 @@ import { ListedActivity } from '../_models/listedActivity';
 /* Handle main application feature : 
  * - prepare data collected through activity.service,
  * - build tailored table to display data depending on user type (manager/user),
- * that offers easy interactive interface to edit or validate activities.
+ * - offering an easy interactive interface to edit or validate activities,
  * - send captured changes (creates or updates) in arrays via activity.service to BackEnd for persistence
  */
 export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
@@ -84,7 +84,7 @@ export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterVie
   }
 
 
-  /* month linked functions (init & nav) */
+  /* month-related functions (init & nav) */
   monthDisplay(): void {
     this.table.nativeElement.querySelector("caption").innerText = "reset";
     this.tableHead.nativeElement.innerHTML = "";
@@ -166,7 +166,7 @@ export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterVie
   }
 
 
-  /* Activity table linked functions (dynamic table by current user, current teams and target month) */
+  /* Activity table related functions (dynamic table by current user, current teams and target month) */
   loadTasks(): void {
     /* retrieve all tasks from BackEnd and store it in array */
     const subs2: Subscription = this.activityService.getAllTasks().subscribe(
@@ -323,8 +323,6 @@ export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterVie
     const crSelTBC = this.createSelectTaskByColor;
     let newRow, newCell, newDiv;
 
-    console.log(this.user)
-
     /* insert Team name title-row */
     newRow = crEl(render, "tr", teamName + "-titleRow", "");
     newCell = crEl(render, "td", teamName + "-titleCell", "nom-equipe tbody-col0-width", teamName,)
@@ -432,41 +430,6 @@ export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterVie
       apd(render, tT.nativeElement, newRow);
     }
   }
-  saveChanges(): void {
-    const creDto = JSON.stringify(this.activitiesToCreate)
-    const updDto = JSON.stringify(this.activitiesToUpdate)
-    /* send creates and updates arrays to BackEnd via service and manage both return status to inform user */
-    const subs6: Subscription = this.activityService.saveListedActivities(creDto, updDto).subscribe(
-      (responses: boolean[]) => {
-        let CreMsg = "";
-        let updMsg = "";
-        if (responses[0] == true) {
-          this.activitiesToCreate.length = 0;
-          this.iCreate = 0;
-          CreMsg += "Nouvelles activitées enregistrées\n";
-        } else if (responses[0] == false) {
-          CreMsg += "Nouvelles activitées non-enregistrées !!!\nVeuillez réessayer dans quelques minutes,\npuis contacter le support si besoin (icone email en haut à droite)\n";
-        }
-        if (responses[1] == true) {
-          this.activitiesToUpdate.length = 0;
-          this.iUpdate = 0;
-          CreMsg += (this.isManager) ? "Statut du mois changé\n" : "Activitées modifiées enregistrées\n";
-        } else if (responses[1] == false) {
-          CreMsg += ((this.isManager) ? "Statut du mois non-changé!!!\n" : "Activitées modifiées non-enregistrées !!!\n") + "Veuillez réessayer dans quelques minutes,\npuis contacter le support si besoin (icone email en haut à droite)\n";
-        }
-        if (this.activitiesToCreate.length == 0 && this.activitiesToUpdate.length == 0) {
-          this.modifiedElements.length = 0;
-          this.isModified = false;
-        }
-        alert(CreMsg + "\n" + updMsg)
-        if (responses[0] == true || responses[1] == true) {
-          this.router.navigate([this.router.url]);
-        }
-      },
-      (error) => { alert(error); }
-    );
-    this.subscription.add(subs6);
-  }
 
   /* Custom DOM interraction functions */
   createElement(renderer: Renderer2, elType: string, id = "", classes = "", innerhtml = "", style = ""): HTMLElement {
@@ -493,8 +456,9 @@ export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterVie
     renderer.appendChild(parent, newSel);
   }
 
-  /* Event onClick 'change' listener, to capture all changes and process them before sendding to back if needed */
+  /* Changes handling methods */
   @HostListener('change', ['$event'])
+  /* Event onClick 'change' listener, to capture all changes and process them before sendding to back if needed */
   onChange(event: any): void {
     /* get el & parent Id & HTMLElement*/
     const parentId: String = event.path[1].id;
@@ -558,10 +522,15 @@ export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterVie
       const old: [String, String, number] = this.modifiedElements.find(el => el[0] == touchedId);
       let indexToDelete: number;
       if (old[1].match("upd")) {
-        indexToDelete = this.activitiesToUpdate.indexOf(this.activitiesToUpdate.find(el => el[1] == old[2]));
+        const halfDayToMatch =
+          indexToDelete = this.activitiesToUpdate.indexOf(this.activitiesToUpdate.find(
+            el => el.employeeId + "-" + el.activity.date.split("-")[2] + "-" + el.activity.halfDay
+              == old[0].split("-")[1] + "-" + old[0].split("-")[3] + "-" + old[0].split("-")[4]));
         this.activitiesToUpdate.splice(indexToDelete, 1);
       } else {
-        indexToDelete = this.activitiesToCreate.indexOf(this.activitiesToCreate.find(el => el[1] == old[2]));
+        indexToDelete = this.activitiesToCreate.indexOf(this.activitiesToCreate.find(
+          el => el.employeeId + "-" + el.activity.date.split("-")[2] + "-" + el.activity.halfDay
+            == old[0].split("-")[1] + "-" + old[0].split("-")[3] + "-" + old[0].split("-")[4]));
         this.activitiesToCreate.splice(indexToDelete, 1);
       }
       this.modifiedElements.splice(iAllready, 1);
@@ -579,5 +548,40 @@ export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterVie
       this.iUpdate++;
       this.checkIsModified();
     }
+  }
+  saveChanges(): void {
+    const creDto = JSON.stringify(this.activitiesToCreate)
+    const updDto = JSON.stringify(this.activitiesToUpdate)
+    /* send creates and updates arrays to BackEnd via service and manage both return status to inform user */
+    const subs6: Subscription = this.activityService.saveListedActivities(creDto, updDto).subscribe(
+      (responses: boolean[]) => {
+        let CreMsg = "";
+        let updMsg = "";
+        if (responses[0] == true) {
+          this.activitiesToCreate.length = 0;
+          this.iCreate = 0;
+          CreMsg += "Nouvelles activitées enregistrées\n";
+        } else if (responses[0] == false) {
+          CreMsg += "Nouvelles activitées non-enregistrées !!!\nVeuillez réessayer dans quelques minutes,\npuis contacter le support si besoin (icone email en haut à droite)\n";
+        }
+        if (responses[1] == true) {
+          this.activitiesToUpdate.length = 0;
+          this.iUpdate = 0;
+          CreMsg += (this.isManager) ? "Statut du mois changé\n" : "Activitées modifiées enregistrées\n";
+        } else if (responses[1] == false) {
+          CreMsg += ((this.isManager) ? "Statut du mois non-changé!!!\n" : "Activitées modifiées non-enregistrées !!!\n") + "Veuillez réessayer dans quelques minutes,\npuis contacter le support si besoin (icone email en haut à droite)\n";
+        }
+        if (this.activitiesToCreate.length == 0 && this.activitiesToUpdate.length == 0) {
+          this.modifiedElements.length = 0;
+          this.isModified = false;
+        }
+        alert(CreMsg + "\n" + updMsg)
+        if (responses[0] == true || responses[1] == true) {
+          this.router.navigate([this.router.url]);
+        }
+      },
+      (error) => { alert(error); }
+    );
+    this.subscription.add(subs6);
   }
 }
