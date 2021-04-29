@@ -107,7 +107,6 @@ export class CreateUserAccountComponent implements OnInit {
     this.http.post(employeesUrl, dataToSend, { headers }).subscribe(
       (data) => {
         this.createForm.reset();
-        alert("Enregistrement réussi!");
         // Send http request to api for auto-login
         const sent = JSON.parse(dataToSend)
         const requiredAuthData =

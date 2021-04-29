@@ -18,14 +18,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Optional<EmployeeViewDto> findByEmail(String email);
     Optional<EmployeeAuthDto> findByUsername (String username);
 
-/*    @Query("select new fr.formation.masterpieceApi.dtos.out.EmployeeActivitiesDto" +
-            "(e.username, e.firstName, e.lastName, e.teamName, e.listedActivities) " +
-            "from Team te join Employee e on te.name = e.teamName " +
-            "inner join e.listedActivities la " +
-            "inner join la.activity a " +
-            "inner join a.task ta " +
-            "where e.username = :username " +
-            "and a.date like :yearMonth% " )*/
     EmployeeActivitiesDto readByUsernameAndListedActivitiesActivityDateStartsWith(String username, String yearMonth);
 
     List<EmployeeShortDto> getAllDistinctByTeam (Team team);
