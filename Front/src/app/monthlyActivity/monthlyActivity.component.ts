@@ -90,7 +90,7 @@ export class MonthlyActivityComponent implements OnInit, AfterViewInit, AfterVie
     this.tableHead.nativeElement.innerHTML = "";
     this.tableBody.nativeElement.innerHTML = "";
 
-    this.daysInMonth = this.findDaysInMonth(this.targetMonth + 1, this.targetYear);
+    this.daysInMonth = this.findDaysInMonth(this.targetYear, this.targetMonth + 1);
     this.yearMonth = this.yearMonthToString(this.targetYear, this.targetMonth)
     this.buildActivityTableHead();
     this.LoadMonthDaysAndActivities();
